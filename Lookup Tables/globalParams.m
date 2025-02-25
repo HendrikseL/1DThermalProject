@@ -6,6 +6,9 @@ globalInputs = struct;
 globalInputs.program.radialNodes = 3;
 globalInputs.program.N = 3;
 globalInputs.program.M = 1;
+globalInputs.program.inputPadding = 2;
+globalInputs.program.outputPadding = 2;
+globalInputs.program.offset = 4; %offset between ambient and slurry
 
 %Aluminum thermophysical properties @300K
 globalInputs.aluminum.rho = 2701; %kg/m^3
@@ -16,6 +19,15 @@ globalInputs.aluminum.k = 237; %W/m K
 globalInputs.water.rho = 996.57; %kg/m^3
 globalInputs.water.cp = 4.18;% kJ/kgK
 globalInputs.water.k = 0.61450; %W/m K
+
+%Initial temperature matrix (in celsius)
+globalInputs.temperature.Ts = 80;
+globalInputs.temperature.Tsc = 80;
+globalInputs.temperature.Top = 80;
+globalInputs.temperature.Tip = 80;
+globalInputs.temperature.Tc = 20;
+globalInputs.temperature.Ta = 21; %ambient temperature
+
 
 %slurry inputs
 globalInputs.slurry = struct;
@@ -35,15 +47,12 @@ globalInputs.slurry.ms = 0.111; %kg/s
 globalInputs.screw = struct;
 globalInputs.screw.h = (1.82/2) * 0.0254; %height of the blade (Blade D), m
 globalInputs.screw.r0 = 2/2 * 0.0254; %initial blade radius, m
-globalInputs.screw.r = h - r; %radius of blade
+globalInputs.screw.r = globalInputs.screw.h - globalInputs.screw.r0 ; %radius of blade
 globalInputs.screw.deltaR = globalInputs.screw.r/globalInputs.program.radialNodes;
 globalInputs.screw.omega = 1; %rotational speed of the screw, rad/s
 globalInputs.screw.p = 1; %pitch, m
 
-%Initial temperature matrix
-globalInputs.T_init = 80* ones(8,7);
-globalInputs.T_init(1,3) = 20;
-globalInputs.T_init(1,5) = 20;
+
 
 globalInputs.HT.h_fpipe = 1900; %W/m^2K
 globalInputs.HT.h_fgasket = 32000; %W/m^2K
