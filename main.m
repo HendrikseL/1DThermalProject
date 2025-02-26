@@ -14,8 +14,7 @@ globalParams
 %%Initialize Temperature matrix and resistor elements
 Tdist = initializeTempDistribution(globalInputs);
 
-
-
-
+%create elements 
+ElDist = initializeElementDistribution(globalInputs, Tdist);
 
 

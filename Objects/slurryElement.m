@@ -1,14 +1,13 @@
-classdef slurryNode
+classdef slurryElement
     %slurry node object.
 
     properties
         %position information
         %n -> axial position, r-> radial position
-        n double =[]
-        r double = []
+        pos double = [];
+        
 
         %material properties
-        
 
 
 
@@ -21,25 +20,24 @@ classdef slurryNode
     end
     
     methods
-        function obj = slurryNode(i,j)
+        function obj = slurryElement(i,j)
             %Constructs a slurry type temperature node
 
             %track position of slurry node
-            obj.n = i;
-            obj.r = j;
+            obj.pos = [i,j];
 
 
             %Updates the slurry node with initial values
             obj = updateSlurry(obj);
         end
         
-        function obj = updateSlurry(obj)
+        function obj = updateSlurry(obj,Tdist)
             %This function handles the updating of the slurry node. It
             %is called upon initialization and when the solver is
             %iterating.
 
             %calculate thermophysical properties
-            c = getConductionm(obj.T,s);
+            % c = getConductionm(,s);
 
 
             %update resistance values
@@ -47,7 +45,7 @@ classdef slurryNode
 
             %calculate massflow
 
-            A0 = 1;
+            obj.A0 = 1;
         end
 
     end
