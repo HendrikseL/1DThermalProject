@@ -10,6 +10,7 @@ clc
 
 %initialize global parameters (creates struct globalInputs)
 globalParams
+createThermophysicaProperties
 
 %%Initialize Temperature matrix and resistor elements
 Tdist = initializeTempDistribution(globalInputs);

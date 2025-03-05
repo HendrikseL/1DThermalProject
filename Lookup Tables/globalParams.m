@@ -51,6 +51,7 @@ globalInputs.screw.r = globalInputs.screw.h - globalInputs.screw.r0 ; %radius of
 globalInputs.screw.deltaR = globalInputs.screw.r/globalInputs.program.radialNodes;
 globalInputs.screw.omega = 1; %rotational speed of the screw, rad/s
 globalInputs.screw.p = 1; %pitch, m
+globalInputs.screw.l = 50 * 0.0254; % length total?
 
 
 
