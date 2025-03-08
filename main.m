@@ -16,6 +16,8 @@ createThermophysicaProperties
 Tdist = initializeTempDistribution(globalInputs);
 
 %create elements 
-ElDist = initializeElementDistribution(globalInputs, Tdist);
+ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
+%initial update of elements. creates the coefficient matrix
+ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
 
 

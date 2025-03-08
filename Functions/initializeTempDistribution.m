@@ -9,7 +9,10 @@ Tdist = zeros(5 + globalInputs.program.radialNodes, globalInputs.program.inputPa
 offset = globalInputs.program.offset;
 
 %input temps and flanges
-
+for j = 1+offset:1:globalInputs.program.radialNodes+offset
+    Tdist(j,1) = globalInputs.temperature.Ts;
+    Tdist(j,2) = globalInputs.temperature.Ts;
+end
 
 %Heat exchanger loop (outermost structure)
 for k = 1:globalInputs.program.N:globalInputs.program.M*globalInputs.program.N

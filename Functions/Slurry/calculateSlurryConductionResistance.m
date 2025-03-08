@@ -1,14 +1,16 @@
-function cds = calculateSlurryConductionResistance(T,globalInputs,TPP)
+function [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T)
 %Calculate the thermal conduction resistance of the slurry
 
 %Input: GlobalVariables and thermophysical properties
-k_al=getConductionCoef(TPP,T,"aluminum");
-k_h2o =getConductionCoef(TPP,T,"water");
+%       T -> desired temperature
 
-k_s = globalInputs.slurry.volumeFarction*k_al + (1-globalInputs.slurry.volumeFraction)*k_h20;
+k_aluminum=getConductionCoef(TPP,T,"aluminum");
+k_water =getConductionCoef(TPP,T,"water");
+
+k_slurry = globalInputs.slurry.volumeFraction*k_aluminum + (1-globalInputs.slurry.volumeFraction)*k_water;
 
 A = globalInputs.screw.p*cosd(45)*globalInputs.screw.deltaR;
 x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 
-cd = (k_s *x) /A;
+cds = (x) /(k_slurry *A);
 end

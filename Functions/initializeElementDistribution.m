@@ -1,4 +1,4 @@
-function [ElDist] = initializeElementDistribution(globalInputs, Tdist)
+function [ElDist] = initializeElementDistribution(globalInputs, Tdist, TPP)
 %Initialized the global Element distribution
 %currently lacking input and output conditions
 
@@ -40,7 +40,7 @@ for k = 1:globalInputs.program.N:globalInputs.program.M*globalInputs.program.N
 
         %create slurry node, equal to radial position
         for j = 1+offset:1:globalInputs.program.radialNodes+offset
-            ElDist(j,i) = {slurryElement(j,i)};
+            ElDist(j,i) = {slurryElement(j,i,globalInputs)};
         end
 
         %create Tsc screw node - assign position data

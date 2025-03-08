@@ -3,6 +3,7 @@
 globalInputs = struct;
 
 %program parameters
+globalInputs.program.writeInterval = 1; %time steps between writes
 globalInputs.program.radialNodes = 3;
 globalInputs.program.N = 3;
 globalInputs.program.M = 1;
@@ -36,17 +37,17 @@ globalInputs.slurry.Ts_in = 1; %slurry input tepperature (K)
 globalInputs.slurry.massRatio = 1.3; % water/al mass ratio
 
 %derive volume fraction and slurry density
-globalInputs.aluminum.w = globalInputs.slurry.massRatio/(1+globalInputs.slurry.massRatio);
-globalInputs.water.w = 1/ (1+ globalInputs.slurry.massRatio);
+globalInputs.aluminum.w = globalInputs.slurry.massRatio/(1+globalInputs.slurry.massRatio); %mass fraction
+globalInputs.water.w = 1/ (1+ globalInputs.slurry.massRatio); %mass fraction
 
 globalInputs.slurry.rho = globalInputs.water.rho*globalInputs.water.w + globalInputs.aluminum.rho*globalInputs.aluminum.w;
 globalInputs.slurry.volumeFraction = (globalInputs.aluminum.w/globalInputs.aluminum.rho) / (globalInputs.aluminum.w/globalInputs.aluminum.rho + globalInputs.water.w/globalInputs.water.rho);
-globalInputs.slurry.ms = 0.111; %kg/s
+globalInputs.slurry.ms = 0.2553; %kg/s
 
 %screw physical parameters
 globalInputs.screw = struct;
 globalInputs.screw.h = (1.82/2) * 0.0254; %height of the blade (Blade D), m
-globalInputs.screw.r0 = 2/2 * 0.0254; %initial blade radius, m
+globalInputs.screw.r0 = 0.85/2 * 0.0254; %initial blade radius, m
 globalInputs.screw.r = globalInputs.screw.h - globalInputs.screw.r0 ; %radius of blade
 globalInputs.screw.deltaR = globalInputs.screw.r/globalInputs.program.radialNodes;
 globalInputs.screw.omega = 1; %rotational speed of the screw, rad/s

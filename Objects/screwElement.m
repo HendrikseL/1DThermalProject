@@ -7,7 +7,8 @@ classdef screwElement
         pos double = [];
         neighbours double = [];
 
-        %material properties
+        %object properties
+        type string = "screw";
 
 
 
@@ -48,16 +49,16 @@ classdef screwElement
             %west
             obj.neighbours(3,:) = [obj.pos(1), obj.pos(2)+1];
             %south
-            % obj.neighbours(4,:) = [obj.pos(1)+1, obj.pos(2)];
+            obj.neighbours(4,:) = [obj.pos(1)+1, obj.pos(2)];
         end
 
-        function obj = updateCoefficients(obj,Tdist)
+        function obj = updateCoefficients(obj,Tdist,ElDist)
             %This function handles the updating of the slurry node. It
             %is called upon initialization and when the solver is
             %iterating.
 
             %calculate thermophysical properties
-            % c = getConductionm(,s);
+            
 
 
             %update resistance values
@@ -66,6 +67,15 @@ classdef screwElement
             %calculate massflow
 
             obj.A0 = 1;
+        end
+
+
+        function cd_down = calculateCDDown(obj,Tdist,ElDist);
+
+        end
+
+        function cd_up = calculateCDUp(obj,Tdist,ElDist);
+
         end
 
         
