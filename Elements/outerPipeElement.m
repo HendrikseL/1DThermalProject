@@ -47,6 +47,8 @@ classdef outerPipeElement
             obj.neighbours(2,:) = [obj.pos(1)-1, obj.pos(2)];
             %eastt
             obj.neighbours(3,:) = [obj.pos(1), obj.pos(2)+1];
+            %south
+            obj.neighbours(4,:) = [obj.pos(1)+1, obj.pos(2)];
         end
 
         function obj = updateCoefficients(obj,Tdist, globalInputs, TPP,ElDist)
