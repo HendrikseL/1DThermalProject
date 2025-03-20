@@ -1,4 +1,4 @@
-classdef screwElement
+classdef innerPipeElement
     %slurry node object.
 
     properties
@@ -9,7 +9,7 @@ classdef screwElement
         radialPosition double =[]; 
 
         %object properties
-        type string = "screw";
+        type string = "innerPipe";
 
 
 
@@ -21,7 +21,7 @@ classdef screwElement
     end
     
     methods
-        function obj = screwElement(i,j, globalInputs)
+        function obj = innerPipeElement(i,j, globalInputs)
             %Constructs a slurry type temperature node
 
             %track position of slurry node
@@ -53,15 +53,15 @@ classdef screwElement
             %This function handles the updating of the screw node. It
             %is called upon initialization and when the solver is
             %iterating.
-            cdsc = calculateScrewConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
+            cdsc = calculateScrewConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial",[]);
             
             %temperatures, averaged between nodes 
             T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
             T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
             %get resistance coefficients
-            cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west);
-            cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east);
+            cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west,"axial",[]);
+            cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",[]);
 
             cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)));
             
@@ -80,7 +80,7 @@ classdef screwElement
             switch ElDist{obj.neighbours(2,1),obj.neighbours(2,2)}.type
 
                 case "slurry"
-                    [cds_up, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T);
+                    [cds_up, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
             end
         end
 

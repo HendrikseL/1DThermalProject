@@ -58,3 +58,7 @@ globalInputs.screw.l = 50 * 0.0254; % length total?
 
 globalInputs.HT.h_fpipe = 1900; %W/m^2K
 globalInputs.HT.h_fgasket = 32000; %W/m^2K
+
+globalInputs.coolant.m = 4.8204269; %kg/s
+globalInputs.coolant.m_r = globalInputs.coolant.m * 0.9;
+globalInputs.coolant.m_ax = globalInputs.coolant.m * 0.1;

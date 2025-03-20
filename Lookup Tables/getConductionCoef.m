@@ -7,7 +7,7 @@
 function k = getConductionCoef(TPP, T, material)
     switch material
     
-        case "hastelloyX"
+        case "hasteloyX"
             k = lerp(TPP.hastelloyX(:,[1:2]),T);
         case "ss316"
             k = lerp(TPP.ss316(:,[1:2]),T);
@@ -16,6 +16,7 @@ function k = getConductionCoef(TPP, T, material)
         case "aluminum"
             k = lerp(TPP.aluminum(:,[1:2]),T);
         case "water"
+            %fix me. Need data set for k water, this currently is using cp
             k = lerp(TPP.water(:,[1:2]),T);
         otherwise
             error("Selected material does not exist");

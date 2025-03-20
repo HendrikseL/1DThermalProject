@@ -1,4 +1,4 @@
-classdef slurryElement
+classdef coolantElement
     %slurry node object.
 
     properties
@@ -9,20 +9,20 @@ classdef slurryElement
         radialPosition double =[]; 
 
         %object properties
-        type string = "slurry";
+        type string = "coolant";
 
 
 
         %Output Coefficients
-        A0 double = [];
-        A1 double = [];
-        A2 double = [];
-        B1 double = [];
-        C1 double = [];
+        D0 double = [];
+        D1 double = [];
+        D2 double = [];
+        E1 double = [];
+        EE1 double = [];
     end
     
     methods
-        function obj = slurryElement(i,j, globalInputs)
+        function obj = coolantElement(i,j, globalInputs)
             %Constructs a slurry type temperature node
 
             %track position of slurry node
@@ -72,8 +72,8 @@ classdef slurryElement
             T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
             %get resistance coefficients
-            [cds_west, k_slurry_west] = calculateSlurryConductionResistance(TPP,globalInputs,T_west,"axial",[]);
-            [cds_east, k_slurry_east] = calculateSlurryConductionResistance(TPP,globalInputs,T_east,"axial",[]);
+            [cds_west, k_slurry_west] = calculateSlurryConductionResistance(TPP,globalInputs,T_west);
+            [cds_east, k_slurry_east] = calculateSlurryConductionResistance(TPP,globalInputs,T_east);
 
             cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)));
             cds_down = calculateCdsDown(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)));
@@ -83,33 +83,33 @@ classdef slurryElement
             cps = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
             
             %coefficients
-            obj.A0 = (-1/cds_west - ms_ax*cps_west);
-            obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps + ms_r*cps);
-            obj.A2 = (-1/cds_east);
+            obj.D0 = (-1/cds_west - ms_ax*cps_west);
+            obj.D1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps + ms_r*cps);
+            obj.D2 = (-1/cds_east);
 
-            obj.B1 = (-1/cds_up);
+            obj.E1 = (-1/cds_up);
 
-            obj.C1 = (-1/cds_down - ms_r*cps_west);
+            obj.EE1 = (-1/cds_down - ms_r*cps_west);
         end
 
 
         function cds_up = calculateCdsUp(obj,TPP,globalInputs,ElDist,T)
-            switch ElDist{obj.neighbours(2,1),obj.neighbours(2,2)}.type
+            % switch ElDist{obj.neighbours(2,1),obj.neighbours(2,2)}.type
+            % 
+            %     case "slurry"
+            %         [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T);
+            %         hs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
+            % 
+            %         cds_up = (1/cds + 1/hs)^-1;
+            %     case "innerPipe"
+            %         %parallel pipe conduction above
+            %         [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T);
+            % 
+            %         cd_blade = caculateScrewConductionResistance(TPP, globalInputs, T);
+            % 
+            %         cds_up = (1/cds + 1/cd_blade)^-1;
 
-                case "slurry"
-                    [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
-                    cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
-
-                    cds_up = (1/cds + 1/cvs)^(-1);
-                case "innerPipe"
-                    %parallel pipe conduction above
-                    [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
-
-                    cd_blade = calculateScrewConductionResistance(TPP, globalInputs, T,"radial",obj.pos);
-
-                    cds_up = (1/cds + 1/cd_blade)^(-1);
-
-            end
+            % end
         end
 
 
@@ -117,17 +117,17 @@ classdef slurryElement
             %                     switch ElDist{obj.neighbours(4,1),obj.neighbours(4,2)}.type
             % 
             %     case "slurry"
-            %         [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
+            %         [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T);
             %         hs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
             % 
-            %         cds_down = (1/cds + 1/hs)^(-1);
+            %         cds_down = (1/cds + 1/hs)^-1;
             %     case "screw"
             %         %parallel pipe conduction above
             %         [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T);
             % 
             %         cd_blade = caculateScrewConductionResistance(TPP, globalInputs, T);
             % 
-            %         cds_down = (1/cds + 1/cd_blade)^(-1);
+            %         cds_down = (1/cds + 1/cd_blade)^-1;
             % 
             % end
         end

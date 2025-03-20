@@ -1,4 +1,4 @@
-classdef screwElement
+classdef outerPipeElement
     %slurry node object.
 
     properties
@@ -9,7 +9,7 @@ classdef screwElement
         radialPosition double =[]; 
 
         %object properties
-        type string = "screw";
+        type string = "outerPipe";
 
 
 
@@ -21,7 +21,7 @@ classdef screwElement
     end
     
     methods
-        function obj = screwElement(i,j, globalInputs)
+        function obj = outerPipeElement(i,j, globalInputs)
             %Constructs a slurry type temperature node
 
             %track position of slurry node

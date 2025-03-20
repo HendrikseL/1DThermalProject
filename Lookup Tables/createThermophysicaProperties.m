@@ -18,5 +18,11 @@ TPP.wool =readmatrix("RockWool_conductivity.csv",NumHeaderLines=1);
 %temp (c), k (Wm/K), nu (m2/s), prandtl number
 TPP.air = readmatrix("Air_Convection.csv",NumHeaderLines=1);
 
-%temp (c), k (Wm/K), mu (Pa s)
+%temp (c), cp (kj/kgK), mu (Pa s)
 TPP.water = readmatrix("Water_Convection.csv",NumHeaderLines=1);
+
+%Temp (c), cp (kj/kgK), mu (Pa s)
+TPP.waterCoolant = readmatrix("Water_Coolant_Convection.csv",NumHeaderLines=1);
+
+%temp (c), k (Wm/K)
+TPP.waterCoolantConduction = readmatrix("Water_Coolant_Conduction.csv",NumHeaderLines=1);
