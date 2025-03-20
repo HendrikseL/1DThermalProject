@@ -14,10 +14,11 @@ classdef innerPipeElement
 
 
         %Output Coefficients
-        F0 double = [];
-        F1 double = [];
-        F2 double = [];
-        G1 double = [];
+        J0 double = [];
+        J1 double = [];
+        J2 double = [];
+        K1 double = [];
+        L1 double = [];
     end
     
     methods
@@ -47,19 +48,24 @@ classdef innerPipeElement
             obj.neighbours(2,:) = [obj.pos(1)-1, obj.pos(2)];
             %eastt
             obj.neighbours(3,:) = [obj.pos(1), obj.pos(2)+1];
+            %south
+            obj.neighbours(4,:) = [obj.pos(1)+1, obj.pos(2)];
         end
 
         function obj = updateCoefficients(obj,Tdist, globalInputs, TPP,ElDist)
             %This function handles the updating of the screw node. It
             %is called upon initialization and when the solver is
             %iterating.
-            cdsc = calculateScrewConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial",[]);
-            
-            %temperatures, averaged between nodes 
-            T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
-            T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
-            %get resistance coefficients
+            %axial and radial pipe conduction resistances
+            cdip = calculatePipeConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial",[]);
+            cdip_r = calculatePipeConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)), "radial", obj.pos);
+
+
+
+            %flange conduction resistance (axial only)
+            cdf = calculateFlangeConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial", []);
+            
             cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west,"axial",[]);
             cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",[]);
 
@@ -67,7 +73,7 @@ classdef innerPipeElement
             
             %coefficients
             obj.F0 = (-1/cdsc_west);
-            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdsc);
+            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdip);
             obj.F2 = (-1/cdsc_east);
 
             obj.G1 = (-1/cds_up);

@@ -1,9 +1,8 @@
 function cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,T,k_coolant)
-%Calculate the thermal convective ressitance of the slurry
+%Calculate the thermal convective ressitance of the coolant
 
 %Input: GlobalVariables and Thermophysical Properties
 %       T --> desired temperature
-
 
 h_coolant = getForcedConvectionCoef(TPP,globalInputs,T,k_coolant)
 
