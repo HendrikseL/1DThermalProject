@@ -98,7 +98,7 @@ classdef slurryElement
 
                 case "slurry"
                     [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
-                    cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
+                    cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_s);
 
                     cds_up = (1/cds + 1/cvs)^(-1);
                 case "innerPipe"
@@ -130,6 +130,7 @@ classdef slurryElement
             %         cds_down = (1/cds + 1/cd_blade)^(-1);
             % 
             % end
+            cds_down = 1;
         end
         
 

@@ -5,6 +5,9 @@ function [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,
 %       T -> desired temperature
 
 k_aluminum=getConductionCoef(TPP,T,"aluminum");
+
+%uses condutction values for water at 1atm. This needs to be updated with a
+%new data set.
 k_water =getConductionCoef(TPP,T,"water");
 
 k_slurry = globalInputs.slurry.volumeFraction*k_aluminum + (1-globalInputs.slurry.volumeFraction)*k_water;

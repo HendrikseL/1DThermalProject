@@ -16,8 +16,8 @@ function k = getConductionCoef(TPP, T, material)
         case "aluminum"
             k = lerp(TPP.aluminum(:,[1:2]),T);
         case "water"
-            %fix me. Need data set for k water, this currently is using cp
-            k = lerp(TPP.water(:,[1:2]),T);
+            %fix me. needs new data set for water under pressure
+            k = lerp(TPP.waterCoolantConduction(:,[1:2]),T);
         otherwise
             error("Selected material does not exist");
     end

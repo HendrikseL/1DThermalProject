@@ -7,7 +7,7 @@ function [h] = getForcedConvectionCoef(TPP, globalInputs, T, k_slurry,material)
 
 switch material
 
-    case "water"
+    case "slurry"
         %getting slurry viscosity
         mu_water = lerp([TPP.water(:,1),TPP.water(:,3)],T);
         phi = globalInputs.slurry.volumeFraction;

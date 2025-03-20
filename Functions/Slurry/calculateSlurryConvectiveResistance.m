@@ -5,7 +5,7 @@ function cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry)
 %       T --> desired temperature
 
 
-h_slurry = getForcedConvectionCoef(TPP,globalInputs,T,k_slurry)
+h_slurry = getForcedConvectionCoef(TPP,globalInputs,T,k_slurry,"slurry");
 
 A = globalInputs.screw.p*cosd(45)*globalInputs.screw.deltaR;
 

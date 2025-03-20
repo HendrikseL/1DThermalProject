@@ -1,4 +1,4 @@
-function [cd_screw] = calculateScrewConductionResistance(TPP,globalInputs,T)
+function [cd_screw] = calculateScrewConductionResistance(TPP,globalInputs,T,direction,position)
 %Calculate the thermal conduction resistance of the screw
 
 %Input: GlobalVariables and thermophysical properties
