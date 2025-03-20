@@ -20,4 +20,7 @@ ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
 %initial update of elements. creates the coefficient matrix
 ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
 
+%construct coefficient matrix theta
+[theta, Tvec] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
+
 
