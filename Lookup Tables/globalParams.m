@@ -51,8 +51,12 @@ globalInputs.screw.r0 = 0.85/2 * 0.0254; %initial blade radius, m
 globalInputs.screw.r = globalInputs.screw.h - globalInputs.screw.r0 ; %radius of blade
 globalInputs.screw.deltaR = globalInputs.screw.r/globalInputs.program.radialNodes;
 globalInputs.screw.omega = 1; %rotational speed of the screw, rad/s
-globalInputs.screw.p = 1; %pitch, m
+globalInputs.screw.p = 1.75/0.0254; %pitch, threads/m
 globalInputs.screw.l = 50 * 0.0254; % length total?
+globalInputs.screw.d = 0.85 *0.0254; %m
+globalInputs.screw.bladeD= 1.82 * 0.0254; %m
+globalInputs.screw.bladeT = 0.22*0.0254; %m
+
 
 
 
