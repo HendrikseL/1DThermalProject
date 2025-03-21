@@ -1,26 +1,28 @@
-function [cd_cool, k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,T,direction,position)
+function [cd_cool, k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,T,direction)
 %Calculate the thermal conduction resistance of the coolant
 
 %Input: GlobalVariables and thermophysical properties
 %       T -> desired temperature
 
-k_cool =getConductionCoef(TPP,T,"ss316");
+k_cool =getConductionCoef(TPP,T,"water");
 
+x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 
 switch direction
 
     case "axial"
-        A = globalInputs.screw.p*cosd(45)*globalInputs.screw.deltaR;
-        x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+        D2 = globalInputs.outerPipe.ID;
+        D1 = globalInputs.innerPipe.OD;
+        A = (pi/4)*(D2^2-D1^2);
 
         cd_cool = (x) /(k_cool *A);
 
     case "radial"
         %find distance from wall
-        dist = (globalInputs.program.radialNodes +5) - position(1);
-        D1 = dist*globalInputs.screw.deltaR;
+        D2 = globalInputs.outerPipe.ID;
+        D1 = globalInputs.innerPipe.OD;
 
-        cd_cool = (log((D1+globalInputs.screw.deltaR)/D1)) / (2*pi*globalInputs.screw.l*k_cool);
+        cd_cool = (log((D2/D1)) / (2*pi*x*k_cool));
 end
 end
 

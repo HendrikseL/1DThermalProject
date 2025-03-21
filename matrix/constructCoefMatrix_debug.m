@@ -23,7 +23,7 @@ ElVec = cell(1,(length(ElDist(1,:))-4)*(length(ElDist(:,1))-1));
 
 %slurry
 for i = globalInputs.program.radialNodes+offset:-1:1+offset
-    for j =  3:1:(N*M)+2
+    for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
         % Tvec(k) = Tdist(i,j);
         Tvec{k} = strcat(ElDist{i,j}.type," ",num2str(i),num2str(j));
         ElVec{k} = ElDist{i,j};
@@ -34,7 +34,7 @@ for i = globalInputs.program.radialNodes+offset:-1:1+offset
 end
 
 %inner pipe
-for j =  3:1:(N*M)+2
+for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
         Tvec{k} = strcat(ElDist{4,j}.type," ",num2str(i),num2str(j));
         ElVec{k} = ElDist{4,j};
         positionMap(k,:) = ElDist{4,j}.pos;
@@ -43,7 +43,7 @@ for j =  3:1:(N*M)+2
 end
 
 %coolant
-for j =  3:1:(N*M)+2
+for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
         Tvec{k} = strcat(ElDist{3,j}.type," ",num2str(i),num2str(j));
         ElVec{k} = ElDist{3,j};
         positionMap(k,:) = ElDist{3,j}.pos;
@@ -52,7 +52,7 @@ for j =  3:1:(N*M)+2
 end
 
 %screw
-for j =  3:1:(N*M)+2
+for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
         Tvec{k} = strcat(ElDist{globalInputs.program.radialNodes+offset+1,j}.type," ",num2str(i),num2str(j));
         ElVec{k} = ElDist{globalInputs.program.radialNodes+offset+1,j};
         positionMap(k,:) = ElDist{globalInputs.program.radialNodes+offset+1,j}.pos;
@@ -61,7 +61,7 @@ for j =  3:1:(N*M)+2
 end
 
 %outer pipe
-for j =  3:1:(N*M)+2
+for j = globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
         Tvec{k} = strcat(ElDist{2,j}.type," ",num2str(i),num2str(j));
         ElVec{k} = ElDist{2,j};
         positionMap(k,:) = ElDist{2,j}.pos;
@@ -122,10 +122,38 @@ for i = startIndex+1:1:startIndex+N*M
     j =i;
 
     theta{i,j} = strcat("J1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2))); 
-    %theta(i,j) = ElVic{i}.A1;
+    %theta(i,j) = ElVic{i}.J1;
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}, positionMap, nMax);
+
+        %western neighbour
+    if ~(neighbours(1) == 0)
+        theta{i,neighbours(1)} = strcat("J0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %northern neighbour
+    if ~(neighbours(2) == 0)
+        theta{i,neighbours(2)} = strcat("L1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %eastern neighbour
+    if ~(neighbours(3) == 0)
+        theta{i,neighbours(3)} = strcat("J2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %southern neighbour
+    if ~(neighbours(4) == 0)
+        theta{i,neighbours(4)} = strcat("K1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
 end
 
 %coolant 
@@ -138,6 +166,35 @@ for i = startIndex+1:1:startIndex+N*M
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}, positionMap, nMax);
+
+    %western neighbour
+    if ~(neighbours(1) == 0)
+        theta{i,neighbours(1)} = strcat("D0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %northern neighbour
+    if ~(neighbours(2) == 0)
+        theta{i,neighbours(2)} = strcat("EE1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %eastern neighbour
+    if ~(neighbours(3) == 0)
+        theta{i,neighbours(3)} = strcat("D2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %southern neighbour
+    if ~(neighbours(4) == 0)
+        theta{i,neighbours(4)} = strcat("E1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
 end
 
 %screw
@@ -150,6 +207,28 @@ for i = startIndex+1:1:startIndex+N*M
 
     nMax = 3;
     neighbours = findNeighboursPosition(ElVec{i}, positionMap, nMax);
+
+        %western neighbour
+    if ~(neighbours(1) == 0)
+        theta{i,neighbours(1)} = strcat("F0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %northern neighbour
+    if ~(neighbours(2) == 0)
+        theta{i,neighbours(2)} = strcat("G1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %eastern neighbour
+    if ~(neighbours(3) == 0)
+        theta{i,neighbours(3)} = strcat("F2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
 end
 
 %outer pipe
@@ -162,6 +241,36 @@ for i = startIndex+1:1:startIndex+N*M
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}, positionMap, nMax);
+
+        %western neighbour
+    if ~(neighbours(1) == 0)
+        theta{i,neighbours(1)} = strcat("H0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %northern neighbour
+    if ~(neighbours(2) == 0)
+        %used in the Q source matrix will never go in theta
+        theta{i,neighbours(2)} = strcat("II1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %eastern neighbour
+    if ~(neighbours(3) == 0)
+        theta{i,neighbours(3)} = strcat("H2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
+    %southern neighbour
+    if ~(neighbours(4) == 0)
+        theta{i,neighbours(4)} = strcat("I1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
+    else
+        %do nothing
+    end
+
 end
 
 end

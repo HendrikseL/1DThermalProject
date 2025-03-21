@@ -4,11 +4,11 @@ function cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,T,k_coolant
 %Input: GlobalVariables and Thermophysical Properties
 %       T --> desired temperature
 
-h_coolant = getForcedConvectionCoef(TPP,globalInputs,T,k_coolant)
+h_coolant = getForcedConvectionCoef(TPP,globalInputs,T,k_coolant);
 
 A = globalInputs.screw.p*cosd(45)*globalInputs.screw.deltaR;
 
-cvc = 1 / (k_coolant*A);
+cvc = 1 / (h_coolant*A);
 
 end
 

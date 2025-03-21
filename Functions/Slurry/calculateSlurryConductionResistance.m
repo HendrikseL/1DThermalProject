@@ -23,7 +23,7 @@ switch direction
     case "radial"
         %find distance from wall
         dist = (globalInputs.program.radialNodes +5) - position(1);
-        D1 = dist*globalInputs.screw.deltaR;
+        D1 = globalInputs.screw.r0 + dist*globalInputs.screw.deltaR;
 
         cds = (log((D1+globalInputs.screw.deltaR)/D1)) / (2*pi*globalInputs.screw.l*k_slurry);
     end

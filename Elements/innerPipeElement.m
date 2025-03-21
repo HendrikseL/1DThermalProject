@@ -66,12 +66,12 @@ classdef innerPipeElement
             cdfin_r = calculateFinsConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
             
             %slurry convection
-            [~, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
-            cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_s);
+            [~, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos);
+            cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_s);
 
             %coolant convection
-            [~, k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
-             cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,T,k_cool);
+            [~, k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
+             cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_cool);
 
 
             %coefficients

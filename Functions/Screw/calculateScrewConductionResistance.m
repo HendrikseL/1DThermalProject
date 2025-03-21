@@ -5,13 +5,13 @@ function [cd_screw] = calculateScrewConductionResistance(TPP,globalInputs,T,dire
 %       T -> desired temperature
 
 k_hast =getConductionCoef(TPP,T,"hasteloyX");
-
+x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 
 switch direction
 
     case "axial"
         A = globalInputs.screw.p*cosd(45)*globalInputs.screw.deltaR;
-        x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+
         
         cd_screw = (x) /(k_hast *A);
 
@@ -20,7 +20,7 @@ switch direction
         dist = (globalInputs.program.radialNodes +5) - position(1);
         D1 = dist*globalInputs.screw.deltaR;
 
-        cd_screw = (log((D1+globalInputs.screw.deltaR)/D1)) / (2*pi*globalInputs.screw.l*k_hast);
+        cd_screw = (log((D1+globalInputs.screw.deltaR)/D1)) / (2*pi*x*k_hast);
     end
 end
 

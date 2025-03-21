@@ -14,10 +14,11 @@ classdef outerPipeElement
 
 
         %Output Coefficients
-        F0 double = [];
-        F1 double = [];
-        F2 double = [];
-        G1 double = [];
+        H0 double = [];
+        H1 double = [];
+        H2 double = [];
+        I1 double = [];
+        II1 double = [];
     end
     
     methods
@@ -51,52 +52,39 @@ classdef outerPipeElement
             obj.neighbours(4,:) = [obj.pos(1)+1, obj.pos(2)];
         end
 
-        function obj = updateCoefficients(obj,Tdist, globalInputs, TPP,ElDist)
+        function obj = updateCoefficients(obj,Tdist, globalInputs, TPP, ElDist)
             %This function handles the updating of the screw node. It
             %is called upon initialization and when the solver is
             %iterating.
-            cdsc = calculateScrewConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
+            cdop = calculatePipeConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial",obj.pos);
+
+            [~,k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial");
+            cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_cool);
             
             %temperatures, averaged between nodes 
             T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
             T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
             %get resistance coefficients
-            cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west);
-            cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east);
+            cdop_west = calculatePipeConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos);
+            cdop_east = calculatePipeConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos);
 
-            cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)));
-            
+            %natural convection
+            cv_nat =  calculateNaturalConvectionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"outerPipe",obj.pos);
+
+            %insulation
+            cd_ins = calculateInsulationConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
+
             %coefficients
-            obj.F0 = (-1/cdsc_west);
-            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdsc);
-            obj.F2 = (-1/cdsc_east);
+            obj.H0 = (-1/cdop_west);
+            obj.H1 = (1/cdop_west + 1/cdop_east + 1/(cvc + cdop) + 1/(cv_nat + cd_ins));
+            obj.H2 = (-1/cdop_east);
 
-            obj.G1 = (-1/cds_up);
+            obj.I1 = (-1/(cvc + cdop));
 
- 
+            obj.II1 = (-1/(cv_nat + cd_ins));
         end
 
-
-        function cds_up = calculateCdsUp(obj,TPP,globalInputs,ElDist,T)
-            switch ElDist{obj.neighbours(2,1),obj.neighbours(2,2)}.type
-
-                case "slurry"
-                    [cds_up, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T);
-            end
-        end
-
-
-        function cds_down = calculateCdsDown(obj,TPP,globalInputs,ElDist,T)
-            %                     switch ElDist{obj.neighbours(2,1),obj.neighbours(2,2)}.type
-            % 
-            %     case "slurry"
-            %         [cds_up, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T);
-            % end
-
-            % end
-        end
-        
 
     end
 end

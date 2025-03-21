@@ -29,7 +29,6 @@ globalInputs.temperature.Tip = 80;
 globalInputs.temperature.Tc = 20;
 globalInputs.temperature.Ta = 21; %ambient temperature
 
-
 %slurry inputs
 globalInputs.slurry = struct;
 globalInputs.slurry.rho = 1; %slurry density (kg/m^3)
@@ -57,24 +56,25 @@ globalInputs.screw.d = 0.85 *0.0254; %m
 globalInputs.screw.bladeD= 1.82 * 0.0254; %m
 globalInputs.screw.bladeT = 0.22*0.0254; %m
 
-
-
-
 globalInputs.HT.h_fpipe = 1900; %W/m^2K
 globalInputs.HT.h_fgasket = 32000; %W/m^2K
 
+%coolant input parameters
 globalInputs.coolant.m = 4.8204269; %kg/s
 globalInputs.coolant.m_r = globalInputs.coolant.m * 0.9;
 globalInputs.coolant.m_ax = globalInputs.coolant.m * 0.1;
 
-
+%inner pipe input parameters
 globalInputs.innerPipe.ID = 0.047244; %inner pipe ID in m
 globalInputs.innerPipe.OD = 0.0508; %inner pipe OD in m
 
+%outer pipe input parameters
 globalInputs.outerPipe.ID = 0.166624; %outer pipe ID in m
 globalInputs.outerPipe.OD = 0.2032; %outer pipe OD in m
 
+%fin input parameters
 globalInputs.fins.OD = 0.166624; %6.75 ins, but right now it is equal to 6.56 as the fins seem to be too long.
 globalInputs.fins.thickness = 0.0015875;
 globalInputs.fins.spacing = 6 / 0.0254; %fins per meter (from fins per inch)
 
+globalInputs.insulation.thickness = 3.5 * 0.0254; %insualtion thickness in meters, currently equal to the flange
