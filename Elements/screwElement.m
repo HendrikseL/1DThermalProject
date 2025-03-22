@@ -6,7 +6,7 @@ classdef screwElement
         %n -> axial position, r-> radial position
         pos double = [];
         neighbours double = [];
-        radialPosition double =[]; 
+        radialPosition double = [];
 
         %object properties
         type string = "screw";

@@ -5,7 +5,7 @@ classdef outerPipeElement
         %position information
         %n -> axial position, r-> radial position
         pos double = [];
-        neighbours double = [];
+        neighbours double = []; 
         radialPosition double =[]; 
 
         %object properties

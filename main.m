@@ -21,6 +21,7 @@ ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
 ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
 
 %construct coefficient matrix theta
-[theta, Tvec] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
+[theta_debug, Tvec_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
+[theta, Tvec] = constructCoefMatrix(ElDist,Tdist,globalInputs);
 
 
