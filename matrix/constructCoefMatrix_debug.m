@@ -1,4 +1,4 @@
-function [theta,Tvec] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs)
+function [theta,Tvec,b] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs)
 %This function is a copy of constructCoefMatrix. It is meant to be
 %identical except instead of placing the coeficients for the matrix, it
 %places a string coressponding to their  type (A0, A1, etc) and their
@@ -69,6 +69,7 @@ for j = globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPa
         k = k+1;
 end
 
+b = cell(1,k-1);
 %% Coeficient Array
 
 %slurry nodes
@@ -82,36 +83,36 @@ for i = 1:1:N*M*r
     neighbours = findNeighboursPosition(ElVec{i}, positionMap, nMax);
 
     %Go through and assign coefficients to proper placement. Where
-    %neighbours is empty, a neighbour does not exist.
+    %neighbours is 0, a neighbour does not exist (or a boundary is present).
     %This is not in a loop because each neighbour receives different
-    %coefficients
+    %coefficients, future improvement involves consolodating the naming so
+    %this can be looped once for all nodes. This however would make
+    %debugging harder
 
     %western neighbour
     if ~(neighbours(1) == 0)
         theta{i,neighbours(1)} = strcat("A0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        %western boundary condition
+       b{i} = strcat("A0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)-1));
     end
 
     %northern neighbour
     if ~(neighbours(2) == 0)
         theta{i,neighbours(2)} = strcat("B1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
     end
 
     %eastern neighbour
     if ~(neighbours(3) == 0)
         theta{i,neighbours(3)} = strcat("A2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        %eastern boundary condition
+       b{i} = strcat("A2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)+1));
     end
 
     %southern neighbour
     if ~(neighbours(4) == 0)
         theta{i,neighbours(4)} = strcat("C1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
     end
 
 end
@@ -131,28 +132,26 @@ for i = startIndex+1:1:startIndex+N*M
     if ~(neighbours(1) == 0)
         theta{i,neighbours(1)} = strcat("J0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        %western boundary condition
+       b{i} = strcat("J0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)-1));
     end
 
     %northern neighbour
     if ~(neighbours(2) == 0)
         theta{i,neighbours(2)} = strcat("L1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
     end
 
     %eastern neighbour
     if ~(neighbours(3) == 0)
         theta{i,neighbours(3)} = strcat("J2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        %eastern boundary condition
+       b{i} = strcat("J2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)+1));
     end
 
     %southern neighbour
     if ~(neighbours(4) == 0)
         theta{i,neighbours(4)} = strcat("K1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
     end
 end
 
@@ -171,28 +170,24 @@ for i = startIndex+1:1:startIndex+N*M
     if ~(neighbours(1) == 0)
         theta{i,neighbours(1)} = strcat("D0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        b{i} = strcat("D0 ", num2str(1), " ",num2str(ElVec{i}.pos(2)));
     end
 
     %northern neighbour
     if ~(neighbours(2) == 0)
         theta{i,neighbours(2)} = strcat("EE1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
     end
 
     %eastern neighbour
     if ~(neighbours(3) == 0)
         theta{i,neighbours(3)} = strcat("D2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        b{i} = strcat("D2 ", num2str(1), " ",num2str(ElVec{i}.pos(2)));
     end
 
     %southern neighbour
     if ~(neighbours(4) == 0)
         theta{i,neighbours(4)} = strcat("E1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
     end
 
 end
@@ -212,21 +207,19 @@ for i = startIndex+1:1:startIndex+N*M
     if ~(neighbours(1) == 0)
         theta{i,neighbours(1)} = strcat("F0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        b{i} = strcat("F0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)-1));
     end
 
     %northern neighbour
     if ~(neighbours(2) == 0)
         theta{i,neighbours(2)} = strcat("G1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
     end
 
     %eastern neighbour
     if ~(neighbours(3) == 0)
         theta{i,neighbours(3)} = strcat("F2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        b{i} = strcat("F2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)+1));
     end
 
 end
@@ -246,29 +239,19 @@ for i = startIndex+1:1:startIndex+N*M
     if ~(neighbours(1) == 0)
         theta{i,neighbours(1)} = strcat("H0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
-    end
-
-    %northern neighbour
-    if ~(neighbours(2) == 0)
-        %used in the Q source matrix will never go in theta
-        theta{i,neighbours(2)} = strcat("II1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
+        b{i} = strcat("H0 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)-1));
     end
 
     %eastern neighbour
     if ~(neighbours(3) == 0)
         theta{i,neighbours(3)} = strcat("H2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
     else
-        %do nothing
+        b{i} = strcat("H2 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)+1));
     end
 
     %southern neighbour
     if ~(neighbours(4) == 0)
         theta{i,neighbours(4)} = strcat("I1 ", num2str(ElVec{i}.pos(1)), " ",num2str(ElVec{i}.pos(2)));
-    else
-        %do nothing
     end
 
 end

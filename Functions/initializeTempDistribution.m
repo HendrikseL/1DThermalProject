@@ -8,11 +8,29 @@ Tdist = zeros(5 + globalInputs.program.radialNodes, globalInputs.program.inputPa
 
 offset = globalInputs.program.offset;
 
+%%Initial boundary temps
+
 %input temps and flanges
 for j = 1+offset:1:globalInputs.program.radialNodes+offset
-    Tdist(j,1) = globalInputs.temperature.Ts;
-    Tdist(j,2) = globalInputs.temperature.Ts;
+    Tdist(j,[1:2]) = globalInputs.temperature.in.Ts;
+    Tdist(j,[end-1:end]) = globalInputs.temperature.out.Ts;
 end
+
+%screw
+Tdist(j+1,[1:2]) = globalInputs.temperature.in.Tsc;
+Tdist(j+1,[end-1:end]) = globalInputs.temperature.out.Tsc;
+
+%flange temps
+Tdist([1:3],[1:2]) = globalInputs.temperature.in.flange;
+Tdist([1:3],[end-1:end]) = globalInputs.temperature.out.flange;
+
+%inner pipe temps
+Tdist(4,[1:2]) = globalInputs.temperature.in.Ts;
+Tdist(4,[end-1:end]) = globalInputs.temperature.out.Ts;
+
+
+  
+%%Initial Nodal Temps
 
 %Heat exchanger loop (outermost structure)
 for k = 1:globalInputs.program.N:globalInputs.program.M*globalInputs.program.N
@@ -23,31 +41,31 @@ for k = 1:globalInputs.program.N:globalInputs.program.M*globalInputs.program.N
         %create HXer temperatures
         if mod(i-globalInputs.program.inputPadding,globalInputs.program.N) == 1
             %create Tc,out
-            Tdist(1,i) = globalInputs.temperature.Tc;
+            Tdist(1,i) = globalInputs.temperature.out.Tc;
         elseif mod(i-globalInputs.program.inputPadding,globalInputs.program.N) == 0
             %create Tc,in
-            Tdist(1,i) = globalInputs.temperature.Tc;
+            Tdist(1,i) = globalInputs.temperature.in.Tc;
         else
             %create Ta
             Tdist(1,i) = globalInputs.temperature.Ta;
         end
 
-        %create Top
-        Tdist(2,i) = globalInputs.temperature.Top;
+        %create Top - equal to flange intially
+        Tdist(2,i) = globalInputs.temperature.in.flange;
 
         %create Tc
-        Tdist(3,i) = globalInputs.temperature.Tc;
+        Tdist(3,i) = globalInputs.temperature.in.Tc;
 
         %create Tip
-        Tdist(4,i) = globalInputs.temperature.Tip;
+        Tdist(4,i) = globalInputs.temperature.in.Tip;
 
         %create slurry node, equal to radial position
         for j = 1+offset:1:globalInputs.program.radialNodes+offset
-            Tdist(j,i) = globalInputs.temperature.Ts;
+            Tdist(j,i) = globalInputs.temperature.in.Ts;
         end
 
         %create Tsc screw node - assign position data
-        Tdist(j+1,i) = globalInputs.temperature.Tsc;
+        Tdist(j+1,i) = globalInputs.temperature.in.Tsc;
 
     end
 

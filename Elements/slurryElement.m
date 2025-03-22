@@ -77,6 +77,7 @@ classdef slurryElement
             
             %coefficients
             obj.A0 = (-1/cds_west - ms_ax*cps_west);
+
             obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps + ms_r*cps);
             obj.A2 = (-1/cds_east);
 

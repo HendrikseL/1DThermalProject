@@ -17,18 +17,6 @@ for k = 1:globalInputs.program.N:globalInputs.program.M*globalInputs.program.N
     %Micro heat exchanger (inner structure)
     for i = globalInputs.program.inputPadding+k:1:globalInputs.program.N+globalInputs.program.inputPadding+k-1
 
-        %create HXer temperatures
-        if mod(i-globalInputs.program.inputPadding,globalInputs.program.N) == 1
-            %create Tc,out
-            ElDist(1,i) = {"Tc,out"};
-        elseif mod(i-globalInputs.program.inputPadding,globalInputs.program.N) == 0
-            %create Tc,in
-            ElDist(1,i) = {"Tc,in"};
-        else
-            %create Ta
-            ElDist(1,i) = {"Tc"};
-        end
-
         %create Top
         ElDist(2,i) = {outerPipeElement(2,i,globalInputs)};
 

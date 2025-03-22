@@ -20,8 +20,17 @@ ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
 %initial update of elements. creates the coefficient matrix
 ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
 
+%convert all temps to Kelvin
+% Property tables are in celsius, Tdist must be in celsius for elements to
+% update
+Tdist = Tdist(:,:) + 273;
+
+%%Begin Solution Loop
+
 %construct coefficient matrix theta
-[theta_debug, Tvec_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
-[theta, Tvec] = constructCoefMatrix(ElDist,Tdist,globalInputs);
+[theta_debug, Tvec_debug, b_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
+[theta, Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs);
 
+Q = constructHeatFlowInput(ElVec,Tdist,globalInputs);
 
+T_new =  inv(theta) * (Q-b)';

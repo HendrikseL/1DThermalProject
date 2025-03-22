@@ -22,11 +22,18 @@ globalInputs.water.cp = 4.18;% kJ/kgK
 globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
-globalInputs.temperature.Ts = 80;
-globalInputs.temperature.Tsc = 80;
-globalInputs.temperature.Top = 80;
-globalInputs.temperature.Tip = 80;
-globalInputs.temperature.Tc = 20;
+globalInputs.temperature.in.Ts = 80;
+globalInputs.temperature.in.Tsc = 80;
+globalInputs.temperature.in.flange = 80;
+globalInputs.temperature.in.Tip = 80;
+globalInputs.temperature.in.Tc = 20;
+
+globalInputs.temperature.out.Ts = 80;
+globalInputs.temperature.out.Tsc = 80;
+globalInputs.temperature.out.flange = 80;
+globalInputs.temperature.out.Tip = 80;
+globalInputs.temperature.out.Tc = 20;
+
 globalInputs.temperature.Ta = 21; %ambient temperature
 
 %slurry inputs
