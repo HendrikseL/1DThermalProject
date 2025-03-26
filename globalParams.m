@@ -26,15 +26,15 @@ globalInputs.temperature.in.Ts = 80;
 globalInputs.temperature.in.Tsc = 80;
 globalInputs.temperature.in.flange = 80;
 globalInputs.temperature.in.Tip = 80;
-globalInputs.temperature.in.Tc = 20;
+globalInputs.temperature.in.Tc = 80;
 
 globalInputs.temperature.out.Ts = 80;
 globalInputs.temperature.out.Tsc = 80;
 globalInputs.temperature.out.flange = 80;
 globalInputs.temperature.out.Tip = 80;
-globalInputs.temperature.out.Tc = 20;
+globalInputs.temperature.out.Tc = 80;
 
-globalInputs.temperature.Ta = 21; %ambient temperature
+globalInputs.temperature.Ta = 80; %ambient temperature
 
 %slurry inputs
 globalInputs.slurry = struct;

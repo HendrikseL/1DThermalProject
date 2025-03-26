@@ -14,16 +14,13 @@ createThermophysicaProperties
 
 %%Initialize Temperature matrix and resistor elements
 Tdist = initializeTempDistribution(globalInputs);
+%convert all temps to Kelvin
+Tdist = Tdist(:,:) + 273;
 
 %create elements 
 ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
 %initial update of elements. creates the coefficient matrix
 ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
-
-%convert all temps to Kelvin
-% Property tables are in celsius, Tdist must be in celsius for elements to
-% update
-Tdist = Tdist(:,:) + 273;
 
 %%Begin Solution Loop
 
@@ -33,4 +30,5 @@ Tdist = Tdist(:,:) + 273;
 
 Q = constructHeatFlowInput(ElVec,Tdist,globalInputs);
 
-T_new =  inv(theta) * (Q-b)';
+lhs = theta*(Tvec)';
+T_new =  (theta)\(Q-b)';

@@ -1,28 +1,37 @@
 %This script reads in all thermophysical properties from their lookuptable
 %files
+%All tables are in celsius, and so are changed to kelvin as the first step
 
 TPP = struct;
 
 %temp (c), k (Wm/K), cp(kJ/kgK)
 TPP.aluminum = readmatrix("Aluminum_conductivity.csv",NumHeaderLines=1);
+TPP.aluminum(:,1) = TPP.aluminum(:,1) + 273.15;
 
 %temp (c), k (Wm/K)
 TPP.hastelloyX = readmatrix("HastelloyX_conductivity.csv",NumHeaderLines=1);
+TPP.hastelloyX(:,1) = TPP.hastelloyX(:,1) + 273.15;
 
 %temp (c), k (Wm/K)
 TPP.ss316 = readmatrix("SS316_conductivity.csv",NumHeaderLines=1);
+TPP.ss316(:,1) = TPP.ss316(:,1) + 273.15;
 
 %temp (c), k (Wm/K)
 TPP.wool =readmatrix("RockWool_conductivity.csv",NumHeaderLines=1);
+TPP.wool(:,1) = TPP.wool(:,1) + 273.15;
 
 %temp (c), k (Wm/K), nu (m2/s), prandtl number
 TPP.air = readmatrix("Air_Convection.csv",NumHeaderLines=1);
+TPP.air(:,1) = TPP.air(:,1) + 273.15;
 
 %temp (c), cp (kj/kgK), mu (Pa s)
 TPP.water = readmatrix("Water_Convection.csv",NumHeaderLines=1);
+TPP.water(:,1) = TPP.water(:,1) + 273.15;
 
 %Temp (c), cp (kj/kgK), mu (Pa s)
 TPP.waterCoolant = readmatrix("Water_Coolant_Convection.csv",NumHeaderLines=1);
+TPP.waterCoolant(:,1) = TPP.waterCoolant(:,1) + 273.15;
 
 %temp (c), k (Wm/K)
 TPP.waterCoolantConduction = readmatrix("Water_Coolant_Conduction.csv",NumHeaderLines=1);
+TPP.waterCoolantConduction(:,1) = TPP.waterCoolantConduction(:,1) + 273.15;

@@ -63,14 +63,14 @@ classdef screwElement
             cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos);
             cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos);
 
-            [cds_up, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos);
+            [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos);
             
             %coefficients
             obj.F0 = (-1/cdsc_west);
-            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdsc);
+            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cds);
             obj.F2 = (-1/cdsc_east);
 
-            obj.G1 = (-1/cds_up);
+            obj.G1 = (-1/cds);
 
  
         end

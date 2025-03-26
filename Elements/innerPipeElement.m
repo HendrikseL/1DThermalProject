@@ -33,7 +33,7 @@ classdef innerPipeElement
         end
         
         function obj = getNeighbours(obj)
-            %This function will deterine the neighbours of a computational
+            %This function will determine the neighbours of a computational
             %molecule
             %the order starts from the eastern neighbour and rotates
             %clockwise around forming the whole array
@@ -76,10 +76,10 @@ classdef innerPipeElement
 
             %coefficients
             obj.J0 = (-1/cdip);
-            obj.J1 = (1/(cdip+cdfin) +1/(cdip_r + cdfin_r) + 1/(cdip_r + cvs) + 1/(cvc));
+            obj.J1 = (1/(cdip+cdfin) +1/(cdip + cdfin_r) + 1/(cdip + cvs) + 1/(cvc));
             obj.J2 = (-1/cdip);
 
-            obj.K1 = ( -1/(cdip_r + cvs));
+            obj.K1 = ( -1/(cdip + cvs));
 
             obj.L1 = (-1/cvc);
 

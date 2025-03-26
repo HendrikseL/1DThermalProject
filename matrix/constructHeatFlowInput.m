@@ -13,7 +13,7 @@ end
 
 %heat loss to ambient atmosphere
 for i = startIndex:1:length(ElVec)
-    Q(i) = -ElVec{i}.II1*globalInputs.temperature.Ta;
+    Q(i) = -ElVec{i}.II1*(globalInputs.temperature.Ta+273.15);
 end
 
 end

@@ -28,11 +28,11 @@ classdef coolantElement
             %track position of slurry node
             obj.pos = [i,j];
 
-            obj = getNeighbours(obj);
+            obj = getNeighbours(obj,globalInputs);
             obj.radialPosition = globalInputs.program.radialNodes+5  -i;
         end
         
-        function obj = getNeighbours(obj)
+        function obj = getNeighbours(obj,globalInputs)
             %This function will deterine the neighbours of a computational
             %molecule
             %the order starts from the eastern neighbour and rotates
@@ -50,6 +50,17 @@ classdef coolantElement
             obj.neighbours(3,:) = [obj.pos(1), obj.pos(2)+1];
             %south
             obj.neighbours(4,:) = [obj.pos(1)+1, obj.pos(2)];
+
+
+            %check for boundaries (tc_out and tc_in)
+            if mod((obj.pos(2) - 2),globalInputs.program.N) == 1
+                %western neighbour is actually tc_in
+                obj.neighbours(1,:) = [obj.pos(1)-2, obj.pos(2)];
+            elseif mod((obj.pos(2) - 2),globalInputs.program.N) == 0
+                %eastern neighbour is actually tc_out
+                obj.neighbours(3,:) = [obj.pos(1)-2, obj.pos(2)];
+            end
+
         end
 
         function obj = updateCoefficients(obj,Tdist, globalInputs, TPP,ElDist)
@@ -82,7 +93,8 @@ classdef coolantElement
             
             %coefficients
             obj.D0 = (-1/cdc_west);
-            obj.D1 = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down + globalInputs.coolant.m_ax*cpc_west + globalInputs.coolant.m_r*cpc_south);
+             %west and south switched to current for now
+            obj.D1 = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down - globalInputs.coolant.m_ax*cpc - globalInputs.coolant.m_r*cpc);
             obj.D2 = (-1/cdc_east + globalInputs.coolant.m_ax*cpc);
 
             obj.E1 = (-1/cdc_down +globalInputs.coolant.m_r*cpc);
