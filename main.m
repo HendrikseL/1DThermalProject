@@ -20,9 +20,14 @@ Tdist = Tdist(:,:) + 273;
 %create elements 
 ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
 %initial update of elements. creates the coefficient matrix
-ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
+
 
 %%Begin Solution Loop
+
+Tdist = calculateBoundaryEffectiveCd(ElDist, globalInputs, Tdist, TPP);
+ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
+
+
 
 %construct coefficient matrix theta
 [theta_debug, Tvec_debug, b_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);

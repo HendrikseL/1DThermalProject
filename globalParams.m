@@ -63,8 +63,8 @@ globalInputs.screw.d = 0.85 *0.0254; %m
 globalInputs.screw.bladeD= 1.82 * 0.0254; %m
 globalInputs.screw.bladeT = 0.22*0.0254; %m
 
-globalInputs.HT.h_fpipe = 1900; %W/m^2K
-globalInputs.HT.h_fgasket = 32000; %W/m^2K
+globalInputs.flange.h_fpipe = 1900; %W/m^2K
+globalInputs.flange.h_fgasket = 32000; %W/m^2K
 
 %coolant input parameters
 globalInputs.coolant.m = 4.8204269; %kg/s
