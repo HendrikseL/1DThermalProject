@@ -27,6 +27,8 @@ globalInputs.temperature.in.Tsc = 80;
 globalInputs.temperature.in.flange = 80;
 globalInputs.temperature.in.Tip = 80;
 globalInputs.temperature.in.Tc = 80;
+globalInputs.temperature.in.Ts_up = globalInputs.temperature.in.Ts;
+globalInputs.temperature.in.Tsc_up = globalInputs.temperature.in.Tsc;
 
 globalInputs.temperature.out.Ts = 80;
 globalInputs.temperature.out.Tsc = 80;
@@ -65,6 +67,8 @@ globalInputs.screw.bladeT = 0.22*0.0254; %m
 
 globalInputs.flange.h_fpipe = 1900; %W/m^2K
 globalInputs.flange.h_fgasket = 32000; %W/m^2K
+globalInputs.flange.D = 18.5*0.0254; %m
+globalInputs.flange.t = 3.5*0.0154;%m
 
 %coolant input parameters
 globalInputs.coolant.m = 4.8204269; %kg/s

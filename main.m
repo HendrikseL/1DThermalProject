@@ -24,7 +24,10 @@ ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
 
 %%Begin Solution Loop
 
-Tdist = calculateBoundaryEffectiveCd(ElDist, globalInputs, Tdist, TPP);
+cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
+Tdist = updateBoundaryTemperatures(Tdist,ElDist,TPP,globalInputs,cde);
+
+
 ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
 
 
