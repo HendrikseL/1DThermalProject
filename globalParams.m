@@ -10,6 +10,7 @@ globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
+globalInputs.program.maxIterations = 1000;
 
 %Aluminum thermophysical properties @300K
 globalInputs.aluminum.rho = 2701; %kg/m^3
