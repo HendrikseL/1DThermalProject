@@ -16,15 +16,15 @@ cv_nat_f4 = calculateNaturalConvectionResistance(TPP,globalInputs,Tdist(1,endIdx
 A2 = [ (1/cde(1) + 1/cde(5) + 1/cv_nat_f1), -1/cde(5);
            -1/cde(5), (1/cde(2) + 1/cde(5) + 1/cv_nat_f2)]; 
 
-b2 = [globalInputs.temperature.in.Tip/cde(1) + globalInputs.temperature.Ta/cv_nat_f1;
-        Tdist(2,3)/cde(2) + globalInputs.temperature.Ta/cv_nat_f2];
+b2 = [(globalInputs.temperature.in.Tip+273.15)/cde(1) + (globalInputs.temperature.Ta+273.15)/cv_nat_f1;
+        Tdist(2,3)/cde(2) + (globalInputs.temperature.Ta+273.15)/cv_nat_f2];
 
 
 A3 = [ (1/cde(3) + 1/cde(6) + 1/cv_nat_f3), -1/cde(6);
            -1/cde(6), (1/cde(4) + 1/cde(6) + 1/cv_nat_f4)]; 
 
-b3 = [Tdist(2,endIdx-2)/cde(3) + globalInputs.temperature.Ta/cv_nat_f3;
-        globalInputs.temperature.out.Tip/cde(4) + globalInputs.temperature.Ta/cv_nat_f4];
+b3 = [Tdist(2,endIdx-2)/cde(3) + (globalInputs.temperature.Ta+273.15)/cv_nat_f3;
+        (globalInputs.temperature.out.Tip+273.15)/cde(4) + (globalInputs.temperature.Ta+273.15)/cv_nat_f4];
 
 end
 

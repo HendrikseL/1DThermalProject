@@ -18,10 +18,10 @@ switch direction
         [ms_ax, ms_r] = calculateSlurryMassFlow(globalInputs,El.radialPosition);
 
         %equation split into LHS and RHS to make it more easily readable
-        rhs = (T-globalInputs.temperature.in.Tip+273.15)/(cdip+cvs) + (T - Ts_up)/cds + (T-globalInputs.temperature.in.Tsc+273.15)/cds_r + ...
+        rhs = (T-(globalInputs.temperature.in.Tip+273.15))/(cdip+cvs) + (T - Ts_up)/cds + (T-(globalInputs.temperature.in.Tsc+273.15))/cds_r + ...
                     ms_ax*cp*T + ms_r*cp*(globalInputs.temperature.in.Tip+273.15);
 
-        Ts = cds*(rhs - ms_ax*cp*Ts_up - ms_r*cp*globalInputs.temperature.in.Tsc+273.15) + T;
+        Ts = cds*(rhs - ms_ax*cp*Ts_up - ms_r*cp*(globalInputs.temperature.in.Tsc+273.15)) + T;
 
     case "out"
         %thermal resistances
@@ -36,7 +36,7 @@ switch direction
         [ms_ax, ms_r] = calculateSlurryMassFlow(globalInputs,El.radialPosition);
 
         %equation split into LHS and RHS to make it more easily readable
-        rhs = (T-globalInputs.temperature.out.Tip+273.15)/(cdip+cvs) + (T-globalInputs.temperature.out.Tsc+273.15)/cds_r + ...
+        rhs = (T-(globalInputs.temperature.out.Tip+273.15))/(cdip+cvs) + (T-(globalInputs.temperature.out.Tsc+273.15))/cds_r + ...
                     ms_ax*cp*T + ms_r*cp*(globalInputs.temperature.out.Tip+273.15);
 
         Ts = cds*(rhs - ms_ax*cp*Tdist(El.pos(1),El.pos(2)) - ms_r*cp*(globalInputs.temperature.out.Tsc+273.15)) + T;

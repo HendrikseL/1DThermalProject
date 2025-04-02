@@ -25,7 +25,7 @@ switch direction
         A = pi*globalInputs.flange.D*x;
         cv_nat = 1 / (h_nat(1)*A);
 
-        if position(1) == 1 || position(1) == (4+ globalInputs.program.N*globalInputs.program.M)
+        if position(2) == 1 || position(2) == (4+ globalInputs.program.N*globalInputs.program.M)
                 %surface area of heat transfer (top of flange cylinder)
                 A = (pi/4)*(globalInputs.flange.D^2-globalInputs.innerPipe.OD^2);
                 cv_nat_ax = 1 / (h_nat(2)*A);

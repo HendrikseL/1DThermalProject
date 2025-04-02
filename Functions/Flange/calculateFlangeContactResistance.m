@@ -14,7 +14,7 @@ switch direction
 
     case "pipe"
         %outer
-        if position(1) == 1 || position(1) == (4+ globalInputs.program.N*globalInputs.program.M)
+        if position(2) == 1 || position(2) == (4+ globalInputs.program.N*globalInputs.program.M)
             h = globalInputs.flange.h_fpipe;
             A = pi/4 * (globalInputs.outerPipe.OD - globalInputs.outerPipe.ID);
         %inner pipe
