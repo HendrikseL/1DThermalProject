@@ -8,7 +8,8 @@ switch direction
         T = globalInputs.temperature.in.Tsc+273.15;
 
         cdsc = calculateScrewConductionResistance(TPP,globalInputs,T,"axial",[]);
-        [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T,"axial",[]);
+        [cd_slurry, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T,"boundary",[]);
+        cds = cd_slurry(1);
 
         Tsc_up = globalInputs.temperature.in.Tsc_up; %temporary, same as with the slurry
 
@@ -18,7 +19,8 @@ switch direction
         T = globalInputs.temperature.out.Tsc+273.15;
 
         cdsc= calculateScrewConductionResistance(TPP,globalInputs,T,"axial",[]);
-        [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T,"axial",[]);
+        [cd_slurry, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T,"boundary",[]);
+        cds = cd_slurry(1);
 
         Tsc = cdsc*((T-(globalInputs.temperature.out.Ts+273.15))/cds) + T;
 

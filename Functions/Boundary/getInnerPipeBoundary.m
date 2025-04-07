@@ -9,7 +9,7 @@ switch direction
         %thermal resistances
         cdip = calculatePipeConductionResistance(TPP,globalInputs,T,"axial",[4,1]);
 
-        [~,k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"axial",[]);
+        [~,k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"axial",[4,1]);
         cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
 
         %Tdist(1,1) is flange 1 temperature
@@ -21,7 +21,7 @@ switch direction
         %thermal resistances
         cdip = calculatePipeConductionResistance(TPP,globalInputs,T,"axial",[4,(2+(globalInputs.program.N*globalInputs.program.M))]);
 
-        [~,k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"axial",[]);
+        [~,k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"axial",[4,1]);
         cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
 
         %Tdist(1,end) is flange 1 temperature

@@ -45,7 +45,7 @@ switch material
         elseif T > TPP.water(end,1)
             k =TPP.water(end,2);
         else
-            k = lerp(TPP.waterCoolantConduction(:,[1:2]),T);
+            k = lerp(TPP.water(:,[1:2]),T);
         end
     otherwise
         error("Selected material does not exist");

@@ -5,14 +5,14 @@ function [cd_f, k_f] = calculateFlangeConductionResistance(TPP,globalInputs,T,di
 %       T -> desired temperature
 
 k_f =getConductionCoef(TPP,T,"ss316");
+x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 
 
 switch direction
 
     case "axial"
-        A = globalInputs.screw.p*cosd(45)*globalInputs.screw.deltaR;
-        x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
-
+        %fix me later
+        A = pi/4 * (globalInputs.flange.D);
         cd_f = (x) /(k_f *A);
 
     case "radial"
@@ -20,7 +20,7 @@ switch direction
         dist = (globalInputs.program.radialNodes +5) - position(1);
         D1 = dist*globalInputs.screw.deltaR;
 
-        cd_f = (log((D1+globalInputs.screw.deltaR)/D1)) / (2*pi*globalInputs.screw.l*k_f);
+        cd_f = (log((D1+globalInputs.screw.deltaR)/D1)) / (2*pi*x*k_f);
 end
 end
 

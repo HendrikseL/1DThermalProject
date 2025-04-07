@@ -25,8 +25,8 @@ Tdist([1:3],[1:2]) = globalInputs.temperature.in.flange;
 Tdist([1:3],[end-1:end]) = globalInputs.temperature.out.flange;
 
 %inner pipe temps
-Tdist(4,[1:2]) = globalInputs.temperature.in.Ts;
-Tdist(4,[end-1:end]) = globalInputs.temperature.out.Ts;
+Tdist(4,[1:2]) = globalInputs.temperature.in.Tip;
+Tdist(4,[end-1:end]) = globalInputs.temperature.out.Tip;
 
 
   

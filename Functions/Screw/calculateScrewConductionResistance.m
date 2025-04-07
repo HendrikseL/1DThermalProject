@@ -10,7 +10,7 @@ x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 switch direction
 
     case "axial"
-        A = globalInputs.screw.p*cosd(45)*globalInputs.screw.deltaR;
+        A = pi/4 * (globalInputs.screw.d)^2;
 
         
         cd_screw = (x) /(k_hast *A);
@@ -18,7 +18,7 @@ switch direction
     case "radial"
         %find distance from wall
         dist = (globalInputs.program.radialNodes +5) - position(1);
-        D1 = dist*globalInputs.screw.deltaR;
+        D1 = globalInputs.screw.r0 + dist*globalInputs.screw.deltaR;
 
         cd_screw = (log((D1+globalInputs.screw.deltaR)/D1)) / (2*pi*x*k_hast);
     end

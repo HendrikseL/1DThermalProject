@@ -24,20 +24,20 @@ globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
 globalInputs.temperature.in.Ts = 80;
-globalInputs.temperature.in.Tsc = 80;
-globalInputs.temperature.in.flange = 80;
-globalInputs.temperature.in.Tip = 80;
-globalInputs.temperature.in.Tc = 80;
+globalInputs.temperature.in.Tsc = 20;
+globalInputs.temperature.in.flange = 20;
+globalInputs.temperature.in.Tip = 20;
+globalInputs.temperature.in.Tc = 20;
 globalInputs.temperature.in.Ts_up = globalInputs.temperature.in.Ts;
 globalInputs.temperature.in.Tsc_up = globalInputs.temperature.in.Tsc;
 
 globalInputs.temperature.out.Ts = 80;
-globalInputs.temperature.out.Tsc = 80;
-globalInputs.temperature.out.flange = 80;
-globalInputs.temperature.out.Tip = 80;
-globalInputs.temperature.out.Tc = 80;
+globalInputs.temperature.out.Tsc = 20;
+globalInputs.temperature.out.flange = 20;
+globalInputs.temperature.out.Tip = 20;
+globalInputs.temperature.out.Tc = 20;
 
-globalInputs.temperature.Ta = 80; %ambient temperature
+globalInputs.temperature.Ta = 20; %ambient temperature
 
 %slurry inputs
 globalInputs.slurry = struct;

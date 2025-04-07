@@ -5,7 +5,7 @@ function [cd_pipe] = calculatePipeConductionResistance(TPP,globalInputs,T,direct
 %       T -> desired temperature
 
 k_ss =getConductionCoef(TPP,T,"ss316");
-
+        x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 
 switch direction
 
@@ -20,9 +20,7 @@ switch direction
             error("Pipe position invalid. Please select inner pipe (row 3) or outer pipe (row 1)");
         end
 
-        A = (pi/4) *  (D2^2-D1^2);
-        x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
-        
+        A = (pi/4) *  (D2^2-D1^2);   
         cd_pipe = (x) /(k_ss *A);
 
     case "radial"
@@ -36,7 +34,7 @@ switch direction
             error("Pipe position invalid. Please select inner pipe (row 3) or outer pipe (row 1)");
         end
 
-        cd_pipe = (log((D2)/D1)) / (2*pi*globalInputs.screw.l*k_ss);
+        cd_pipe = (log((D2)/D1)) / (2*pi*x*k_ss);
     end
 end
 

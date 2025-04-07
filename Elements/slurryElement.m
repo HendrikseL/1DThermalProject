@@ -65,8 +65,8 @@ classdef slurryElement
             T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
             %get resistance coefficients
-            [cds_west, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_west,"axial",[]);
-            [cds_east, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_east,"axial",[]);
+            [cds_west, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos);
+            [cds_east, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos);
 
             cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)));
             cds_down = calculateCdsDown(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)));

@@ -6,7 +6,14 @@ function [h] = getForcedConvectionCoef(TPP, globalInputs, T, k_slurry)
 %   T: desired operating temperature
 
 %getting slurry viscosity
-mu_water = lerp([TPP.water(:,1),TPP.water(:,3)],T);
+if T > TPP.water(end,1)
+    %use maximum tabulate viscosity and tell user
+    mu_water = TPP.water(end,3);
+    fprintf("Temperature %.1f K, is too high, max viscosity for water used (getForcedConvectionCoef)",T);
+else
+    mu_water = lerp([TPP.water(:,1),TPP.water(:,3)],T);
+end
+
 phi = globalInputs.slurry.volumeFraction;
 
 mu_slurry = mu_water *(1 + 2.5*phi + 10.05*phi^2 + 0.00273*exp(16.6*phi) );

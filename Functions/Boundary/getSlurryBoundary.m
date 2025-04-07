@@ -6,8 +6,9 @@ switch direction
     case "in"
         %thermal resistances
         T = globalInputs.temperature.in.Ts+273.15; %position of slurry inlet temperature
-        [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"axial",[]);
-        [cds_r, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",El.pos);
+        [cd_slurry, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"boundary",[]);
+        cds = cd_slurry(1);
+        cds_r = cd_slurry(2);
         cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
         cp = calculateSlurryHeatCap(TPP,globalInputs,T);
 
@@ -26,8 +27,9 @@ switch direction
     case "out"
         %thermal resistances
         T = globalInputs.temperature.out.Ts+273.15; %position of slurry inlet temperature
-        [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"axial",[]);
-        [cds_r, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",El.pos);
+        [cd_slurry, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"boundary",[]);
+        cds = cd_slurry(1);
+        cds_r = cd_slurry(2);
         cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
         cp = calculateSlurryHeatCap(TPP,globalInputs,T);
 
