@@ -39,13 +39,13 @@ switch material
         else
             k = lerp(TPP.aluminum(:,[1:2]),T);
         end
-    case "water"
-        if T < TPP.water(1,1)
-            k = TPP.water(1,2);
-        elseif T > TPP.water(end,1)
-            k =TPP.water(end,2);
+    case "water" %cooan conduction is used as this is the available data set for water with conduction heat transfer coefficients
+        if T < TPP.waterCoolantConduction(1,1)
+            k = TPP.waterCoolantConduction(1,2);
+        elseif T > TPP.waterCoolantConduction(end,1)
+            k =TPP.waterCoolantConduction(end,2);
         else
-            k = lerp(TPP.water(:,[1:2]),T);
+            k = lerp(TPP.waterCoolantConduction(:,[1:2]),T);
         end
     otherwise
         error("Selected material does not exist");

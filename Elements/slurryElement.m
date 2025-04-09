@@ -92,7 +92,7 @@ classdef slurryElement
 
                 case "slurry"
                     [cds, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
-                    cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_s);
+                    cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_s,obj.pos);
 
                     cds_up = (1/cds + 1/cvs)^(-1);
                 case "innerPipe"
@@ -108,11 +108,11 @@ classdef slurryElement
 
 
         function cds_down = calculateCdsDown(obj,TPP,globalInputs,ElDist,T)
-                                switch ElDist{obj.neighbours(4,1),obj.neighbours(4,2)}.type
+                switch ElDist{obj.neighbours(4,1),obj.neighbours(4,2)}.type
 
                 case "slurry"
                     [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos);
-                    hs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry);
+                    hs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry,obj.pos);
 
                     cds_down = (1/cds + 1/hs)^(-1);
                 case "screw"
