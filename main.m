@@ -13,24 +13,20 @@ tic
 globalParams
 createThermophysicaProperties
 
-%%Initialize Temperature matrix and resistor elements
+%Initialize Temperature matrix 
 Tdist = initializeTempDistribution(globalInputs);
 %convert all temps to Kelvin
 Tdist = Tdist(:,:) + 273.15;
 
+%Initialize resistor elements
 ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
 
-toc
-
-tic
-CONVERGED = 0; %convergence flag
-
 %%Begin Solution Loop
+CONVERGED = 0; %convergence flag
 i = 1;
 while ~CONVERGED && i < globalInputs.program.maxIterations
 
     cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
-    % Tdist = updateBoundaryTemperatures(Tdist,ElDist,TPP,globalInputs,cde);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
 
     ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
@@ -50,17 +46,19 @@ while ~CONVERGED && i < globalInputs.program.maxIterations
     %solve equations M.3 (flange temperatures 3 and 4)
     T_flange(3:4,1) = A3\b3;
 
+    %combines the temperature outputs from the M1, M2 and M3 into the
+    %format of Tdist in the documentation
     Tdist_new = reconstructTdist(T_new,T_flange,positionMap,Tdist);
 
     %check solution convergance
     Qnet = calculateNetHeatFlow(ElDist,Tdist_new,globalInputs);
     Tc_out = calculateCoolantOutletTemperature(TPP,Tdist_new,globalInputs,Qnet);
 
-    %k counts absolute the column position
-    k = 2; %offset k
+    %k counts absolute column position
+    k = 2; %offset k, accounts the two columns of inlet temps
     error = zeros(1,globalInputs.program.M);
     converged_array = zeros(1,globalInputs.program.M);
-    %count through heat exchangers and sample the Tc,out of each (Tdist at
+    %count through heat exchangers (M) and sample the Tc,out of each (Tdist at
     %position N)
     for j = 1:1:globalInputs.program.M
         k = k + globalInputs.program.N;
