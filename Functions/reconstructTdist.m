@@ -15,5 +15,15 @@ for i = 1:1:length(T_new)
     Tdist_new(positionMap(i,1),positionMap(i,2)) = T_new(i);
 end
 
+%copy the padding conditions for visualization
+%first row
+for i = 4:1:length(Tdist_new(:,1))
+    Tdist_new(i,1) = Tdist_new(i,2);
+end
+%last row
+for i = 4:1:length(Tdist_new(:,1))
+    Tdist_new(i,end) = Tdist_new(i,end-1);
+end
+
 end
 
