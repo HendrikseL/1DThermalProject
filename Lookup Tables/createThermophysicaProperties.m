@@ -24,13 +24,13 @@ TPP.wool(:,1) = TPP.wool(:,1) + 273.15;
 TPP.air = readmatrix("Air_Convection.csv",NumHeaderLines=1);
 TPP.air(:,1) = TPP.air(:,1) + 273.15;
 
-%temp (c), cp (kj/kgK), mu (Pa s)
-TPP.water = readmatrix("Water_Convection.csv",NumHeaderLines=1);
+%temp (c), cp (kj/kgK), mu (Pa s) (Slurry Water)
+TPP.water = readmatrix("Water_Coolant_Convection_2.csv",NumHeaderLines=1);
 TPP.water(:,1) = TPP.water(:,1) + 273.15;
 TPP.water(:,2) = TPP.water(:,2)*1000; %converting to J/kgK
 
-%Temp (c), cp (kj/kgK), mu (Pa s)
-TPP.waterCoolant = readmatrix("Water_Coolant_Convection.csv",NumHeaderLines=1);
+%Temp (c), cp (kj/kgK), mu (Pa s) (Coolant Water)
+TPP.waterCoolant = readmatrix("Water_Coolant_Convection_2.csv",NumHeaderLines=1);
 TPP.waterCoolant(:,1) = TPP.waterCoolant(:,1) + 273.15;
 TPP.waterCoolant(:,2) = TPP.waterCoolant(:,2)*1000; %converting to J/kgK
 

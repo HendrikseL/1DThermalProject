@@ -1,8 +1,9 @@
-function [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,direction,position)
+function [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,direction,position,alpha)
 %Calculate the thermal conduction resistance of the slurry
 
 %Input: GlobalVariables and thermophysical properties
 %       T -> desired temperature
+%       alpha -> combustion flag, 0 = no combustion
 
 k_aluminum=getConductionCoef(TPP,T,"aluminum");
 
@@ -13,7 +14,12 @@ k_water =getConductionCoef(TPP,T,"water");
 k_slurry = globalInputs.slurry.volumeFraction*k_aluminum + (1-globalInputs.slurry.volumeFraction)*k_water;
 
 x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
-dist = (globalInputs.program.radialNodes +5) - position(1);
+dist = (globalInputs.program.radialNodes +4) - position(1);
+%if distance is -1, coressponding to the screw, dist should be 0
+if dist < 0
+    dist = 0;
+end
+
 R1 = globalInputs.screw.r0 + dist*globalInputs.screw.deltaR;
 
 switch direction
@@ -26,17 +32,5 @@ switch direction
     case "radial"
         %find distance from wall
         cds = (log((R1+globalInputs.screw.deltaR)/R1)) / (2*pi*x*k_slurry);
-    % case "boundary"
-    %     D2 = globalInputs.screw.bladeD;
-    %     D1 = globalInputs.screw.d;
-    % 
-    %     A = pi/4 * (D2^2 - D1^2);
-    %     x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
-    % 
-    %     %axial for entire boundary
-    %     cds(1) = (x) /(k_slurry *A);
-    % 
-    %    %radial of entire boundary
-    %     cds(2) = (log(D2/D1)) / (2*pi*x*k_slurry); 
     end
 end

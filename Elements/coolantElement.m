@@ -11,7 +11,9 @@ classdef coolantElement
         %object properties
         type string = "coolant";
 
-
+        %combustion flag, present here for uniformity.
+        %will always be empty
+        COMBUSTION double = [];
 
         %Output Coefficients
         D0 double = [];
@@ -80,11 +82,12 @@ classdef coolantElement
             [cdc_east, ~] = calculateCoolantConductionResistance(TPP,globalInputs,T_east,"axial");
 
             cd_fins = calculateFinsConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
-            cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_cool);
+            cvc_op = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),2);
+            cvc_ip = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),4);
             cd_op = calculatePipeConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",[obj.pos(1)-1,obj.pos(2)]);
 
-            cdc_up = (1/(cvc + cd_op) + 1/cd_fins)^(-1);
-            cdc_down = (1/cvc + 1/cd_fins)^(-1);
+            cdc_up = (1/(cvc_op + cd_op) + 1/cd_fins)^(-1);
+            cdc_down = (1/cvc_ip + 1/cd_fins)^(-1);
 
             %heat capacities
             cpc_west = calculateCoolantHeatCap(TPP,globalInputs,T_west);

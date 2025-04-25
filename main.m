@@ -20,16 +20,17 @@ Tdist = Tdist(:,:) + 273.15;
 
 %Initialize resistor elements
 ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
+combMap = zeros(length(ElDist(:,1)),length(ElDist(1,:)));
 
 %%Begin Solution Loop
 CONVERGED = 0; %convergence flag
 i = 1;
-while ~CONVERGED && i < globalInputs.program.maxIterations
+while ~CONVERGED && i < 2%globalInputs.program.maxIterations
 
     cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
 
-    ElDist = updateElements(ElDist, globalInputs, Tdist, TPP);
+    [ElDist, combMap] = updateElements(ElDist, globalInputs, Tdist, TPP, combMap);
 
     %construct coefficient matrix theta
     % [theta_debug, Tvec_debug, b_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
@@ -84,6 +85,8 @@ while ~CONVERGED && i < globalInputs.program.maxIterations
     i = i +1;
 end
 
+%convert all temps back to Celsius
+Tdist = Tdist(:,:) - 273.15;
 
 %clear all unwanted variables (comment to debug)
 % clearvars -except globalInputs Tdist TPP ElDist

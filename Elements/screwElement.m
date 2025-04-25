@@ -11,7 +11,8 @@ classdef screwElement
         %object properties
         type string = "screw";
 
-
+        %combustion flag, used for slurry, 0 = no combustion
+        COMBUSTION double = 0;
 
         %Output Coefficients
         F0 double = [];
@@ -63,7 +64,7 @@ classdef screwElement
             cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos);
             cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos);
 
-            [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos);
+            [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.COMBUSTION);
             
             %coefficients
             obj.F0 = (-1/cdsc_west);

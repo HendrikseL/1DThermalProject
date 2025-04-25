@@ -5,7 +5,7 @@ function [cd_pipe] = calculatePipeConductionResistance(TPP,globalInputs,T,direct
 %       T -> desired temperature
 
 k_ss =getConductionCoef(TPP,T,"ss316");
-        x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 
 switch direction
 

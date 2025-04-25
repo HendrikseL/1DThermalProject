@@ -1,4 +1,4 @@
-function [h] = getForcedConvectionCoef(TPP, globalInputs, T, k_slurry)
+function [h] = getForcedConvectionCoef(TPP, globalInputs, T, k_slurry,alpha)
 %calculates the forced heat transfer coefficient within the slurry
 %Inputs:
 %   TPP: thermophysical properties
@@ -24,7 +24,19 @@ cp_slurry = calculateSlurryHeatCap(TPP,globalInputs,T);
 %Reynolds number and Prandtl number
 Pr = (cp_slurry * mu_slurry) / k_slurry;
 
-Red = (2*globalInputs.slurry.ms)/(globalInputs.screw.r*pi*mu_slurry);
+%calculating reynolds number
+w = (globalInputs.innerPipe.ID-2*globalInputs.screw.r0)/2;
+l = globalInputs.screw.p*cosd(45);
+A =  w*l;
+%hydraulic diameter
+D = 2*A/(w+l);
+
+%for no combustion:
+if alpha == 1
+   %do nothing for now
+else
+    Red = (4*globalInputs.slurry.ms)/(D*pi*mu_slurry);
+end
 
 %moody friction factor (8.21) incopera et al.
 f = (0.790*log(Red) - 1.64)^-2;

@@ -8,7 +8,7 @@ function [ms_ax, ms_r] = calculateSlurryMassFlow(globalInputs,node)
 %           position
 
     ms_ax = globalInputs.slurry.ms * (( (node*globalInputs.screw.deltaR)^2 - (node*globalInputs.screw.deltaR- globalInputs.screw.deltaR)^2)/...
-        (globalInputs.screw.h^2 - globalInputs.screw.r0^2)) * 1/(sqrt(1 +  ((2*pi*node*globalInputs.screw.deltaR)/globalInputs.screw.p)^2));
+        (globalInputs.innerPipe.ID^2 - globalInputs.screw.r0^2)) * 1/(sqrt(1 +  ((2*pi*node*globalInputs.screw.deltaR)/globalInputs.screw.p)^2));
 
     ms_r = ms_ax * ((2*pi*(node*globalInputs.screw.deltaR))/globalInputs.screw.p);
         

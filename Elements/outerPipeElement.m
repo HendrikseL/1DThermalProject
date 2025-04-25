@@ -11,7 +11,9 @@ classdef outerPipeElement
         %object properties
         type string = "outerPipe";
 
-
+        %combustion flag, present here for uniformity.
+        %will always be empty
+        COMBUSTION double = [];
 
         %Output Coefficients
         H0 double = [];
@@ -59,7 +61,7 @@ classdef outerPipeElement
             cdop = calculatePipeConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial",obj.pos);
 
             [~,k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial");
-            cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_cool);
+            cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.pos);
             
             %temperatures, averaged between nodes 
             T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
@@ -76,10 +78,23 @@ classdef outerPipeElement
             cd_ins = calculateInsulationConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
 
             %coefficients
-            obj.H0 = (-1/cdop_west);
-            obj.H1 = (1/cdop_west + 1/cdop_east + 1/(cvc + cdop) + 1/(cv_nat + cd_ins));
-            obj.H2 = (-1/cdop_east);
+            if obj.pos(2) == 3 %touching flange on left
+                R_west = (1/(cdop_west+calculateFlangeContactResistance(globalInputs,"pipe",[1,2])));
+            else
+                R_west = (1/cdop_west);
+            end
 
+            if obj.pos(2) == length(ElDist(1,:))-2 %touching flange on left
+                posF3 = [1, 3+globalInputs.program.N*globalInputs.program.M];
+                R_east = (1/(cdop_east+calculateFlangeContactResistance(globalInputs,"pipe",posF3)));
+            else
+                R_east = (1/cdop_east);
+            end
+
+            obj.H0 = -R_west;
+            obj.H2 = -R_east;
+            obj.H1 = (R_west + R_east + 1/(cvc + cdop) + 1/(cv_nat + cd_ins));
+           
             obj.I1 = (-1/(cvc + cdop));
 
             obj.II1 = (-1/(cv_nat + cd_ins));

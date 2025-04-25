@@ -11,7 +11,8 @@ classdef innerPipeElement
         %object properties
         type string = "innerPipe";
 
-
+        %combustion flag
+        COMBUSTION double = 0;
 
         %Output Coefficients
         J0 double = [];
@@ -66,20 +67,21 @@ classdef innerPipeElement
             cdfin_r = calculateFinsConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
             
             %slurry convection
-            [~, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos);
-            cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_s,obj.pos);
+            [~, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.COMBUSTION);
+            cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_s,obj.pos,obj.COMBUSTION,"upper");
 
             %coolant convection
             [~, k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
-             cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_cool);
+             cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.pos);
 
 
             %coefficients
             obj.J0 = (-1/cdip);
-            obj.J1 = (1/(cdip+cdfin) +1/(cdip + cdfin_r) + 1/(cdip + cvs) + 1/(cvc));
+            % obj.J1 = (1/(cdip+cdfin) +1/(cdip + cdfin_r) + 1/(cdip + cvs) + 1/(cvc));
+            obj.J1 = (1/(cdip) +1/(cdip ) + 1/(cdip_r + cvs) + 1/(cvc));
             obj.J2 = (-1/cdip);
 
-            obj.K1 = ( -1/(cdip + cvs));
+            obj.K1 = ( -1/(cdip_r + cvs));
 
             obj.L1 = (-1/cvc);
 
