@@ -23,7 +23,7 @@ globalInputs.water.cp = 4.18;% kJ/kgK
 globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
-globalInputs.temperature.in.Ts = 22;
+globalInputs.temperature.in.Ts = 80;
 globalInputs.temperature.in.Tsc = 22;
 globalInputs.temperature.in.flange = 22;
 globalInputs.temperature.in.Tip = 22;

@@ -38,6 +38,7 @@ while ~CONVERGED && i < 2%globalInputs.program.maxIterations
 
     Q = constructHeatFlowInput(ElVec,Tdist,globalInputs);
 
+    %%Solve Equations
     %solve equation M.1 (main resistor matrix)
     T_new =  (theta)\(Q-b)';
 
@@ -51,7 +52,7 @@ while ~CONVERGED && i < 2%globalInputs.program.maxIterations
     %format of Tdist in the documentation
     Tdist_new = reconstructTdist(T_new,T_flange,positionMap,Tdist);
 
-    %check solution convergance
+    %%Check Solution Convergance
     Qnet = calculateNetHeatFlow(ElDist,Tdist_new,globalInputs);
     Tc_out = calculateCoolantOutletTemperature(TPP,Tdist_new,globalInputs,Qnet);
 
