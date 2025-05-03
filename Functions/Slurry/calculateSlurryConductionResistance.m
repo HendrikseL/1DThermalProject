@@ -4,14 +4,21 @@ function [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,
 %Input: GlobalVariables and thermophysical properties
 %       T -> desired temperature
 %       alpha -> combustion flag, 0 = no combustion
+if alpha == 0
+    k_aluminum=getConductionCoef(TPP,T,"aluminum");
+    
+    %uses conduction values for water at 1atm. This needs to be updated with a
+    %new data set.
+    k_water =getConductionCoef(TPP,T,"water");
+    
+    k_slurry = globalInputs.slurry.volumeFraction*k_aluminum + (1-globalInputs.slurry.volumeFraction)*k_water;
 
-k_aluminum=getConductionCoef(TPP,T,"aluminum");
+else
+%use conduction values for products
 
-%uses conduction values for water at 1atm. This needs to be updated with a
-%new data set.
-k_water =getConductionCoef(TPP,T,"water");
+end
 
-k_slurry = globalInputs.slurry.volumeFraction*k_aluminum + (1-globalInputs.slurry.volumeFraction)*k_water;
+
 
 x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 dist = (globalInputs.program.radialNodes +4) - position(1);

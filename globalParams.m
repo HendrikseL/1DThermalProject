@@ -24,23 +24,22 @@ globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
 globalInputs.temperature.in.Ts = 80;
-globalInputs.temperature.in.Tsc = 22;
-globalInputs.temperature.in.flange = 22;
-globalInputs.temperature.in.Tip = 22;
-globalInputs.temperature.in.Tc = 22;
+globalInputs.temperature.in.Tsc = 21.1111;
+globalInputs.temperature.in.flange = 21.1111;
+globalInputs.temperature.in.Tip = 21.1111;
+globalInputs.temperature.in.Tc = 21.1111;
 globalInputs.temperature.in.Ts_up = globalInputs.temperature.in.Ts;
 globalInputs.temperature.in.Tsc_up = globalInputs.temperature.in.Tsc;
 
-globalInputs.temperature.out.Ts = 22;
-globalInputs.temperature.out.Tsc = 22;
-globalInputs.temperature.out.flange = 22;
-globalInputs.temperature.out.Tip = 22;
-globalInputs.temperature.out.Tc = 22;
+globalInputs.temperature.out.Ts = 21.1111;
+globalInputs.temperature.out.Tsc = 21.1111;
+globalInputs.temperature.out.flange = 21.1111;
+globalInputs.temperature.out.Tip = 21.1111;
+globalInputs.temperature.out.Tc = 21.1111;
 
-globalInputs.temperature.Ta = 22; %ambient temperature
+globalInputs.temperature.Ta = 21.1111; %ambient temperature
 
 %slurry inputs
-globalInputs.slurry = struct;
 globalInputs.slurry.massRatio = 1.3; % water/al mass ratio
 
 %derive volume fraction and slurry density
@@ -75,17 +74,17 @@ globalInputs.screw.bladeT = 0.22*0.0254; %m
 globalInputs.flange.h_fpipe = 1900; %W/m^2K
 globalInputs.flange.h_fgasket = 32000; %W/m^2K
 globalInputs.flange.D = 18.5*0.0254; %m
-globalInputs.flange.t = 3.5*0.0154;%m
+globalInputs.flange.t = 3.5*0.0254;%m
 
 %coolant input parameters
-globalInputs.coolant.m = 4.8205; %kg/s
+globalInputs.coolant.m = 0.0125998; %kg/s
 globalInputs.coolant.m_r = globalInputs.coolant.m * 0;
 globalInputs.coolant.m_ax = globalInputs.coolant.m * 1;
 
 
 
 %fin input parameters
-globalInputs.fins.OD = 6.75*0.0254; %fins OD in m
+globalInputs.fins.OD = 6.56*0.0254; %fins OD in m
 globalInputs.fins.thickness = 0.0625*0.0254;
 globalInputs.fins.spacing = 6 / 0.0254; %fins per meter (from fins per inch)
 

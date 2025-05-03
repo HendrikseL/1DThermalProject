@@ -12,7 +12,10 @@ for i = r+offset+1:-1:2
     for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
 
         %if slurry is combusted, update the flag of its neighbours
-        if strcmp(ElDist{i,j}.type,"slurry") && ElDist{i,j}.COMBUSTION == 1
+        %0 = no combustion
+        %1 = combusted, use products
+        %2 = combustion occuring here, use products and generate heat
+        if strcmp(ElDist{i,j}.type,"slurry") && (ElDist{i,j}.COMBUSTION == 1 || ElDist{i,j}.COMBUSTION == 2)
             %downstream neighbours
             combMap(i,[j:end]) = 1;
 
