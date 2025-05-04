@@ -54,24 +54,24 @@ classdef screwElement
             %This function handles the updating of the screw node. It
             %is called upon initialization and when the solver is
             %iterating.
-            cdsc = calculateScrewConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial",obj.pos);
+            cdsc = calculateScrewConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.type);
             
             %temperatures, averaged between nodes 
             T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
             T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
             %get resistance coefficients
-            cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos);
-            cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos);
+            cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos,obj.type);
+            cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos,obj.type);
 
-            [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.COMBUSTION);
+            % [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.COMBUSTION);
             
             %coefficients
             obj.F0 = (-1/cdsc_west);
-            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cds);
+            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdsc);
             obj.F2 = (-1/cdsc_east);
 
-            obj.G1 = (-1/cds);
+            obj.G1 = (-1/cdsc);
 
  
         end

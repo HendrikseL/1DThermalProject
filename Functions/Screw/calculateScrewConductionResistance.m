@@ -1,4 +1,4 @@
-function [cd_screw] = calculateScrewConductionResistance(TPP,globalInputs,T,direction,position)
+function [cd_screw] = calculateScrewConductionResistance(TPP,globalInputs,T,direction,position,type)
 %Calculate the thermal conduction resistance of the screw
 
 %Input: GlobalVariables and thermophysical properties
@@ -16,6 +16,9 @@ switch direction
         cd_screw = (x) /(k_hast *A);
 
     case "radial"
+        if strcmp(type,"slurry")
+            x = globalInputs.screw.p*x*globalInputs.screw.bladeT;
+        end
         %find distance from wall
         dist = (globalInputs.program.radialNodes +5) - position(1);
         D1 = globalInputs.screw.r0 + dist*globalInputs.screw.deltaR;

@@ -4,5 +4,5 @@
 main
 
 for i =1:1:length(theta(:,1))
-    error(i) = (22+273.15)*(sum(theta(i,:))) - Q(i) + b(i);
+    error(i) = (21.1111+273.15)*(sum(theta(i,:))) - Q(i) + b(i);
 end
