@@ -77,9 +77,9 @@ globalInputs.flange.D = 18.5*0.0254; %m
 globalInputs.flange.t = 3.5*0.0254;%m
 
 %coolant input parameters
-globalInputs.coolant.m = 0.0125998; %kg/s
-globalInputs.coolant.m_r = globalInputs.coolant.m * 0;
-globalInputs.coolant.m_ax = globalInputs.coolant.m * 1;
+globalInputs.coolant.m = 38258*0.000125998; %kg/s
+globalInputs.coolant.m_r = globalInputs.coolant.m * 0.9;
+globalInputs.coolant.m_ax = globalInputs.coolant.m * 0.1;
 
 
 
