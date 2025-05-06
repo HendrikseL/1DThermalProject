@@ -1,4 +1,4 @@
-function [theta,Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs)
+function [theta,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs)
 %This function is a copy of constructCoefMatrix. It is meant to be
 %identical except instead of placing the coeficients for the matrix, it
 %places a string coressponding to their  type (A0, A1, etc) and their
@@ -14,28 +14,25 @@ M = globalInputs.program.M;
 r = globalInputs.program.radialNodes;
 offset = globalInputs.program.offset;
 
-%%Temperature vector
+%%Create position map, allows for the coef matrix to be mapped to the Tdist
+%%matrix
 k = 1; %row counter
 
 %initialize Tvec and ElVec
-Tvec = zeros(1,len);
 ElVec = cell(1,len);
 
 %slurry inlet boundary nodes
 for i = globalInputs.program.radialNodes+offset:-1:1+offset
-    Tvec(k) = Tdist(i,2);
     positionMap(k,:) = [i,2];
     k = k+1;  
 end
 
 %inner pipe inlet boundary condition
-Tvec(k) = Tdist(4,2);
 positionMap(k,:) = [4,2];
 k = k+1;  
 
 %screw inlet boundary condition
 index = length(Tdist(:,1));
-Tvec(k) = Tdist(index,2);
 positionMap(k,:) = [index,2];
 k = k+1; 
 
@@ -43,7 +40,6 @@ k = k+1;
 %slurry
 for i = globalInputs.program.radialNodes+offset:-1:1+offset
     for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(i,j);
         ElVec{k} = ElDist{i,j};
         positionMap(k,:) = ElDist{i,j}.pos;
 
@@ -53,7 +49,6 @@ end
 
 %inner pipe
 for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(4,j);
         ElVec{k} = ElDist{4,j};
         positionMap(k,:) = ElDist{4,j}.pos;
 
@@ -62,7 +57,6 @@ end
 
 %coolant
 for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(3,j);
         ElVec{k} = ElDist{3,j};
         positionMap(k,:) = ElDist{3,j}.pos;
 
@@ -71,7 +65,6 @@ end
 
 %screw
 for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(globalInputs.program.radialNodes+offset+1,j);
         ElVec{k} = ElDist{globalInputs.program.radialNodes+offset+1,j};
         positionMap(k,:) = ElDist{globalInputs.program.radialNodes+offset+1,j}.pos;
 
@@ -80,7 +73,6 @@ end
 
 %outer pipe
 for j = globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(2,j);
         ElVec{k} = ElDist{2,j};
         positionMap(k,:) = ElDist{2,j}.pos;
 
@@ -90,19 +82,16 @@ end
 len = length(Tdist(1,:))-1;
 %slurry outlet boundary nodes
 for i = globalInputs.program.radialNodes+offset:-1:1+offset
-    Tvec(k) = Tdist(i,len);
     positionMap(k,:) = [i,len];
     k = k+1;  
 end
 
 %inner pipe outlet boundary condition
-Tvec(k) = Tdist(4,len);
 positionMap(k,:) = [4,len];
 k = k+1;  
 
 %screw outlet boundary condition
 index = length(Tdist(:,1));
-Tvec(k) = Tdist(index,len);
 positionMap(k,:) = [index,len];
 k = k+1; 
 

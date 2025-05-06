@@ -3,14 +3,17 @@
 globalInputs = struct;
 
 %program parameters
-globalInputs.program.writeInterval = 1; %time steps between writes
 globalInputs.program.radialNodes = 3;
 globalInputs.program.N = 3;
 globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
-globalInputs.program.maxIterations = 1000;
+globalInputs.program.maxIterations = 2;
+globalInputs.program.timeStep = 1e-3;
+globalInputs.program.writeOutput = 1; %flag for if write should be done
+globalInputs.program.writeInterval = 1; %time steps between writes
+globalInputs.program.outFile = "out.txt";
 
 %Aluminum thermophysical properties @300K
 globalInputs.aluminum.rho = 2701; %kg/m^3
@@ -23,13 +26,11 @@ globalInputs.water.cp = 4.18;% kJ/kgK
 globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
-globalInputs.temperature.in.Ts = 21.1111;
+globalInputs.temperature.in.Ts = 80;
 globalInputs.temperature.in.Tsc = 21.1111;
 globalInputs.temperature.in.flange = 21.1111;
 globalInputs.temperature.in.Tip = 21.1111;
 globalInputs.temperature.in.Tc = 21.1111;
-globalInputs.temperature.in.Ts_up = globalInputs.temperature.in.Ts;
-globalInputs.temperature.in.Tsc_up = globalInputs.temperature.in.Tsc;
 
 globalInputs.temperature.out.Ts = 21.1111;
 globalInputs.temperature.out.Tsc = 21.1111;
@@ -77,7 +78,7 @@ globalInputs.flange.D = 18.5*0.0254; %m
 globalInputs.flange.t = 3.5*0.0254;%m
 
 %coolant input parameters
-globalInputs.coolant.m = 38258*0.000125998; %kg/s
+globalInputs.coolant.m = 0; %38258*0.000125998; %kg/s
 globalInputs.coolant.m_r = globalInputs.coolant.m * 0.9;
 globalInputs.coolant.m_ax = globalInputs.coolant.m * 0.1;
 

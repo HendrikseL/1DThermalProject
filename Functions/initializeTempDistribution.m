@@ -61,7 +61,7 @@ for k = 1:globalInputs.program.N:globalInputs.program.M*globalInputs.program.N
 
         %create slurry node, equal to radial position
         for j = 1+offset:1:globalInputs.program.radialNodes+offset
-            Tdist(j,i) = globalInputs.temperature.in.Ts;
+            Tdist(j,i) = globalInputs.temperature.out.Ts;
         end
 
         %create Tsc screw node - assign position data
