@@ -20,6 +20,9 @@ classdef slurryElement
         A2 double = [];
         B1 double = [];
         C1 double = [];
+
+        %this term is related to the time derivative in the fluid
+        t double = [];
     end
     
     methods
@@ -81,12 +84,18 @@ classdef slurryElement
                 %heat capacity of incoming fluid
                 cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
                 cps_out = cps_in;
+
+                rho = globalInputs.slurry.rho;
             end
+
+          
+
+            obj.t = rho*cps_in/globalInputs.program.timeStep;
 
             %coefficients
             obj.A0 = (-1/cds_west - ms_ax*cps_in);
 
-            obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_in);
+            obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_in - obj.t);
             obj.A2 = (-1/cds_east);
 
             obj.B1 = (-1/cds_up);

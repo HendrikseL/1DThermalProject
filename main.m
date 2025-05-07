@@ -63,8 +63,8 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
 
 
     %update Tdist
-    % Tdist = Tdist + Tdist_new*globalInputs.program.timeStep;
-    Tdist = Tdist_new;
+    Tdist = Tdist + Tdist_new*globalInputs.program.timeStep;
+    % Tdist = Tdist_new;
 
 
     %write output for timestep
@@ -81,5 +81,5 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
 end
 
 %clear all unwanted variables (comment to debug)
-clearvars -except globalInputs Tdist TPP ElDist
+% clearvars -except globalInputs Tdist TPP ElDist
 toc

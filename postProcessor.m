@@ -17,6 +17,7 @@ fullPath = strcat(pwd,"/",fileName);
 
 %make flood plot of a time step
 temperatureFloodPlot(Tdist(:,:,1),settings,0,[0 100],1)
+pause(1)
 %update figure
 for i = 2:1:length(Tdist(1,1,:))
     temperatureFloodPlot(Tdist(:,:,i),settings,0,[0 100],2)

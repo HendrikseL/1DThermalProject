@@ -128,6 +128,7 @@ for i = k:1:N*M*r+k-1
     j =i;
  
     theta(i,j) = ElVec{i}.A1;
+    b(i) = ElVec{i}.t;
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
@@ -153,7 +154,7 @@ for i = k:1:N*M*r+k-1
     if ~(neighbours(3) == 0)
         theta(i,neighbours(3)) = ElVec{i}.A2;
     else
-        b(i) = ElVec{i}.A2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
+        b(i) = b(i) + ElVec{i}.A2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
     end
 
     %southern neighbour
