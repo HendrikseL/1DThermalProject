@@ -21,6 +21,9 @@ classdef coolantElement
         D2 double = [];
         E1 double = [];
         EE1 double = [];
+
+        %time derivative term
+        t double  = [];
     end
     
     methods
@@ -94,10 +97,18 @@ classdef coolantElement
             cpc_south = calculateCoolantHeatCap(TPP,globalInputs,T_south);
             cpc = calculateCoolantHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
             
+            %time derivative
+            rho = lerp([TPP.waterCoolant(:,1),TPP.waterCoolant(:,4)],Tdist(obj.pos(1),obj.pos(2)));
+
+             x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+             vol = x * (pi/4) * (globalInputs.outerPipe.ID^2 - globalInputs.innerPipe.OD^2);
+
+            obj.t = (rho*cpc*vol)/globalInputs.program.timeStep;
+
             %coefficients
             obj.D0 = (-1/cdc_west);
              %west and south switched to current for now
-            obj.D1 = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down - globalInputs.coolant.m_ax*cpc - globalInputs.coolant.m_r*cpc);
+            obj.D1 = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down - globalInputs.coolant.m_ax*cpc - globalInputs.coolant.m_r*cpc + obj.t);
             obj.D2 = (-1/cdc_east + globalInputs.coolant.m_ax*cpc);
 
             obj.E1 = (-1/cdc_down +globalInputs.coolant.m_r*cpc);

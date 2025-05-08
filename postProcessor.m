@@ -20,6 +20,6 @@ temperatureFloodPlot(Tdist(:,:,1),settings,0,[0 100],1)
 pause(1)
 %update figure
 for i = 2:1:length(Tdist(1,1,:))
-    temperatureFloodPlot(Tdist(:,:,i),settings,0,[0 100],2)
+    temperatureFloodPlot(Tdist(:,:,i),settings,i,[0 100],2)
     pause(1)
 end

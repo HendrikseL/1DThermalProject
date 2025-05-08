@@ -4,15 +4,15 @@ globalInputs = struct;
 
 %program parameters
 globalInputs.program.radialNodes = 3;
-globalInputs.program.N = 3;
+globalInputs.program.N = 9;
 globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
-globalInputs.program.maxIterations = 2;
-globalInputs.program.timeStep = 1e-3;
+globalInputs.program.maxIterations = 1000;
+globalInputs.program.timeStep = 1e-1;
 globalInputs.program.writeOutput = 1; %flag for if write should be done
-globalInputs.program.writeInterval = 1; %time steps between writes
+globalInputs.program.writeInterval = 10; %time steps between writes
 globalInputs.program.outFile = "out.txt";
 
 %Aluminum thermophysical properties @300K
@@ -26,7 +26,7 @@ globalInputs.water.cp = 4.18;% kJ/kgK
 globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
-globalInputs.temperature.in.Ts = 21.1111;
+globalInputs.temperature.in.Ts = 80;
 globalInputs.temperature.in.Tsc = 21.1111;
 globalInputs.temperature.in.flange = 21.1111;
 globalInputs.temperature.in.Tip = 21.1111;
@@ -47,7 +47,6 @@ globalInputs.slurry.massRatio = 1.3; % water/al mass ratio
 globalInputs.aluminum.w = 1/(1+globalInputs.slurry.massRatio); %mass fraction
 globalInputs.water.w = globalInputs.slurry.massRatio/ (1+ globalInputs.slurry.massRatio); %mass fraction
 
-globalInputs.slurry.rho = 1 / (globalInputs.water.w/globalInputs.water.rho + globalInputs.aluminum.w/globalInputs.aluminum.rho);
 globalInputs.slurry.volumeFraction = (globalInputs.aluminum.w/globalInputs.aluminum.rho) / (globalInputs.aluminum.w/globalInputs.aluminum.rho + globalInputs.water.w/globalInputs.water.rho);
 globalInputs.slurry.ms = 0.2553; %kg/s
 

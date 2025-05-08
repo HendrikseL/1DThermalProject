@@ -20,6 +20,9 @@ classdef innerPipeElement
         J2 double = [];
         K1 double = [];
         L1 double = [];
+
+        %time derivative term
+        t double = [];
     end
     
     methods
@@ -75,10 +78,18 @@ classdef innerPipeElement
              cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.pos);
 
 
+             c = calculatePipeHeatCap(TPP,Tdist(obj.pos(1),obj.pos(2)));
+             rho_ss = 8000; %kg/m^3
+
+              x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+             vol = x * (pi/4) * (globalInputs.innerPipe.OD^2 - globalInputs.innerPipe.ID^2);
+
+            obj.t = (rho_ss*c*vol)/globalInputs.program.timeStep;
+
             %coefficients
             obj.J0 = (-1/cdip);
             % obj.J1 = (1/(cdip+cdfin) +1/(cdip + cdfin_r) + 1/(cdip + cvs) + 1/(cvc));
-            obj.J1 = (1/(cdip) +1/(cdip ) + 1/(cdip_r + cvs) + 1/(cvc));
+            obj.J1 = (1/(cdip) +1/(cdip ) + 1/(cdip_r + cvs) + 1/(cvc) + obj.t);
             obj.J2 = (-1/cdip);
 
             obj.K1 = ( -1/(cdip_r + cvs));

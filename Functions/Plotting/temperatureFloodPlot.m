@@ -56,7 +56,7 @@ switch figType
         end
         
         colorlim = [range(1), range(2)];
-        name = strcat("Reactor Temperature Distribution at Time: ", num2str(time*settings(4)*settings(5)));
+        name = strcat("Reactor Temperature Distribution at Time: ", num2str(time*settings(4)*settings(5)), " secs");
         title(name ,"Interpreter", "latex", "Fontsize",16);
         clim(colorlim);
         c = colorbar;
@@ -124,6 +124,9 @@ switch figType
             p.AutoScale = "off";
         end
         
+        name = strcat("Reactor Temperature Distribution at Time: ", num2str(time*settings(4)*settings(5)), " secs");
+        title(name ,"Interpreter", "latex", "Fontsize",16);
+
         hold off
 end
 

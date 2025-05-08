@@ -19,6 +19,9 @@ classdef screwElement
         F1 double = [];
         F2 double = [];
         G1 double = [];
+
+        %time derivative term
+        t double = [];
     end
     
     methods
@@ -65,10 +68,16 @@ classdef screwElement
             cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos,obj.type);
 
             % [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.COMBUSTION);
-            
+            c = calculateScrewHeatCap(TPP,Tdist(obj.pos(1),obj.pos(2)));
+            rho_hx = 8220; %kg/m^3
+
+            x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+            vol = x * (pi/4)*globalInputs.screw.d^2;
+            obj.t = (rho_hx*c*vol)/globalInputs.program.timeStep;
+
             %coefficients
             obj.F0 = (-1/cdsc_west);
-            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdsc);
+            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdsc + obj.t);
             obj.F2 = (-1/cdsc_east);
 
             obj.G1 = (-1/cdsc);

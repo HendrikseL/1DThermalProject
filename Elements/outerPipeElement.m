@@ -21,6 +21,9 @@ classdef outerPipeElement
         H2 double = [];
         I1 double = [];
         II1 double = [];
+
+        %time derivate term
+        t double = [];
     end
     
     methods
@@ -91,9 +94,17 @@ classdef outerPipeElement
                 R_east = (1/cdop_east);
             end
 
+             c = calculatePipeHeatCap(TPP,Tdist(obj.pos(1),obj.pos(2)));
+             rho_ss = 8000; %kg/m^3
+
+             x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+             vol = x * (pi/4) * (globalInputs.outerPipe.OD^2 - globalInputs.outerPipe.ID^2);
+            obj.t = (rho_ss*c*vol)/globalInputs.program.timeStep;
+
+
             obj.H0 = -R_west;
             obj.H2 = -R_east;
-            obj.H1 = (R_west + R_east + 1/(cvc + cdop) + 1/(cv_nat + cd_ins));
+            obj.H1 = (R_west + R_east + 1/(cvc + cdop) + 1/(cv_nat + cd_ins) + obj.t);
            
             obj.I1 = (-1/(cvc + cdop));
 

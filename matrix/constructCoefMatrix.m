@@ -128,7 +128,7 @@ for i = k:1:N*M*r+k-1
     j =i;
  
     theta(i,j) = ElVec{i}.A1;
-    b(i) = ElVec{i}.t;
+    b(i) = -ElVec{i}.t* Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
@@ -170,6 +170,7 @@ for i = startIndex+1:1:startIndex+N*M
     j =i;
 
     theta(i,j) = ElVec{i}.J1;
+    b(i) = -ElVec{i}.t* Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
@@ -178,7 +179,7 @@ for i = startIndex+1:1:startIndex+N*M
     if ~(neighbours(1) == 0)
         theta(i,neighbours(1)) = ElVec{i}.J0;
     else
-        b(i) = ElVec{i}.J0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
+        b(i) = b(i) + ElVec{i}.J0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
     end
 
     %northern neighbour
@@ -205,6 +206,7 @@ for i = startIndex+1:1:startIndex+N*M
     j =i;
  
     theta(i,j) = ElVec{i}.D1;
+    b(i) = -ElVec{i}.t* Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
@@ -214,7 +216,7 @@ for i = startIndex+1:1:startIndex+N*M
         theta(i,neighbours(1)) = ElVec{i}.D0;
     else
         %western boundary (tc, in for coolant)
-       b(i) = ElVec{i}.D0 * Tdist(1,ElVec{i}.pos(2));
+       b(i) = b(i) + ElVec{i}.D0 * Tdist(1,ElVec{i}.pos(2));
     end
 
     %northern neighbour
@@ -227,7 +229,7 @@ for i = startIndex+1:1:startIndex+N*M
         theta(i,neighbours(3)) = ElVec{i}.D2;
     else
         %eastern boundary (tc, out)
-        b(i) = ElVec{i}.D2 * Tdist(1,ElVec{i}.pos(2));
+        b(i) = b(i) + ElVec{i}.D2 * Tdist(1,ElVec{i}.pos(2));
     end
 
     %southern neighbour
@@ -243,6 +245,7 @@ for i = startIndex+1:1:startIndex+N*M
     j =i;
  
     theta(i,j) = ElVec{i}.F1;
+    b(i) = -ElVec{i}.t* Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
 
     nMax = 3;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
@@ -252,7 +255,7 @@ for i = startIndex+1:1:startIndex+N*M
         theta(i,neighbours(1)) = ElVec{i}.F0;
     else
        %western boundary (tc, in for coolant)
-       b(i) = ElVec{i}.F0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
+       b(i) = b(i) + ElVec{i}.F0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
     end
 
     %northern neighbour
@@ -265,7 +268,7 @@ for i = startIndex+1:1:startIndex+N*M
         theta(i,neighbours(3)) = ElVec{i}.F2;
     else
        %eastern boundary (tc, in for coolant)
-       b(i) = ElVec{i}.F2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
+       b(i) = b(i) + ElVec{i}.F2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
     end
 
 end
@@ -276,6 +279,7 @@ for i = startIndex+1:1:startIndex+N*M
     j =i;
 
     theta(i,j) = ElVec{i}.H1;
+    b(i) = -ElVec{i}.t* Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
@@ -285,7 +289,7 @@ for i = startIndex+1:1:startIndex+N*M
         theta(i,neighbours(1)) = ElVec{i}.H0;
     else
        %western boundary (tc, in for coolant)
-       b(i) = ElVec{i}.H0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
+       b(i) = b(i) + ElVec{i}.H0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
     end
 
     %northern neighbour
@@ -299,7 +303,7 @@ for i = startIndex+1:1:startIndex+N*M
         theta(i,neighbours(3)) = ElVec{i}.H2;
     else
        %eastern boundary (tc, in for coolant)
-       b(i) = ElVec{i}.H2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
+       b(i) = b(i) + ElVec{i}.H2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
     end
 
     %southern neighbour

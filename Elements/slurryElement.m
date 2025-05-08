@@ -85,17 +85,22 @@ classdef slurryElement
                 cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
                 cps_out = cps_in;
 
-                rho = globalInputs.slurry.rho;
+                rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
             end
 
-          
+            dist = (globalInputs.program.radialNodes +4) - obj.pos(1);
+            R1 = globalInputs.screw.r0 + dist*globalInputs.screw.deltaR;
+            
+            A = pi * ((R1+globalInputs.screw.deltaR)^2 - R1^2);
+            x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
 
-            obj.t = rho*cps_in/globalInputs.program.timeStep;
+            vol = A*x;
+            obj.t = (rho*cps_in*vol)/globalInputs.program.timeStep;
 
             %coefficients
             obj.A0 = (-1/cds_west - ms_ax*cps_in);
 
-            obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_in - obj.t);
+            obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_in + obj.t);
             obj.A2 = (-1/cds_east);
 
             obj.B1 = (-1/cds_up);
@@ -125,22 +130,12 @@ classdef slurryElement
 
 
         function cds_down = calculateCdsDown(obj,TPP,globalInputs,ElDist,T,alpha)
-                % switch ElDist{obj.neighbours(4,1),obj.neighbours(4,2)}.type
-                % 
-                %     case "screw"
-                %         [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos,alpha);
-                %         hs = calculateSlurryConvectiveResistance(TPP,globalInputs,T,k_slurry,obj.pos,alpha,"lower");
-                % 
-                %         cds_down = (1/cds + 1/hs)^(-1);
-                %     case "slurry"
-                        %parallel pipe conduction above
-                        [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos,alpha);
-    
-                        cd_blade = calculateScrewConductionResistance(TPP, globalInputs, T,"radial",obj.pos,obj.type);
-    
-                        cds_down = (1/cds + 1/cd_blade)^(-1);
+      
+                [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,T,"radial",obj.pos,alpha);
 
-                % end
+                cd_blade = calculateScrewConductionResistance(TPP, globalInputs, T,"radial",obj.pos,obj.type);
+
+                cds_down = (1/cds + 1/cd_blade)^(-1);
         end
         
 

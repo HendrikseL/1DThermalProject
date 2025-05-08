@@ -63,8 +63,8 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
 
 
     %update Tdist
-    Tdist = Tdist + Tdist_new*globalInputs.program.timeStep;
-    % Tdist = Tdist_new;
+    % Tdist = Tdist + Tdist_new*globalInputs.program.timeStep;
+    Tdist = Tdist_new;
 
 
     %write output for timestep
