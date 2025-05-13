@@ -23,6 +23,10 @@ classdef slurryElement
 
         %this term is related to the time derivative in the fluid
         t double = [];
+
+        %tracking properties of the fluid
+        rho_old double =[] %previous time step's density
+        KE double =[] %kinetic energy term for source due to time varying density
     end
     
     methods
@@ -34,6 +38,7 @@ classdef slurryElement
 
             obj = getNeighbours(obj);
             obj.radialPosition = globalInputs.program.radialNodes+5  -i;
+
         end
         
         function obj = getNeighbours(obj)
@@ -82,10 +87,12 @@ classdef slurryElement
             if obj.COMBUSTION == 0 
                 
                 %heat capacity of incoming fluid
-                cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
-                cps_out = cps_in;
+                cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)-1));
+                cps_out = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
 
                 rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
+
+                vel = calculateSlurryVelocity(globalInputs,rho);
             end
 
             dist = (globalInputs.program.radialNodes +4) - obj.pos(1);
@@ -93,14 +100,28 @@ classdef slurryElement
             
             A = pi * ((R1+globalInputs.screw.deltaR)^2 - R1^2);
             x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
-
             vol = A*x;
+
+
             obj.t = (rho*cps_in*vol)/globalInputs.program.timeStep;
 
+            if isempty(obj.rho_old)
+                obj.rho_old = rho;
+            end
+
+            obj.KE = ((rho-obj.rho_old)/globalInputs.program.timeStep)*(vel^2/2)*vol;
+
+            obj.rho_old = rho;
+
+
+            cds_west = 1e6;
+            cds_east = 1e6;
+            cds_up = 1e6;
+            cds_down = 1e6;
             %coefficients
             obj.A0 = (-1/cds_west - ms_ax*cps_in);
 
-            obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_in + obj.t);
+            obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_out + obj.t);
             obj.A2 = (-1/cds_east);
 
             obj.B1 = (-1/cds_up);

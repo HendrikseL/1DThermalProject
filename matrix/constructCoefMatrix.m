@@ -128,7 +128,7 @@ for i = k:1:N*M*r+k-1
     j =i;
  
     theta(i,j) = ElVec{i}.A1;
-    b(i) = -ElVec{i}.t* Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
+    b(i) = -ElVec{i}.t* Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)) + ElVec{i}.KE;
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
