@@ -34,7 +34,7 @@ combMap = zeros(length(ElDist(:,1)),length(ElDist(1,:)));
 CONVERGED = 0; %convergence flag
 %time step counter
 t = 1;
-while ~CONVERGED && t < globalInputs.program.maxIterations
+% while ~CONVERGED && t < globalInputs.program.maxIterations
 
     cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
@@ -43,13 +43,13 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
 
     %construct coefficient matrix theta
     % [theta_debug, Tvec_debug, b_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
-    [theta,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs);
+    [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs);
 
     Q = constructHeatFlowInput(ElVec,Tdist,globalInputs);
 
     %%Solve Equations
     %solve equation M.1 (main resistor matrix)
-    T_new =  (theta)\(Q-b)';
+    T_new =  (A)\(Q-b)';
 
     %solve equation M.2 (flange temperatures 1 and 2)
     T_flange(1:2,1) = A2\b2;
@@ -78,8 +78,8 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
 
     %iterate timestep
     t = t +1;
-end
+% end
 
 %clear all unwanted variables (comment to debug)
-clearvars -except globalInputs Tdist TPP ElDist
+% clearvars -except globalInputs Tdist TPP ElDist
 toc
