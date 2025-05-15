@@ -21,6 +21,14 @@ classdef outerPipeElement
         H2 double = [];
         I1 double = [];
         II1 double = [];
+
+        %geometry
+        vol double =[];
+
+        %cell properties
+        rho double = 8000; %kg/m^3 for ss316
+        c double =[];
+
     end
     
     methods
@@ -32,6 +40,9 @@ classdef outerPipeElement
 
             obj = getNeighbours(obj);
             obj.radialPosition = globalInputs.program.radialNodes+5  -i;
+
+             x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+             obj.vol = x * (pi/4) * (globalInputs.outerPipe.OD^2 - globalInputs.outerPipe.ID^2);
         end
         
         function obj = getNeighbours(obj)
@@ -91,6 +102,10 @@ classdef outerPipeElement
                 R_east = (1/cdop_east);
             end
 
+
+            %calculate heat capacity
+            obj.c = calculatePipeHeatCap(TPP,Tdist(obj.pos(1),obj.pos(2)));
+            
             obj.H0 = -R_west;
             obj.H2 = -R_east;
             obj.H1 = (R_west + R_east + 1/(cvc + cdop) + 1/(cv_nat + cd_ins));

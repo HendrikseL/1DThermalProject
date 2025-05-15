@@ -20,6 +20,13 @@ classdef innerPipeElement
         J2 double = [];
         K1 double = [];
         L1 double = [];
+
+        %geometry
+        vol double =[];
+
+        %cell properties
+        rho double = 8000; %kg/m^3 for ss316
+        c double =[];
     end
     
     methods
@@ -31,6 +38,10 @@ classdef innerPipeElement
 
             obj = getNeighbours(obj);
             obj.radialPosition = globalInputs.program.radialNodes+5  -i;
+
+
+              x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+             obj.vol = x * (pi/4) * (globalInputs.innerPipe.OD^2 - globalInputs.innerPipe.ID^2);
         end
         
         function obj = getNeighbours(obj)
@@ -73,6 +84,9 @@ classdef innerPipeElement
             %coolant convection
             [~, k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
              cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.pos);
+
+            %calculate heat capacity
+            obj.c = calculatePipeHeatCap(TPP,Tdist(obj.pos(1),obj.pos(2)));
 
 
             %coefficients

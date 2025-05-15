@@ -19,6 +19,13 @@ classdef screwElement
         F1 double = [];
         F2 double = [];
         G1 double = [];
+
+        %cell geometry
+        vol double =[];
+
+        %cell properties
+        rho double = 8220; %kg/m^3 for haselloyX
+        c double =[];
     end
     
     methods
@@ -30,6 +37,10 @@ classdef screwElement
 
             obj = getNeighbours(obj);
             obj.radialPosition = globalInputs.program.radialNodes+5  -i;
+
+
+            x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+            obj.vol = x * (pi/4)*globalInputs.screw.d^2;
         end
         
         function obj = getNeighbours(obj)
@@ -65,7 +76,11 @@ classdef screwElement
             cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos,obj.type);
 
             % [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.COMBUSTION);
-            
+
+            %calculate cell heat capacity
+            obj.c = calculateScrewHeatCap(TPP,Tdist(obj.pos(1),obj.pos(2)));
+
+
             %coefficients
             obj.F0 = (-1/cdsc_west);
             obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdsc);

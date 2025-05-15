@@ -28,6 +28,8 @@ classdef slurryElement
         t double = [];
 
         %tracking properties of the fluid
+        rho double =[];
+        c double =[];
         rho_old double =[] %previous time step's density
         KE double =[] %kinetic energy term for source due to time varying density
     end
@@ -94,9 +96,9 @@ classdef slurryElement
             cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
             cds_down = calculateCdsDown(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
 
-            rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
+            obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
 
-            vel = calculateSlurryVelocity(globalInputs,rho);
+            vel = calculateSlurryVelocity(globalInputs,obj.rho);
 
             %no combustion occurs
             if obj.COMBUSTION == 0 
@@ -106,15 +108,16 @@ classdef slurryElement
                 cps_out = cps_in;
             end
 
-
+            %log cell heat capacity
+            obj.c = cps_in;
             
             if isempty(obj.rho_old)
-                obj.rho_old = rho;
+                obj.rho_old = obj.rho;
             end
 
-            obj.KE = ((rho-obj.rho_old)/globalInputs.program.timeStep)*(vel^2/2)*obj.vol;
+            obj.KE = ((obj.rho-obj.rho_old)/globalInputs.program.timeStep)*(vel^2/2)*obj.vol;
 
-            obj.rho_old = rho;
+            obj.rho_old = obj.rho;
 
             %coefficients
             obj.A0 = (-1/cds_west - ms_ax*cps_in);

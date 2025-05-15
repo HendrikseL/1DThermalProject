@@ -21,6 +21,14 @@ classdef coolantElement
         D2 double = [];
         E1 double = [];
         EE1 double = [];
+
+        %geometry
+        vol double =[];
+
+        %cell properties
+        rho double = [];
+        c double =[];
+
     end
     
     methods
@@ -32,6 +40,9 @@ classdef coolantElement
 
             obj = getNeighbours(obj,globalInputs);
             obj.radialPosition = globalInputs.program.radialNodes+5  -i;
+
+             x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+             obj.vol = x * (pi/4) * (globalInputs.outerPipe.ID^2 - globalInputs.innerPipe.OD^2);
         end
         
         function obj = getNeighbours(obj,globalInputs)
@@ -90,10 +101,13 @@ classdef coolantElement
             cdc_down = (1/cvc_ip + 1/cd_fins)^(-1);
 
             %heat capacities
-            cpc_west = calculateCoolantHeatCap(TPP,globalInputs,T_west);
-            cpc_south = calculateCoolantHeatCap(TPP,globalInputs,T_south);
             cpc = calculateCoolantHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
             
+
+            %cell properties
+            obj.rho = lerp([TPP.waterCoolant(:,1),TPP.waterCoolant(:,4)],Tdist(obj.pos(1),obj.pos(2)));
+            obj.c = cpc;
+
             %coefficients
             obj.D0 = (-1/cdc_west);
              %west and south switched to current for now

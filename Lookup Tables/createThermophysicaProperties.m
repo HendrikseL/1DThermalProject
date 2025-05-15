@@ -12,9 +12,15 @@ TPP.aluminum(:,1) = TPP.aluminum(:,1) + 273.15;
 TPP.hastelloyX = readmatrix("HastelloyX_conductivity.csv",NumHeaderLines=1);
 TPP.hastelloyX(:,1) = TPP.hastelloyX(:,1) + 273.15;
 
+TPP.hastelloyX_c = readmatrix("HastelloyX_heatCap.csv",NumHeaderLines=1);
+TPP.hastelloyX_c(:,1) = TPP.hastelloyX_c(:,1) + 273.15;
+
 %temp (c), k (W/m K)
 TPP.ss316 = readmatrix("SS316_conductivity.csv",NumHeaderLines=1);
 TPP.ss316(:,1) = TPP.ss316(:,1) + 273.15;
+
+TPP.ss316_c = readmatrix("SS316_heatCap.csv",NumHeaderLines=1);
+TPP.ss316_c(:,1) = TPP.ss316_c(:,1) + 273.15;
 
 %temp (c), k (W/m K)
 TPP.wool =readmatrix("RockWool_conductivity.csv",NumHeaderLines=1);
