@@ -10,6 +10,8 @@ if T > TPP.water(end,1)
     %use maximum tabulate viscosity and tell user
     mu_water = TPP.water(end,3);
     fprintf("Temperature %.1f K, is too high, max viscosity for water used (getForcedConvectionCoef)",T);
+elseif T< TPP.water(1,1)
+    mu_water = TPP.water(1,3);
 else
     mu_water = lerp([TPP.water(:,1),TPP.water(:,3)],T);
 end

@@ -118,11 +118,14 @@ classdef slurryElement
             obj.KE = ((obj.rho-obj.rho_old)/globalInputs.program.timeStep)*(vel^2/2)*obj.vol;
 
             obj.rho_old = obj.rho;
+            % cds_west = 1e6;
+            % cds_east = 1e6;
+            % cds_down = 1e6;
+            % cds_up = 1e6;
 
             %coefficients
             obj.A0 = (-1/cds_west - ms_ax*cps_in);
-
-            obj.A1 = (1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_in);
+            obj.A1 = (+1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_out);
             obj.A2 = (-1/cds_east);
 
             obj.B1 = (-1/cds_up);

@@ -81,7 +81,10 @@ switch figType
         hold on
         axis ij
         imagesc(Tdist);
-        
+
+        name = strcat("Reactor Temperature Distribution at Time: ", num2str(time*settings(4)*settings(5)));
+        title(name ,"Interpreter", "latex", "Fontsize",16);
+
         %screw box
         boxSC_x = [0.5 length(Tdist(1,:))+0.5 length(Tdist(1,:))+0.5 0.5 0.5 ];
         boxSC_y = [length(Tdist(:,1))+0.5 length(Tdist(:,1))+0.5 length(Tdist(:,1))-0.5 length(Tdist(:,1))-0.5 length(Tdist(:,1))+0.5 ];
@@ -123,6 +126,7 @@ switch figType
             p = quiver(4+settings(1)-2+settings(1)*i,3,0,-2,'k',LineWidth=2);
             p.AutoScale = "off";
         end
+        
         
         hold off
 end

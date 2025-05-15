@@ -4,15 +4,15 @@ globalInputs = struct;
 
 %program parameters
 globalInputs.program.radialNodes = 3;
-globalInputs.program.N = 3;
+globalInputs.program.N = 9;
 globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
-globalInputs.program.maxIterations = 2;
-globalInputs.program.timeStep = 1e-3;
+globalInputs.program.maxIterations = 1200;
+globalInputs.program.timeStep = 1e-1;
 globalInputs.program.writeOutput = 1; %flag for if write should be done
-globalInputs.program.writeInterval = 1; %time steps between writes
+globalInputs.program.writeInterval = 10; %time steps between writes
 globalInputs.program.outFile = "out.txt";
 
 %Aluminum thermophysical properties @300K
@@ -49,7 +49,7 @@ globalInputs.water.w = globalInputs.slurry.massRatio/ (1+ globalInputs.slurry.ma
 
 globalInputs.slurry.rho = 1 / (globalInputs.water.w/globalInputs.water.rho + globalInputs.aluminum.w/globalInputs.aluminum.rho);
 globalInputs.slurry.volumeFraction = (globalInputs.aluminum.w/globalInputs.aluminum.rho) / (globalInputs.aluminum.w/globalInputs.aluminum.rho + globalInputs.water.w/globalInputs.water.rho);
-globalInputs.slurry.ms = 0.2553; %kg/s
+globalInputs.slurry.ms = 10; %0.2553; %kg/s
 
 %inner pipe input parameters
 globalInputs.innerPipe.ID = 1.86*0.0254; %inner pipe ID in m

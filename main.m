@@ -34,7 +34,7 @@ combMap = zeros(length(ElDist(:,1)),length(ElDist(1,:)));
 CONVERGED = 0; %convergence flag
 %time step counter
 t = 1;
-% while ~CONVERGED && t < globalInputs.program.maxIterations
+while ~CONVERGED && t < globalInputs.program.maxIterations
 
     cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
@@ -49,7 +49,8 @@ t = 1;
 
     %%Solve Equations
     %solve equation M.1 (main resistor matrix)
-    T_new =  (A)\(Q-b)';
+    % T_new =  (A)\(Q-b)';
+    T_new = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs);
 
     %solve equation M.2 (flange temperatures 1 and 2)
     T_flange(1:2,1) = A2\b2;
@@ -78,7 +79,7 @@ t = 1;
 
     %iterate timestep
     t = t +1;
-% end
+end
 
 %clear all unwanted variables (comment to debug)
 % clearvars -except globalInputs Tdist TPP ElDist
