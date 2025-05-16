@@ -4,12 +4,12 @@ globalInputs = struct;
 
 %program parameters
 globalInputs.program.radialNodes = 3;
-globalInputs.program.N = 9;
+globalInputs.program.N = 18;
 globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
-globalInputs.program.maxIterations = 1200;
+globalInputs.program.maxIterations = 500;
 globalInputs.program.timeStep = 1e-1;
 globalInputs.program.writeOutput = 1; %flag for if write should be done
 globalInputs.program.writeInterval = 10; %time steps between writes
@@ -26,7 +26,7 @@ globalInputs.water.cp = 4.18;% kJ/kgK
 globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
-globalInputs.temperature.in.Ts = 80;
+globalInputs.temperature.in.Ts = 21.1111;
 globalInputs.temperature.in.Tsc = 21.1111;
 globalInputs.temperature.in.flange = 21.1111;
 globalInputs.temperature.in.Tip = 21.1111;
@@ -49,7 +49,7 @@ globalInputs.water.w = globalInputs.slurry.massRatio/ (1+ globalInputs.slurry.ma
 
 globalInputs.slurry.rho = 1 / (globalInputs.water.w/globalInputs.water.rho + globalInputs.aluminum.w/globalInputs.aluminum.rho);
 globalInputs.slurry.volumeFraction = (globalInputs.aluminum.w/globalInputs.aluminum.rho) / (globalInputs.aluminum.w/globalInputs.aluminum.rho + globalInputs.water.w/globalInputs.water.rho);
-globalInputs.slurry.ms = 10; %0.2553; %kg/s
+globalInputs.slurry.ms = 0.2553; %kg/s
 
 %inner pipe input parameters
 globalInputs.innerPipe.ID = 1.86*0.0254; %inner pipe ID in m
@@ -66,7 +66,7 @@ globalInputs.screw.r0 = 0.85/2 * 0.0254; %initial blade radius, m
 globalInputs.screw.r = globalInputs.innerPipe.ID/2 - globalInputs.screw.r0 ; %radius of blade
 globalInputs.screw.deltaR = globalInputs.screw.r/globalInputs.program.radialNodes;
 globalInputs.screw.omega = 1; %rotational speed of the screw, rad/s
-globalInputs.screw.p = 1.75/0.0254; %lead, threads/m
+globalInputs.screw.lead = 1.75/0.0254; %lead, threads/m
 globalInputs.screw.l = 96 * 0.0254; % length total?
 globalInputs.screw.d = 0.85 *0.0254; %m
 globalInputs.screw.bladeD= 1.82 * 0.0254; %m

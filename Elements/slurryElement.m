@@ -6,7 +6,6 @@ classdef slurryElement
         %n -> axial position, r-> radial position
         pos double = [];
         neighbours double = [];
-        radialPosition double =[]; 
 
         %object properties
         type string = "slurry";
@@ -23,6 +22,9 @@ classdef slurryElement
 
         %geometry data
         vol double = [];
+        A double = [];
+        x double = [];
+        A_r double = [];
 
         %this term is related to the time derivative in the fluid
         t double = [];
@@ -30,6 +32,7 @@ classdef slurryElement
         %tracking properties of the fluid
         rho double =[];
         c double =[];
+        vel double = [];
         rho_old double =[] %previous time step's density
         KE double =[] %kinetic energy term for source due to time varying density
     end
@@ -40,16 +43,17 @@ classdef slurryElement
 
             %track position of slurry node
             obj.pos = [i,j];
-
             obj = getNeighbours(obj);
-            obj.radialPosition = globalInputs.program.radialNodes+5  -i;
+
 
             dist = (globalInputs.program.radialNodes +4) - obj.pos(1);
             R1 = globalInputs.screw.r0 + dist*globalInputs.screw.deltaR;
             
-            A = pi * ((R1+globalInputs.screw.deltaR)^2 - R1^2);
-            x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
-            obj.vol = A*x;
+            obj.A = pi * ((R1+globalInputs.screw.deltaR)^2 - R1^2);
+            obj.x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+            obj.vol = obj.A*obj.x;
+
+            obj.A_r = R1*2*pi*obj.x;
 
 
         end
@@ -77,10 +81,7 @@ classdef slurryElement
         function obj = updateCoefficients(obj,Tdist, globalInputs, TPP,ElDist)
             %This function handles the updating of the slurry node. It
             %is called upon initialization and when the solver is
-            %iterating.
-
-            %calculate massflow
-            [ms_ax, ms_r] = calculateSlurryMassFlow(globalInputs,obj.radialPosition);
+            %iterating
             
             %temperatures, averaged between nodes 
             T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
@@ -96,9 +97,7 @@ classdef slurryElement
             cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
             cds_down = calculateCdsDown(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
 
-            obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
 
-            vel = calculateSlurryVelocity(globalInputs,obj.rho);
 
             %no combustion occurs
             if obj.COMBUSTION == 0 
@@ -106,6 +105,11 @@ classdef slurryElement
                 %heat capacity of incoming fluid
                 cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
                 cps_out = cps_in;
+
+                %physical properties
+                obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
+                obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,obj.COMBUSTION);
+
             end
 
             %log cell heat capacity
@@ -115,7 +119,7 @@ classdef slurryElement
                 obj.rho_old = obj.rho;
             end
 
-            obj.KE = ((obj.rho-obj.rho_old)/globalInputs.program.timeStep)*(vel^2/2)*obj.vol;
+            obj.KE = ((obj.rho-obj.rho_old)/globalInputs.program.timeStep)*(sqrt(obj.vel(1)^2+obj.vel(2)^2)^2/2)*obj.vol;
 
             obj.rho_old = obj.rho;
             % cds_west = 1e6;
@@ -124,13 +128,13 @@ classdef slurryElement
             % cds_up = 1e6;
 
             %coefficients
-            obj.A0 = (-1/cds_west - ms_ax*cps_in);
-            obj.A1 = (+1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down +ms_ax*cps_out + ms_r*cps_out);
+            obj.A0 = (-1/cds_west - obj.vel(1)*obj.A*obj.rho*cps_in);
+            obj.A1 = (+1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down + obj.vel(1)*obj.A*obj.rho*cps_out + obj.vel(2)*obj.A_r*obj.rho*cps_out ); 
             obj.A2 = (-1/cds_east);
 
             obj.B1 = (-1/cds_up);
 
-            obj.C1 = (-1/cds_down - ms_r*cps_in);
+            obj.C1 = (-1/cds_down - obj.vel(2)*obj.A_r*obj.rho*cps_out );
         end
 
 

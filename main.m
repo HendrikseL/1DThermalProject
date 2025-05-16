@@ -50,7 +50,7 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
     %%Solve Equations
     %solve equation M.1 (main resistor matrix)
     % T_new =  (A)\(Q-b)';
-    T_new = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs);
+    T_new = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs,Tdist);
 
     %solve equation M.2 (flange temperatures 1 and 2)
     T_flange(1:2,1) = A2\b2;

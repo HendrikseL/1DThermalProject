@@ -17,7 +17,7 @@ switch direction
 
     case "radial"
         if strcmp(type,"slurry")
-            x = globalInputs.screw.p*x*globalInputs.screw.bladeT;
+            x = globalInputs.screw.lead*x*globalInputs.screw.bladeT;
         end
         %find distance from wall
         dist = (globalInputs.program.radialNodes +5) - position(1);

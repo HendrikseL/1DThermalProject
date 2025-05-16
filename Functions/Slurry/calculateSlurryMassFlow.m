@@ -1,15 +1,17 @@
-function [ms_ax, ms_r] = calculateSlurryMassFlow(globalInputs,node)
+function [ms_ax, ms_r] = calculateSlurryMassFlow(globalInputs,radialPosition)
 %breaks the mass flow down into the axial (ms_ax) and radial (ms_r)
 %components based on screw geometry and radial position.
 
 %Inputs: globalInputs --> global input struct, contains the screw physical
 %           parameters and the slurry mass flow input
-%        node --> Nodal position away from the screw wall, radialNode
+%        radialPosition --> Nodal position away from the screw wall, radialNode
 %           position
 
-    ms_ax = globalInputs.slurry.ms * (( (globalInputs.screw.d/2 + (node)*globalInputs.screw.deltaR)^2 - (globalInputs.screw.d/2 + (node-1)*globalInputs.screw.deltaR)^2)/...
-        ((globalInputs.innerPipe.ID/2)^2 - (globalInputs.screw.d/2)^2)) * 1/(sqrt(1 + ((2*pi*(globalInputs.screw.d/2 + (node)*globalInputs.screw.deltaR))/ (1/globalInputs.screw.p))^2));
+pitch = 1/globalInputs.screw.lead;
+radius = globalInputs.screw.d/2 + radialPosition*globalInputs.screw.deltaR;
+path = (2*pi*radius)/pitch;
 
-     ms_r = ms_ax * ((2*pi*((globalInputs.screw.d/2 + (node)*globalInputs.screw.deltaR)))/(1/globalInputs.screw.p));
+ms_ax = globalInputs.slurry.ms* ((radius^2-(radius-globalInputs.screw.deltaR)^2)/(globalInputs.screw.bladeD^2 - globalInputs.screw.d^2)) *(1/(1+path^2));
+ms_r = ms_ax*path;
         
 end

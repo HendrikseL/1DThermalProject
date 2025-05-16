@@ -28,7 +28,7 @@ Pr = (cp_slurry * mu_slurry) / k_slurry;
 
 %calculating reynolds number
 w = (globalInputs.innerPipe.ID-2*globalInputs.screw.r0)/2;
-l = globalInputs.screw.p*cosd(45);
+l = globalInputs.screw.lead*cosd(45);
 A =  w*l;
 %hydraulic diameter
 D = 2*A/(w+l);

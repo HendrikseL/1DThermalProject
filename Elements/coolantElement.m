@@ -24,10 +24,14 @@ classdef coolantElement
 
         %geometry
         vol double =[];
+        A double = [];
+        x double =[];
+        A_r double = [];
 
         %cell properties
         rho double = [];
         c double =[];
+        vel double = [];
 
     end
     
@@ -41,8 +45,11 @@ classdef coolantElement
             obj = getNeighbours(obj,globalInputs);
             obj.radialPosition = globalInputs.program.radialNodes+5  -i;
 
-             x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
-             obj.vol = x * (pi/4) * (globalInputs.outerPipe.ID^2 - globalInputs.innerPipe.OD^2);
+             obj.x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
+             obj.A = (pi/4) * (globalInputs.outerPipe.ID^2 - globalInputs.innerPipe.OD^2);
+             obj.vol = obj.x * obj.A;
+
+             obj.A_r = obj.x*pi*globalInputs.outerPipe.ID;
         end
         
         function obj = getNeighbours(obj,globalInputs)
@@ -100,21 +107,23 @@ classdef coolantElement
             cdc_up = (1/(cvc_op + cd_op) + 1/cd_fins)^(-1);
             cdc_down = (1/cvc_ip + 1/cd_fins)^(-1);
 
-            %heat capacities
-            cpc = calculateCoolantHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
             
 
             %cell properties
             obj.rho = lerp([TPP.waterCoolant(:,1),TPP.waterCoolant(:,4)],Tdist(obj.pos(1),obj.pos(2)));
-            obj.c = cpc;
+            obj.c = calculateCoolantHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
+
+            %calculate coolant velocity
+            obj.vel(1) = globalInputs.coolant.m_ax / (obj.A * obj.rho);
+            obj.vel(2) = globalInputs.coolant.m_r / (obj.A_r* obj.rho);
 
             %coefficients
             obj.D0 = (-1/cdc_west);
              %west and south switched to current for now
-            obj.D1 = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down - globalInputs.coolant.m_ax*cpc - globalInputs.coolant.m_r*cpc);
-            obj.D2 = (-1/cdc_east + globalInputs.coolant.m_ax*cpc);
+            obj.D1 = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down - obj.vel(1)*obj.A*obj.rho*obj.c - obj.vel(2)*obj.A_r*obj.rho*obj.c );
+            obj.D2 = (-1/cdc_east + obj.vel(1)*obj.A*obj.rho*obj.c);
 
-            obj.E1 = (-1/cdc_down +globalInputs.coolant.m_r*cpc);
+            obj.E1 = (-1/cdc_down +obj.vel(2)*obj.A_r*obj.rho*obj.c);
 
             obj.EE1 = (-1/cdc_up);
         end
