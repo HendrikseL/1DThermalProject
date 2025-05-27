@@ -14,10 +14,25 @@ for i = r+offset+1:-1:2
         %if slurry is combusted, update the flag of its neighbours
         %0 = no combustion
         %1 = combusted, use products
-        %2 = combustion occuring here, use products and generate heat
-        if strcmp(ElDist{i,j}.type,"slurry") && (ElDist{i,j}.COMBUSTION == 1 || ElDist{i,j}.COMBUSTION == 2)
-            %downstream neighbours
-            combMap(i,[j:end]) = 1;
+        if strcmp(ElDist{i,j}.type,"slurry") && (ElDist{i,j}.COMBUSTION > 0)
+            %calculate how far products travel in 1 time step (moves at the
+            %wave speed)
+            %Calculate nodes travelled for slurry products
+            ElDist{i,j}.dist = ElDist{i,j}.dist + (ElDist{i,j}.vel*globalInputs.program.timeStep);
+            %round distance to integer corresponding to nodes travelled
+            dist_int(1) = round(ElDist{i,j}.dist(1)/ElDist{i,j}.x);
+            dist_int(2) = round(ElDist{i,j}.dist(2)/globalInputs.screw.deltaR);
+
+            %ensure maximum radial distance is not exceeded
+            dist_rMax = globalInputs.program.radialNodes - (globalInputs.program.radialNodes + 5 -ElDist{i,j}.pos(1));
+            if dist_int(2) > dist_rMax
+                dist_int(2) = dist_rMax;
+            end
+
+            %convect prodctsS
+            combMap(i,[j:j+dist_int(1)]) = 1;
+            combMap([i-dist_int(2):i],j) = 1;
+
 
             %check if northern or southern neighbour are pipe or screw
             if strcmp(ElDist{i-1,j}.type,"innerPipe")
@@ -33,7 +48,7 @@ for i = r+offset+1:-1:2
         ElDist{i,j} = updateCoefficients(ElDist{i,j},Tdist,globalInputs,TPP,ElDist);
 
         %if element is now combusted update the combustion map
-        combMap(i,j) = ElDist{i,j}.COMBUSTION;
+        % combMap(i,j) = ElDist{i,j}.COMBUSTION;
 
     end
 end

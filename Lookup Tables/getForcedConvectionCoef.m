@@ -33,12 +33,7 @@ A =  w*l;
 %hydraulic diameter
 D = 2*A/(w+l);
 
-%for no combustion:
-if alpha == 1
-   %do nothing for now
-else
-    Red = (4*globalInputs.slurry.ms)/(D*pi*mu_slurry);
-end
+Red = (4*globalInputs.slurry.ms)/(D*pi*mu_slurry);
 
 %moody friction factor (8.21) incopera et al.
 f = (0.790*log(Red) - 1.64)^-2;

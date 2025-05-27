@@ -12,6 +12,8 @@ classdef slurryElement
 
         %combustion flag, 0 = no combustion
         COMBUSTION double = 0;
+        dist double = 0; %product distance travelled
+        Q double = 0; %heat generation from combustion
 
         %Output Coefficients
         A0 double = [];
@@ -98,20 +100,36 @@ classdef slurryElement
             cds_down = calculateCdsDown(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
 
 
+            %needs two checkers, one for material used
+                %should support multiple materials in one node
+            %second checker for if cell is over combustion temp, with
+            %reactants and generating heat
 
             %no combustion occurs
-            if obj.COMBUSTION == 0 
-                
+            if Tdist(obj.pos(1),obj.pos(2)) > globalInputs.temperature.Tig
+                obj.COMBUSTION = 1;
+
                 %heat capacity of incoming fluid
                 cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
                 cps_out = cps_in;
 
                 %physical properties
-                obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
-                obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,obj.COMBUSTION);
+                obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
+                obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,0); %ax,radial
 
+            else %combustion occurs
+                % obj.COMBUSTION = 0;
+
+                %heat capacity of incoming fluid
+                cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
+                cps_out = cps_in;
+
+                %physical properties
+                obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
+                obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,0);
             end
 
+            
             %log cell heat capacity
             obj.c = cps_in;
             

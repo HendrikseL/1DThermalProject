@@ -39,6 +39,7 @@ globalInputs.temperature.out.Tip = 21.1111;
 globalInputs.temperature.out.Tc = 21.1111;
 
 globalInputs.temperature.Ta = 21.1111; %ambient temperature
+globalInputs.temperature.Tig = 104.4 +273.15; %ignition temperature (K)
 
 %slurry inputs
 globalInputs.slurry.massRatio = 1.3; % water/al mass ratio

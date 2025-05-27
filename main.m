@@ -39,6 +39,7 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
     cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
 
+    Tdist(6,4) = 110+273.15;
     [ElDist, combMap] = updateElements(ElDist, globalInputs, Tdist, TPP, combMap);
 
     %construct coefficient matrix theta
