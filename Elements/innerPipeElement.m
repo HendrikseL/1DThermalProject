@@ -11,8 +11,8 @@ classdef innerPipeElement
         %object properties
         type string = "innerPipe";
 
-        %combustion flag
-        COMBUSTION double = 0;
+        %alpha flag
+        alpha double = 0;
 
         %Output Coefficients
         J0 double = [];
@@ -78,8 +78,8 @@ classdef innerPipeElement
             cdfin_r = calculateFinsConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
             
             %slurry convection
-            [~, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.COMBUSTION);
-            cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_s,obj.pos,obj.COMBUSTION,"upper");
+            [~, k_s] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.alpha);
+            cvs = calculateSlurryConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),k_s,obj.pos,obj.alpha,"upper");
 
             %coolant convection
             [~, k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");

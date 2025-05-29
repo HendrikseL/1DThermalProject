@@ -13,7 +13,7 @@ g = 9.81; %gravity
 beta = 1/T; %volume expansion for ideal gas
 T_inf = globalInputs.temperature.Ta;
 
-nu = lerp([TPP.air(:,1) TPP.air(:,3)],T);
+mu = lerp([TPP.air(:,1) TPP.air(:,3)],T);
 
 switch direction
 
@@ -21,7 +21,7 @@ switch direction
 
         D = globalInputs.outerPipe.OD;
         %calculate Grashoff number
-        Gr = (g*beta*(T-T_inf)*D^3)/(nu^2);
+        Gr = (g*beta*(T-T_inf)*D^3)/(mu^2);
 
         %calculate rayleigh number
         Ra = Gr*Pr;
@@ -35,7 +35,7 @@ switch direction
     case "flange"
         D = globalInputs.flange.D;
         %calculate Grashoff number
-        Gr = (g*beta*(T-T_inf)*D^3)/(nu^2);
+        Gr = (g*beta*(T-T_inf)*D^3)/(mu^2);
 
         %calculate rayleigh number
         Ra = Gr*Pr;
@@ -48,7 +48,7 @@ switch direction
 
         if position(1) == 1 || position(1) == (4+ globalInputs.program.N*globalInputs.program.M)
             L = D/2 - globalInputs.innerPipe.OD;
-            Gr = (g*beta*(T-T_inf)*L^3)/(nu^2);
+            Gr = (g*beta*(T-T_inf)*L^3)/(mu^2);
 
             %calculate rayleigh number
             Ra = Gr*Pr;

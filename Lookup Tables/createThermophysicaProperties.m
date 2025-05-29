@@ -31,15 +31,46 @@ TPP.air = readmatrix("Air_Convection.csv",NumHeaderLines=1);
 TPP.air(:,1) = TPP.air(:,1) + 273.15;
 
 %temp (c), cp (kj/kgK), mu (Pa s) (Slurry Water)
-TPP.water = readmatrix("Water_Coolant_Convection_2.csv",NumHeaderLines=1);
+TPP.water = readmatrix("Water_properties.csv",NumHeaderLines=1);
 TPP.water(:,1) = TPP.water(:,1) + 273.15;
 TPP.water(:,2) = TPP.water(:,2)*1000; %converting to J/kgK
 
 %Temp (c), cp (kj/kgK), mu (Pa s) (Coolant Water)
-TPP.waterCoolant = readmatrix("Water_Coolant_Convection_2.csv",NumHeaderLines=1);
+%seperate from slurry water to allow for a change in coolant easily
+TPP.waterCoolant = readmatrix("Water_properties.csv",NumHeaderLines=1);
 TPP.waterCoolant(:,1) = TPP.waterCoolant(:,1) + 273.15;
 TPP.waterCoolant(:,2) = TPP.waterCoolant(:,2)*1000; %converting to J/kgK
 
 %temp (c), k (W/m K)
 TPP.waterCoolantConduction = readmatrix("Water_Coolant_Conduction.csv",NumHeaderLines=1);
 TPP.waterCoolantConduction(:,1) = TPP.waterCoolantConduction(:,1) + 273.15;
+
+
+%H2 Properties
+TPP.H2 = readmatrix("H2_properties.csv",NumHeaderLines=1);
+TPP.H2(:,1) = TPP.H2(:,1) + 273.15;
+TPP.H2(:,3) = TPP.H2(:,3)*1000;
+
+TPP.H2Density = readmatrix("H2_density.csv",NumHeaderLines=1);
+TPP.H2Density(:,1) = TPP.H2Density(:,1) + 273.15;
+
+%Steam Properties
+TPP.Steam.density = readmatrix("Steam_Density.csv",NumHeaderLines=1);
+TPP.Steam.density(:,1) = TPP.Steam.density(:,1) + 273.15;
+
+TPP.Steam.conductivity = readmatrix("Steam_conductivity.csv",NumHeaderLines=1);
+TPP.Steam.conductivity(:,1) = TPP.Steam.conductivity(:,1) +273.15;
+
+TPP.Steam.viscosity = readmatrix("Steam_viscosity.csv",NumHeaderLines=1);
+TPP.Steam.viscosity(:,1) = TPP.Steam.viscosity(:,1) + 273.15;
+
+TPP.Steam.heatCap = readmatrix("Steam_heatCap.csv",NumHeaderLines=1);
+TPP.Steam.heatCap(:,1) = TPP.Steam.heatCap(:,1) + 273.15;
+TPP.Steam.heatCap(:,2) = TPP.Steam.heatCap(:,2)*1000;
+
+%Al2O3 Properties
+TPP.Al2O3.heatCap = readmatrix("Al2O3_heatCap.csv");
+TPP.Al2O3.heatCap(:,1) = TPP.Al2O3.heatCap(:,1) + 273.15;
+
+TPP.Al2O3.conductivity = readmatrix("Al2O3_conductivity.csv");
+TPP.Al2O3.conductivity(:,1) = TPP.Al2O3.conductivity(:,1) + 273.15;

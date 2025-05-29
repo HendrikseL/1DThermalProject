@@ -11,7 +11,7 @@ classdef slurryElement
         type string = "slurry";
 
         %combustion flag, 0 = no combustion
-        COMBUSTION double = 0;
+        alpha double = 0;
         dist double = 0; %product distance travelled
         Q double = 0; %heat generation from combustion
 
@@ -93,11 +93,11 @@ classdef slurryElement
                 %check for combustion
 
             %get resistance coefficients
-            [cds_west, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos,obj.COMBUSTION);
-            [cds_east, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos,obj.COMBUSTION);
+            [cds_west, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos,obj.alpha);
+            [cds_east, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos,obj.alpha);
 
-            cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
-            cds_down = calculateCdsDown(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.COMBUSTION);
+            cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
+            cds_down = calculateCdsDown(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
 
 
             %needs two checkers, one for material used
@@ -106,28 +106,17 @@ classdef slurryElement
             %reactants and generating heat
 
             %no combustion occurs
-            if Tdist(obj.pos(1),obj.pos(2)) > globalInputs.temperature.Tig
-                obj.COMBUSTION = 1;
+            % if Tdist(obj.pos(1),obj.pos(2)) > globalInputs.temperature.Tig
+                % obj.alpha = 1;
 
                 %heat capacity of incoming fluid
                 cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
                 cps_out = cps_in;
 
                 %physical properties
-                obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
-                obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,0); %ax,radial
+                obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
+                obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,obj.alpha); %ax,radial
 
-            else %combustion occurs
-                % obj.COMBUSTION = 0;
-
-                %heat capacity of incoming fluid
-                cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
-                cps_out = cps_in;
-
-                %physical properties
-                obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
-                obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,0);
-            end
 
             
             %log cell heat capacity
@@ -155,7 +144,6 @@ classdef slurryElement
             obj.C1 = (-1/cds_down - obj.vel(2)*obj.A_r*obj.rho*cps_out );
         end
 
-
         function cds_up = calculateCdsUp(obj,TPP,globalInputs,ElDist,T, alpha)
             switch ElDist{obj.neighbours(2,1),obj.neighbours(2,2)}.type
 
@@ -174,7 +162,6 @@ classdef slurryElement
 
             end
         end
-
 
         function cds_down = calculateCdsDown(obj,TPP,globalInputs,ElDist,T,alpha)
                 % switch ElDist{obj.neighbours(4,1),obj.neighbours(4,2)}.type

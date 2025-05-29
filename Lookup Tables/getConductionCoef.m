@@ -8,45 +8,29 @@ function k = getConductionCoef(TPP, T, material)
 switch material
 
     case "hasteloyX"
-        if T < TPP.hastelloyX(1,1)
-            k = TPP.hastelloyX(1,2);
-        elseif T > TPP.hastelloyX(end,1)
-            k =TPP.hastelloyX(end,2);
-        else
-            k = lerp(TPP.hastelloyX(:,[1:2]),T);
-        end
+        k = lerp(TPP.hastelloyX(:,[1:2]),T);
+
     case "ss316"
-        if T < TPP.ss316(1,1)
-            k = TPP.ss316(1,2);
-        elseif T > TPP.ss316(end,1)
-            k =TPP.ss316(end,2);
-        else
-            k = lerp(TPP.ss316(:,[1:2]),T);
-        end
+        k = lerp(TPP.ss316(:,[1:2]),T);
+
     case "wool"
-        if T < TPP.wool(1,1)
-            k = TPP.wool(1,2);
-        elseif T > TPP.wool(end,1)
-            k =TPP.wool(end,2);
-        else
-            k = lerp(TPP.wool(:,[1:2]),T);
-        end
+        k = lerp(TPP.wool(:,[1:2]),T);
+
     case "aluminum"
-        if T < TPP.aluminum(1,1)
-            k = TPP.aluminum(1,2);
-        elseif T > TPP.aluminum(end,1)
-            k =TPP.aluminum(end,2);
-        else
-            k = lerp(TPP.aluminum(:,[1:2]),T);
-        end
-    case "water" %cooan conduction is used as this is the available data set for water with conduction heat transfer coefficients
-        if T < TPP.waterCoolantConduction(1,1)
-            k = TPP.waterCoolantConduction(1,2);
-        elseif T > TPP.waterCoolantConduction(end,1)
-            k =TPP.waterCoolantConduction(end,2);
-        else
-            k = lerp(TPP.waterCoolantConduction(:,[1:2]),T);
-        end
+        k = lerp(TPP.aluminum(:,[1:2]),T);
+  
+    case "water" %coolant conduction is used as this is the available data set for water with conduction heat transfer coefficients
+        k = lerp(TPP.waterCoolantConduction(:,[1:2]),T);
+
+    case "steam"
+        k = lerp(TPP.Steam.conductivity(:,[1:2]),T);
+
+    case "h2"
+        k = lerp(TPP.H2(:,[1:2]),T);
+
+    case "al2o3"
+        k = lerp(TPP.Al2O3.conductivity(:,[1:2]),T);
+
     otherwise
         error("Selected material does not exist");
 end

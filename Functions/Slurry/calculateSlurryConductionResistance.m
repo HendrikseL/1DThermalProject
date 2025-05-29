@@ -3,27 +3,26 @@ function [cds, k_slurry] = calculateSlurryConductionResistance(TPP,globalInputs,
 
 %Input: GlobalVariables and thermophysical properties
 %       T -> desired temperature
-%       alpha -> combustion flag, 0 = no combustion
-if alpha == 0
-    k_aluminum=getConductionCoef(TPP,T,"aluminum");
-    
-    %uses conduction values for water at 1atm. This needs to be updated with a
-    %new data set.
-    k_water =getConductionCoef(TPP,T,"water");
-    
-    k_slurry = globalInputs.slurry.volumeFraction*k_aluminum + (1-globalInputs.slurry.volumeFraction)*k_water;
+%       alpha -> extent of reaction, 0 = no combustion
 
-else
-%use conduction values for products
+%reactants
 k_aluminum=getConductionCoef(TPP,T,"aluminum");
-    
-    %uses conduction values for water at 1atm. This needs to be updated with a
-    %new data set.
-    k_water =getConductionCoef(TPP,T,"water");
-    
-k_slurry = globalInputs.slurry.volumeFraction*k_aluminum + (1-globalInputs.slurry.volumeFraction)*k_water;
-end
+k_water =getConductionCoef(TPP,T,"water");
 
+k_slurry_reactants = globalInputs.slurry.volumeFraction*k_aluminum + (1-globalInputs.slurry.volumeFraction)*k_water;
+
+
+%products
+k_steam = getConductionCoef(TPP, T, "steam");
+k_h2 = getConductionCoef(TPP, T, "h2");
+k_gas = calculateGasConductionCoef(globalInputs,k_steam,k_h2);
+k_al2o3 = getConductionCoef(TPP, T, "al2o3");
+
+phi = calculateProductVolumeRatio(TPP, globalInputs, T);
+k_slurry_products = phi*k_al2o3 + (1-phi)*k_gas;
+
+%overall slurry (currently only a binary)
+k_slurry = alpha*k_slurry_products + (1-alpha)*k_slurry_reactants;
 
 
 x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);

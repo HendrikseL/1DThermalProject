@@ -4,7 +4,7 @@ globalInputs = struct;
 
 %program parameters
 globalInputs.program.radialNodes = 3;
-globalInputs.program.N = 18;
+globalInputs.program.N = 12;
 globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
@@ -17,13 +17,15 @@ globalInputs.program.outFile = "out.txt";
 
 %Aluminum thermophysical properties @300K
 globalInputs.aluminum.rho = 2701; %kg/m^3
-globalInputs.aluminum.cp = 0.902; %kJ/kg K
-globalInputs.aluminum.k = 237; %W/m K
+% globalInputs.aluminum.cp = 0.902; %kJ/kg K
+% globalInputs.aluminum.k = 237; %W/m K
+
+globalInputs.al2o3.rho = 3950; %kg/m^3
 
 %water thermophysical properties @300K
 globalInputs.water.rho = 996.57; %kg/m^3
-globalInputs.water.cp = 4.18;% kJ/kgK
-globalInputs.water.k = 0.61450; %W/m K
+% globalInputs.water.cp = 4.18;% kJ/kgK
+% globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
 globalInputs.temperature.in.Ts = 80;
@@ -84,10 +86,21 @@ globalInputs.coolant.m_r = globalInputs.coolant.m * 0.9;
 globalInputs.coolant.m_ax = globalInputs.coolant.m * 0.1;
 
 
-
 %fin input parameters
 globalInputs.fins.OD = 6.56*0.0254; %fins OD in m
 globalInputs.fins.thickness = 0.0625*0.0254;
 globalInputs.fins.spacing = 6 / 0.0254; %fins per meter (from fins per inch)
 
 globalInputs.insulation.thickness = 3.5 * 0.0254; %insualtion thickness in meters, currently equal to the flange
+
+
+%Chemistry Data (derived)
+globalInputs.chemistry.M_H2 = 2.02; %g/mol
+globalInputs.chemistry.M_Steam = 18.019; %g/mol
+globalInputs.chemistry.M_Al2O3 = 101.959; %g/mol
+%mass ratio
+globalInputs.chemistry.mf_H2 = 0.11229; %g of h2/ g of al input
+globalInputs.chemistry.mf_Steam = globalInputs.slurry.massRatio - 1; % Assumes full reaction
+%mol ratio
+globalInputs.chemistry.X_H2 = (globalInputs.chemistry.mf_H2/globalInputs.chemistry.M_H2)/((globalInputs.chemistry.mf_H2/globalInputs.chemistry.M_H2) + (globalInputs.chemistry.mf_Steam/globalInputs.chemistry.M_Steam));
+globalInputs.chemistry.X_Steam = 1 - globalInputs.chemistry.X_H2;

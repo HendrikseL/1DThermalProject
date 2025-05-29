@@ -11,8 +11,8 @@ classdef screwElement
         %object properties
         type string = "screw";
 
-        %combustion flag, used for slurry, 0 = no combustion
-        COMBUSTION double = 0;
+        %alpha flag, used for slurry, 0 = no alpha
+        alpha double = 0;
 
         %Output Coefficients
         F0 double = [];
@@ -75,7 +75,7 @@ classdef screwElement
             cdsc_west = calculateScrewConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos,obj.type);
             cdsc_east = calculateScrewConductionResistance(TPP,globalInputs,T_east,"axial",obj.pos,obj.type);
 
-            % [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.COMBUSTION);
+            % [cds, ~] = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.alpha);
 
             %calculate cell heat capacity
             obj.c = calculateScrewHeatCap(TPP,Tdist(obj.pos(1),obj.pos(2)));

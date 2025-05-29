@@ -13,7 +13,7 @@ classdef coolantElement
 
         %combustion flag, present here for uniformity.
         %will always be empty
-        COMBUSTION double = [];
+        alpha double = [];
 
         %Output Coefficients
         D0 double = [];

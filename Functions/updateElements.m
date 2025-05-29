@@ -14,7 +14,7 @@ for i = r+offset+1:-1:2
         %if slurry is combusted, update the flag of its neighbours
         %0 = no combustion
         %1 = combusted, use products
-        if strcmp(ElDist{i,j}.type,"slurry") && (ElDist{i,j}.COMBUSTION > 0)
+        if strcmp(ElDist{i,j}.type,"slurry") && (ElDist{i,j}.alpha > 0)
             %calculate how far products travel in 1 time step (moves at the
             %wave speed)
             %Calculate nodes travelled for slurry products
@@ -43,7 +43,7 @@ for i = r+offset+1:-1:2
         end
 
         %check if element is combusted
-        ElDist{i,j}.COMBUSTION = combMap(i,j);
+        ElDist{i,j}.alpha = combMap(i,j);
 
         ElDist{i,j} = updateCoefficients(ElDist{i,j},Tdist,globalInputs,TPP,ElDist);
 
