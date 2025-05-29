@@ -9,7 +9,7 @@ clc
 clf
 
 %input here
-fileName = "out_12.txt";
+fileName = "out.txt";
 
 %get full fie path
 fullPath = strcat(pwd,"/",fileName);

@@ -6,22 +6,18 @@ function [h] = getForcedConvectionCoef(TPP, globalInputs, T, k_slurry,alpha)
 %   T: desired operating temperature
 
 %getting slurry viscosity
-if T > TPP.water(end,1)
-    %use maximum tabulate viscosity and tell user
-    mu_water = TPP.water(end,3);
-    fprintf("Temperature %.1f K, is too high, max viscosity for water used (getForcedConvectionCoef)",T);
-elseif T< TPP.water(1,1)
-    mu_water = TPP.water(1,3);
-else
-    mu_water = lerp([TPP.water(:,1),TPP.water(:,3)],T);
-end
 
+mu_water = lerp([TPP.water(:,1),TPP.water(:,3)],T);
 phi = globalInputs.slurry.volumeFraction;
+mu_slurry_reactants = mu_water *(1 + 2.5*phi + 10.05*phi^2 + 0.00273*exp(16.6*phi) );
 
-mu_slurry = mu_water *(1 + 2.5*phi + 10.05*phi^2 + 0.00273*exp(16.6*phi) );
+mu_slurry_products = calculateGasViscosity(TPP, globalInputs, T);
+
+mu_slurry = alpha*mu_slurry_products + (1-alpha)*mu_slurry_reactants;
+
 
 %getting slurry heat capacity
-cp_slurry = calculateSlurryHeatCap(TPP,globalInputs,T);
+cp_slurry = calculateSlurryHeatCap(TPP,globalInputs,T,alpha);
 
 %Reynolds number and Prandtl number
 Pr = (cp_slurry * mu_slurry) / k_slurry;

@@ -7,6 +7,7 @@ TPP = struct;
 %temp (c), k (W/m K), cp(kJ/kgK)
 TPP.aluminum = readmatrix("Aluminum_conductivity.csv",NumHeaderLines=1);
 TPP.aluminum(:,1) = TPP.aluminum(:,1) + 273.15;
+TPP.aluminum(:,3) = TPP.aluminum(:,3) *1000;
 
 %temp (c), k (W/m K)
 TPP.hastelloyX = readmatrix("HastelloyX_conductivity.csv",NumHeaderLines=1);

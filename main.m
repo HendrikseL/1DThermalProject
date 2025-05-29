@@ -38,18 +38,23 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
 
     cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
+    
+    if t < 5
+        Tdist(6,4) = 110+273.15;
+    end
 
-    % Tdist(6,4) = 110+273.15;
     [ElDist, combMap] = updateElements(ElDist, globalInputs, Tdist, TPP, combMap);
 
     %construct coefficient matrix theta
     % [theta_debug, Tvec_debug, b_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
+
     [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix_transient(ElDist,Tdist,globalInputs);
 
     Q = constructHeatFlowInput(ElVec,Tdist,globalInputs);
 
     %%Solve Equations
     %solve equation M.1 (main resistor matrix)
+
     T_new =  (A)\(Q-b)';
     % T_new = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs,Tdist);
 

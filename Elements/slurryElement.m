@@ -90,7 +90,9 @@ classdef slurryElement
             T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
             %Combustion Process 
-                %check for combustion
+            if Tdist(obj.pos(1),obj.pos(2)) > globalInputs.temperature.Tig
+                obj.alpha = 1;
+            end
 
             %get resistance coefficients
             [cds_west, ~] = calculateSlurryConductionResistance(TPP,globalInputs,T_west,"axial",obj.pos,obj.alpha);
@@ -99,36 +101,28 @@ classdef slurryElement
             cds_up = calculateCdsUp(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
             cds_down = calculateCdsDown(obj, TPP, globalInputs, ElDist, Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
 
+            %heat capacity of incoming fluid
+            cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1)-1,obj.pos(2)), obj.alpha);
+            cps_out = calculateSlurryHeatCap(TPP, globalInputs, Tdist(obj.pos(1),obj.pos(2)), obj.alpha);
 
-            %needs two checkers, one for material used
-                %should support multiple materials in one node
-            %second checker for if cell is over combustion temp, with
-            %reactants and generating heat
-
-            %no combustion occurs
-            % if Tdist(obj.pos(1),obj.pos(2)) > globalInputs.temperature.Tig
-                % obj.alpha = 1;
-
-                %heat capacity of incoming fluid
-                cps_in = calculateSlurryHeatCap(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)));
-                cps_out = cps_in;
-
-                %physical properties
-                obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
-                obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,obj.alpha); %ax,radial
-
-
+            %physical properties
+            %burned density doesnt include the al2o3
+            obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
+            obj.vel = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho); %ax,radial
             
             %log cell heat capacity
-            obj.c = cps_in;
+            obj.c = cps_out;
             
+            %initialize tho if it does not exist (remove me somehow)
             if isempty(obj.rho_old)
                 obj.rho_old = obj.rho;
             end
 
+            %kinetic energy change
             obj.KE = ((obj.rho-obj.rho_old)/globalInputs.program.timeStep)*(sqrt(obj.vel(1)^2+obj.vel(2)^2)^2/2)*obj.vol;
-
             obj.rho_old = obj.rho;
+
+
             % cds_west = 1e6;
             % cds_east = 1e6;
             % cds_down = 1e6;

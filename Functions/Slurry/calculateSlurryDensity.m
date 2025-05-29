@@ -1,28 +1,18 @@
 function rho = calculateSlurryDensity(TPP,globalInputs,T,alpha)
-    %calculates density of the slurry. Can handle combustion.
+%calculates density of the slurry.
 
-    switch alpha
-        %combustion
-        case 1
-            %do nothing
-        case 0
-            if T < TPP.water(1,1)
-                rho_water = TPP.water(1,4);
-            elseif T> TPP.water(end,1)
-                rho_water = TPP.water(end,4);
-            else
-                rho_water = lerp([TPP.water(:,1),TPP.water(:,4)],T);
-            end
+%reactants
+rho_water = lerp([TPP.water(:,1),TPP.water(:,4)],T);
+rho_aluminum = lerp([TPP.aluminum(:,1),TPP.aluminum(:,4)],T);
 
-            if T < TPP.aluminum(1,1)
-                rho_aluminum = TPP.aluminum(1,4);
-            elseif T > TPP.aluminum(end,1)
-                rho_aluminum = TPP.aluminum(end,4);
-            else
-                rho_aluminum = lerp([TPP.aluminum(:,1),TPP.aluminum(:,4)],T);
-            end
+rho_reactants = 1 / (globalInputs.water.w/rho_water + globalInputs.aluminum.w/rho_aluminum);
 
-            rho = 1 / (globalInputs.water.w/rho_water + globalInputs.aluminum.w/rho_aluminum);
-    end
+%products
+rho_steam = lerp([TPP.Steam.density(:,1), TPP.Steam.density(:,2)],T);
+rho_h2 = lerp([TPP.H2Density(:,1), TPP.H2Density(:,2)],T);
+
+rho_products = globalInputs.chemistry.X_H2*rho_h2 + globalInputs.chemistry.X_Steam*rho_steam;
+
+rho = alpha*rho_products + (1-alpha)*rho_reactants;
 end
 
