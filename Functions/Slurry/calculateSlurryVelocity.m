@@ -1,4 +1,4 @@
-function vel = calculateSlurryVelocity(globalInputs,pos, rho)
+function [vel, ms] = calculateSlurryVelocity(globalInputs,pos, rho)
 %calculates slurry velocity from known density
 
 %find radial position
@@ -30,6 +30,6 @@ vel(1) = ms_ax/ (A_ax * rho);
 %radial velocity
 vel(2) = ms_r /(A_r*rho);
 
-
+ms = [ms_ax, ms_r];
 end
 

@@ -50,7 +50,7 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
 
     [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix_transient(ElDist,Tdist,globalInputs);
 
-    Q = constructHeatFlowInput(ElVec,Tdist,globalInputs);
+    Q = constructHeatFlowInput(ElVec,Tdist,globalInputs,positionMap);
 
     %%Solve Equations
     %solve equation M.1 (main resistor matrix)
