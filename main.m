@@ -31,15 +31,15 @@ ElDist = initializeElementDistribution(globalInputs, Tdist, TPP);
 combMap = zeros(length(ElDist(:,1)),length(ElDist(1,:)));
 
 %%Begin Solution Loop
-CONVERGED = 0; %convergence flag
+
 %time step counter
 t = 1;
-while ~CONVERGED && t < globalInputs.program.maxIterations
+while t < globalInputs.program.maxIterations
 
     cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
     
-    if t < 5
+    if t <= 2
         Tdist(6,4) = 110+273.15;
     end
 
@@ -47,7 +47,7 @@ while ~CONVERGED && t < globalInputs.program.maxIterations
 
     %construct coefficient matrix theta
     % [theta_debug, Tvec_debug, b_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
-
+    % [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs);
     [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix_transient(ElDist,Tdist,globalInputs);
 
     Q = constructHeatFlowInput(ElVec,Tdist,globalInputs,positionMap);

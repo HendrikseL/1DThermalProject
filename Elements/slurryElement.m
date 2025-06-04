@@ -12,7 +12,7 @@ classdef slurryElement
 
         %combustion flag, 0 = no combustion
         alpha double = 0;
-        dist double = 0; %product distance travelled
+        dist double = [0 0]; %product distance travelled [axial,radial]
         Q double = 0; %heat generation from combustion
 
         %Output Coefficients
@@ -91,9 +91,10 @@ classdef slurryElement
             T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
             %Combustion Process 
-            if Tdist(obj.pos(1),obj.pos(2)) > globalInputs.temperature.Tig
+            if Tdist(obj.pos(1),obj.pos(2)) >= globalInputs.temperature.Tig
                 obj.alpha = 1;
-                obj.Q = globalInputs.slurry.Q;
+                % obj.Q = globalInputs.slurry.Q;
+                obj.Q=1000;
             end
 
             %get resistance coefficients
