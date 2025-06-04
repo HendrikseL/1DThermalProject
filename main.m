@@ -36,7 +36,7 @@ combMap = zeros(length(ElDist(:,1)),length(ElDist(1,:)));
 t = 1;
 while t < globalInputs.program.maxIterations
 
-    cde = calculateBoundaryEffectiveCd(globalInputs, Tdist, TPP);
+    cde = calculateFlangeEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
     
     if t <= 2
