@@ -139,7 +139,7 @@ for i = k:1:N*M*r+k-1
     j =i;
  
     theta(i,j) = ElVec{i}.A1 +(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep;
-    b(i) = -((ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep)*Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)) + ElVec{i}.KE;
+    b(i) = -((ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep)*Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)) - ElVec{i}.KE;
 
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
