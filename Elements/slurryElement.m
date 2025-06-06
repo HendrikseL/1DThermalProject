@@ -112,7 +112,7 @@ classdef slurryElement
             %burned density doesnt include the al2o3
             obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
             % obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
-            [obj.vel, obj.ms] = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho); %ax,radial
+            [obj.vel, obj.ms] = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho,obj.alpha); %ax,radial
             
             %log cell heat capacity
             obj.c = cps_out;

@@ -1,4 +1,4 @@
-function [vel, ms] = calculateSlurryVelocity(globalInputs,pos, rho)
+function [vel, ms] = calculateSlurryVelocity(globalInputs,pos, rho,alpha)
 %calculates slurry velocity from known density
 
 %find radial position
@@ -24,11 +24,17 @@ A_rTotal = x*pi*globalInputs.innerPipe.ID;
 
 ms_r = ms_r * (A_r/A_rTotal);
 
+mf_reactants = 1;
+%only considering the product gas portion of the products. we are assuming that the aluminum oxide does not accelerate like the gases do.
+mf_products = globalInputs.chemistry.mf_H2 + globalInputs.chemistry.mf_Steam;
+
+mf = mf_reactants*(1-alpha) + mf_products*alpha;
+
 %axial velocity
-vel(1) = ms_ax/ (A_ax * rho);
+vel(1) = (mf*ms_ax)/ (A_ax * rho);
 
 %radial velocity
-vel(2) = ms_r /(A_r*rho);
+vel(2) = (ms_r*ms_ax) /(A_r*rho);
 
 ms = [ms_ax, ms_r];
 end
