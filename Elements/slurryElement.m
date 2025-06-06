@@ -16,11 +16,11 @@ classdef slurryElement
         Q double = 0; %heat generation from combustion
 
         %Output Coefficients
-        A0 double = [];
-        A1 double = [];
-        A2 double = [];
-        B1 double = [];
-        C1 double = [];
+        Aw double = [];
+        Ap double = [];
+        Ae double = [];
+        An double = [];
+        As double = [];
 
         %geometry data
         vol double = [];
@@ -133,13 +133,13 @@ classdef slurryElement
             % cds_up = 1e6;
 
             %coefficients
-            obj.A0 = (-1/cds_west - obj.vel(1)*obj.A*obj.rho*cps_in);
-            obj.A1 = (+1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down + obj.vel(1)*obj.A*obj.rho*cps_out + obj.vel(2)*obj.A_r*obj.rho*cps_out ); 
-            obj.A2 = (-1/cds_east);
+            obj.Aw = (-1/cds_west - obj.vel(1)*obj.A*obj.rho*cps_in);
+            obj.Ap = (+1/cds_west + 1/cds_east + 1/cds_up + 1/cds_down + obj.vel(1)*obj.A*obj.rho*cps_out + obj.vel(2)*obj.A_r*obj.rho*cps_out ); 
+            obj.Ae = (-1/cds_east);
 
-            obj.B1 = (-1/cds_up);
+            obj.An = (-1/cds_up);
 
-            obj.C1 = (-1/cds_down - obj.vel(2)*obj.A_r*obj.rho*cps_out );
+            obj.As = (-1/cds_down - obj.vel(2)*obj.A_r*obj.rho*cps_out );
         end
 
         function cds_up = calculateCdsUp(obj,TPP,globalInputs,ElDist,T, alpha)

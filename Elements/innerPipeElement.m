@@ -15,17 +15,19 @@ classdef innerPipeElement
         alpha double = 0;
 
         %Output Coefficients
-        J0 double = [];
-        J1 double = [];
-        J2 double = [];
-        K1 double = [];
-        L1 double = [];
+        %Output Coefficients
+        Aw double = [];
+        Ap double = [];
+        Ae double = [];
+        An double = [];
+        As double = [];
 
         %geometry
         vol double =[];
 
         %cell properties
         rho double = 8000; %kg/m^3 for ss316
+        KE double = 0;
         c double =[];
     end
     
@@ -90,14 +92,14 @@ classdef innerPipeElement
 
 
             %coefficients
-            obj.J0 = (-1/cdip);
-            % obj.J1 = (1/(cdip+cdfin) +1/(cdip + cdfin_r) + 1/(cdip + cvs) + 1/(cvc));
-            obj.J1 = (1/(cdip) +1/(cdip ) + 1/(cdip_r + cvs) + 1/(cvc));
-            obj.J2 = (-1/cdip);
+            obj.Aw = (-1/cdip);
+            % obj.Ap = (1/(cdip+cdfin) +1/(cdip + cdfin_r) + 1/(cdip + cvs) + 1/(cvc));
+            obj.Ap = (1/(cdip) +1/(cdip ) + 1/(cdip_r + cvs) + 1/(cvc));
+            obj.Ae = (-1/cdip);
 
-            obj.K1 = ( -1/(cdip_r + cvs));
+            obj.As = ( -1/(cdip_r + cvs));
 
-            obj.L1 = (-1/cvc);
+            obj.An = (-1/cvc);
 
  
         end

@@ -46,7 +46,6 @@ while t < globalInputs.program.maxIterations
     [ElDist, combMap] = updateElements(ElDist, globalInputs, Tdist, TPP, combMap);
 
     %construct coefficient matrix theta
-    % [theta_debug, Tvec_debug, b_debug] = constructCoefMatrix_debug(ElDist,Tdist,globalInputs);
     % [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs);
     [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix_transient(ElDist,Tdist,globalInputs);
 

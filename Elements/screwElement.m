@@ -15,16 +15,18 @@ classdef screwElement
         alpha double = 0;
 
         %Output Coefficients
-        F0 double = [];
-        F1 double = [];
-        F2 double = [];
-        G1 double = [];
+        Aw double = [];
+        Ap double = [];
+        Ae double = [];
+        An double = [];
+        As double = 0 % no southern neighbour;
 
         %cell geometry
         vol double =[];
 
         %cell properties
         rho double = 8220; %kg/m^3 for haselloyX
+        KE double = 0;
         c double =[];
     end
     
@@ -59,6 +61,8 @@ classdef screwElement
             obj.neighbours(2,:) = [obj.pos(1)-1, obj.pos(2)];
             %eastt
             obj.neighbours(3,:) = [obj.pos(1), obj.pos(2)+1];
+            %south
+            obj.neighbours(4,:) = [0, 0]; %no neighbour
         end
 
         function obj = updateCoefficients(obj,Tdist, globalInputs, TPP,ElDist)
@@ -82,11 +86,11 @@ classdef screwElement
 
 
             %coefficients
-            obj.F0 = (-1/cdsc_west);
-            obj.F1 = (1/cdsc_west + 1/cdsc_east + 1/cdsc);
-            obj.F2 = (-1/cdsc_east);
+            obj.Aw = (-1/cdsc_west);
+            obj.Ap = (1/cdsc_west + 1/cdsc_east + 1/cdsc);
+            obj.Ae = (-1/cdsc_east);
 
-            obj.G1 = (-1/cdsc);
+            obj.An = (-1/cdsc);
 
  
         end

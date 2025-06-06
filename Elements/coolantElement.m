@@ -16,11 +16,11 @@ classdef coolantElement
         alpha double = [];
 
         %Output Coefficients
-        D0 double = [];
-        D1 double = [];
-        D2 double = [];
-        E1 double = [];
-        EE1 double = [];
+        Aw double = [];
+        Ap double = [];
+        Ae double = [];
+        An double = [];
+        As double = [];
 
         %geometry
         vol double =[];
@@ -30,6 +30,7 @@ classdef coolantElement
 
         %cell properties
         rho double = [];
+        KE double = 0;
         c double =[];
         vel double = [];
 
@@ -88,12 +89,11 @@ classdef coolantElement
             %is called upon initialization and when the solver is
             %iterating.
             
-            [~, k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial");
 
             %temperatures, averaged between nodes 
             T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
             T_east = (Tdist(obj.neighbours(3,1),obj.neighbours(3,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
-            T_south = (Tdist(obj.neighbours(4,1),obj.neighbours(4,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
+            % T_south = (Tdist(obj.neighbours(4,1),obj.neighbours(4,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
 
             %get resistance coefficients
             [cdc_west, ~] = calculateCoolantConductionResistance(TPP,globalInputs,T_west,"axial");
@@ -118,14 +118,14 @@ classdef coolantElement
             obj.vel(2) = globalInputs.coolant.m_r / (obj.A_r* obj.rho);
 
             %coefficients
-            obj.D0 = (-1/cdc_west);
+            obj.Aw= (-1/cdc_west);
              %west and south switched to current for now
-            obj.D1 = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down - obj.vel(1)*obj.A*obj.rho*obj.c - obj.vel(2)*obj.A_r*obj.rho*obj.c );
-            obj.D2 = (-1/cdc_east + obj.vel(1)*obj.A*obj.rho*obj.c);
+            obj.Ap = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down - obj.vel(1)*obj.A*obj.rho*obj.c - obj.vel(2)*obj.A_r*obj.rho*obj.c );
+            obj.Ae = (-1/cdc_east + obj.vel(1)*obj.A*obj.rho*obj.c);
 
-            obj.E1 = (-1/cdc_down +obj.vel(2)*obj.A_r*obj.rho*obj.c);
+            obj.As = (-1/cdc_down +obj.vel(2)*obj.A_r*obj.rho*obj.c);
 
-            obj.EE1 = (-1/cdc_up);
+            obj.An = (-1/cdc_up);
         end
         
 

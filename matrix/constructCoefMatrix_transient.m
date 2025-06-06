@@ -8,13 +8,14 @@ function [theta,Tvec,b,ElVec,positionMap] = constructCoefMatrix_transient(ElDist
 len = (length(ElDist(1,:))-4)*(length(ElDist(:,1))-1) +2*(globalInputs.program.radialNodes+2); %array length incudes elements and boundary nodes
 theta = zeros(len,len);
 
-%fill the main diagonal 
+%short-names for program variables
 N = globalInputs.program.N;
 M = globalInputs.program.M;
 r = globalInputs.program.radialNodes;
 offset = globalInputs.program.offset;
 
-%%Temperature vector
+%%Create position map. maps temperature and elements into a vector for use
+%%as the 'x' term in the linear equation
 k = 1; %row counter
 
 %initialize Tvec and ElVec
@@ -134,11 +135,11 @@ b(k) = (globalInputs.temperature.in.Tsc+273.15);
 
 k = k+1; 
 
-%slurry nodes
-for i = k:1:N*M*r+k-1
+%construct coefficient matrix for each internal node
+for i = k:1:N*M*(r+4)+k-1
     j =i;
  
-    theta(i,j) = ElVec{i}.A1 +(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep;
+    theta(i,j) = ElVec{i}.Ap +(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep;
     b(i) = -((ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep)*Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)) - ElVec{i}.KE;
 
     nMax = 4;
@@ -146,180 +147,29 @@ for i = k:1:N*M*r+k-1
 
     %Go through and assign coefficients to proper placement. Where
     %neighbours is empty, a neighbour does not exist.
-    %This is not in a loop because each neighbour receives different
-    %coefficients
 
     %western neighbour
     if ~(neighbours(1) == 0)
-        theta(i,neighbours(1)) = ElVec{i}.A0;
+        theta(i,neighbours(1)) = ElVec{i}.Aw;
     else
-        b(i) = b(i) +ElVec{i}.A0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
+        b(i) = b(i) +ElVec{i}.Aw * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
     end
 
     %northern neighbour
     if ~(neighbours(2) == 0)
-        theta(i,neighbours(2)) = ElVec{i}.B1;
+        theta(i,neighbours(2)) = ElVec{i}.An;
     end
 
     %eastern neighbour
     if ~(neighbours(3) == 0)
-        theta(i,neighbours(3)) = ElVec{i}.A2;
+        theta(i,neighbours(3)) = ElVec{i}.Ae;
     else
-        b(i) = b(i) +ElVec{i}.A2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
+        b(i) = b(i) +ElVec{i}.Ae * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
     end
 
     %southern neighbour
     if ~(neighbours(4) == 0)
-        theta(i,neighbours(4)) = ElVec{i}.C1;
-    end
-
-end
-
-%inner pipe
-startIndex = i;
-for i = startIndex+1:1:startIndex+N*M
-    j =i;
-
-    theta(i,j) = ElVec{i}.J1+(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep;
-    b(i) = -((ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep)*Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
-
-    nMax = 4;
-    neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
-
-        %western neighbour
-    if ~(neighbours(1) == 0)
-        theta(i,neighbours(1)) = ElVec{i}.J0;
-    else
-        b(i) = b(i) + ElVec{i}.J0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
-    end
-
-    %northern neighbour
-    if ~(neighbours(2) == 0)
-        theta(i,neighbours(2)) = ElVec{i}.L1;
-    end
-
-    %eastern neighbour
-    if ~(neighbours(3) == 0)
-        theta(i,neighbours(3)) = ElVec{i}.J2;
-    else
-        b(i) = b(i) + ElVec{i}.J2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
-    end
-
-    %southern neighbour
-    if ~(neighbours(4) == 0)
-        theta(i,neighbours(4)) = ElVec{i}.K1;
-    end
-end
-
-%coolant 
-startIndex = i;
-for i = startIndex+1:1:startIndex+N*M
-    j =i;
- 
-    theta(i,j) = ElVec{i}.D1+(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep;
-    b(i) = -((ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep)*Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
-
-    nMax = 4;
-    neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
-
-    %western neighbour
-    if ~(neighbours(1) == 0)
-        theta(i,neighbours(1)) = ElVec{i}.D0;
-    else
-        %western boundary (tc, in for coolant)
-       b(i) = b(i) + ElVec{i}.D0 * Tdist(1,ElVec{i}.pos(2));
-    end
-
-    %northern neighbour
-    if ~(neighbours(2) == 0)
-        theta(i,neighbours(2)) = ElVec{i}.EE1;
-    end
-
-    %eastern neighbour
-    if ~(neighbours(3) == 0)
-        theta(i,neighbours(3)) = ElVec{i}.D2;
-    else
-        %eastern boundary (tc, out)
-        b(i) = b(i) + ElVec{i}.D2 * Tdist(1,ElVec{i}.pos(2));
-    end
-
-    %southern neighbour
-    if ~(neighbours(4) == 0)
-        theta(i,neighbours(4)) = ElVec{i}.E1;
-    end
-
-end
-
-%screw
-startIndex = i;
-for i = startIndex+1:1:startIndex+N*M
-    j =i;
- 
-    theta(i,j) = ElVec{i}.F1+(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep;
-    b(i) = -((ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep)*Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
-
-    nMax = 3;
-    neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
-
-        %western neighbour
-    if ~(neighbours(1) == 0)
-        theta(i,neighbours(1)) = ElVec{i}.F0;
-    else
-       %western boundary (tc, in for coolant)
-       b(i) = b(i) + ElVec{i}.F0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
-    end
-
-    %northern neighbour
-    if ~(neighbours(2) == 0)
-        theta(i,neighbours(2)) = ElVec{i}.G1;
-    end
-
-    %eastern neighbour
-    if ~(neighbours(3) == 0)
-        theta(i,neighbours(3)) = ElVec{i}.F2;
-    else
-       %eastern boundary (tc, in for coolant)
-       b(i) = b(i) + ElVec{i}.F2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
-    end
-
-end
-
-%outer pipe
-startIndex = i;
-for i = startIndex+1:1:startIndex+N*M
-    j =i;
-
-    theta(i,j) = ElVec{i}.H1+(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep;
-    b(i) = -((ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)/globalInputs.program.timeStep)*Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2));
-
-    nMax = 4;
-    neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
-
-        %western neighbour
-    if ~(neighbours(1) == 0)
-        theta(i,neighbours(1)) = ElVec{i}.H0;
-    else
-       %western boundary (tc, in for coolant)
-       b(i) = b(i) + ElVec{i}.H0 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)-1);
-    end
-
-    %northern neighbour
-    if ~(neighbours(2) == 0)
-        %used in the Q source matrix will never go in theta
-        theta(i,neighbours(2)) = ElVec{i}.II1;
-    end
-
-    %eastern neighbour
-    if ~(neighbours(3) == 0)
-        theta(i,neighbours(3)) = ElVec{i}.H2;
-    else
-       %eastern boundary (tc, in for coolant)
-       b(i) = b(i) + ElVec{i}.H2 * Tdist(ElVec{i}.pos(1),ElVec{i}.pos(2)+1);
-    end
-
-    %southern neighbour
-    if ~(neighbours(4) == 0)
-        theta(i,neighbours(4)) = ElVec{i}.I1;
+        theta(i,neighbours(4)) = ElVec{i}.As;
     end
 
 end

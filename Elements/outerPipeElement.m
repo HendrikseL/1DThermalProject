@@ -16,17 +16,19 @@ classdef outerPipeElement
         alpha double = [];
 
         %Output Coefficients
-        H0 double = [];
-        H1 double = [];
-        H2 double = [];
-        I1 double = [];
-        II1 double = [];
+        Aw double = [];
+        Ap double = [];
+        Ae double = [];
+        An double = [];
+        As double = [];
+
 
         %geometry
         vol double =[];
 
         %cell properties
         rho double = 8000; %kg/m^3 for ss316
+        KE double = 0;
         c double =[];
 
     end
@@ -71,7 +73,7 @@ classdef outerPipeElement
             %iterating.
             cdop = calculatePipeConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial",obj.pos);
 
-            [~,k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial");
+            % [~,k_cool] = calculateCoolantConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"axial");
             cvc = calculateCoolantConvectiveResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.pos);
             
             %temperatures, averaged between nodes 
@@ -106,13 +108,13 @@ classdef outerPipeElement
             %calculate heat capacity
             obj.c = calculatePipeHeatCap(TPP,Tdist(obj.pos(1),obj.pos(2)));
             
-            obj.H0 = -R_west;
-            obj.H2 = -R_east;
-            obj.H1 = (R_west + R_east + 1/(cvc + cdop) + 1/(cv_nat + cd_ins));
+            obj.Aw = -R_west;
+            obj.Ap = -R_east;
+            obj.Ae = (R_west + R_east + 1/(cvc + cdop) + 1/(cv_nat + cd_ins));
            
-            obj.I1 = (-1/(cvc + cdop));
+            obj.As = (-1/(cvc + cdop));
 
-            obj.II1 = (-1/(cv_nat + cd_ins));
+            obj.An = (-1/(cv_nat + cd_ins));
         end
 
 

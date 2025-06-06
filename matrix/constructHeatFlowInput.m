@@ -38,7 +38,7 @@ while i < length(ElVec) && i < (offset + globalInputs.program.N*globalInputs.pro
 
             Q(i) = ElVec{i}.Q + ElVec{i}.ms(1)*(neighbourVel(1) - ElVec{i}.vel(1)) + ElVec{i}.ms(2)*(neighbourVel(2) - ElVec{i}.vel(2));
         case "outerPipe"
-            Q(i) = -ElVec{i}.II1*(globalInputs.temperature.Ta+273.15);
+            Q(i) = -ElVec{i}.An*(globalInputs.temperature.Ta+273.15);
 
     end
 
