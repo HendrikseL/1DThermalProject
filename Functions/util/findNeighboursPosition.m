@@ -2,7 +2,6 @@ function neighbours = findNeighboursPosition(neighboursIn,positionMap,nMax)
 %find the neighbouring elements in the position map
 
 for n = 1:1:nMax
-    %eastern neighbour
     index = 0;
     k = 1;
     while k <= length(positionMap) && index == 0
