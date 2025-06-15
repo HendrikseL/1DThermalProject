@@ -23,25 +23,17 @@ b = zeros(1,len);
 %reusing counter k as a inlet boundary node counter
 k = 1;
 
-%slurry inlet boundary nodes
-for i = 1:1:globalInputs.program.radialNodes
+%All inlet nodes
+for i = 1:1:globalInputs.program.radialNodes+2 %fix me
     theta(k,k) = -1;
-    b(k) = (globalInputs.temperature.in.Ts+273.15);
+
+    nMax = 1;
+    neighbour = findNeighboursPosition([positionMap(k,1),globalInputs.program.inputPadding], positionMap, nMax);
+
+    b(k) = Tvec(neighbour);
 
     k = k+1;  
 end
-
-%inner pipe inlet boundary condition
-theta(k,k) = -1;
-b(k) = (globalInputs.temperature.in.Tip+273.15);
-
-k = k+1; 
-    
-%screw inlet boundary condition
-theta(k,k) = -1;
-b(k) = (globalInputs.temperature.in.Tsc+273.15);
-
-k = k+1; 
 
 %construct coefficient matrix for each internal node
 i = k;

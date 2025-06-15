@@ -35,13 +35,14 @@ classdef slurryElement
         rho double =[];
         c double =[];
         vel double = [];
+        mu
         rho_old double =[] %previous time step's density
         KE double =[] %kinetic energy term for source due to time varying density
         ms double = []; %mass flow
     end
     
     methods
-        function obj = slurryElement(i,j, globalInputs)
+        function obj = slurryElement(i,j, globalInputs, TPP, Tdist)
             %Constructs a slurry type temperature node
 
             %track position of slurry node
@@ -57,6 +58,11 @@ classdef slurryElement
             obj.vol = obj.A*obj.x;
 
             obj.A_r = R1*2*pi*obj.x;
+
+            %initialize density and velocity
+            obj.rho_old = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
+            [obj.vel, obj.ms] = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho_old); %ax,radial
+            
 
 
         end
@@ -113,14 +119,10 @@ classdef slurryElement
             obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
             % obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
             [obj.vel, obj.ms] = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho); %ax,radial
+            obj.mu = calculateSlurryViscosity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
             
             %log cell heat capacity
             obj.c = cps_out;
-            
-            %initialize tho if it does not exist (remove me somehow)
-            if isempty(obj.rho_old)
-                obj.rho_old = obj.rho;
-            end
 
             %kinetic energy change
             obj.KE = ((obj.rho-obj.rho_old)/globalInputs.program.timeStep)*(sqrt(obj.vel(1)^2+obj.vel(2)^2)^2/2)*obj.vol;

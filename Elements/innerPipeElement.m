@@ -32,7 +32,7 @@ classdef innerPipeElement
     end
     
     methods
-        function obj = innerPipeElement(i,j, globalInputs)
+        function obj = innerPipeElement(i,j, globalInputs, TPP, Tdist)
             %Constructs a slurry type temperature node
 
             %track position of slurry node

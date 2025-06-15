@@ -31,7 +31,7 @@ classdef screwElement
     end
     
     methods
-        function obj = screwElement(i,j, globalInputs)
+        function obj = screwElement(i,j, globalInputs, TPP, Tdist)
             %Constructs a slurry type temperature node
 
             %track position of slurry node
