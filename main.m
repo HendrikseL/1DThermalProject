@@ -46,16 +46,16 @@ while t < globalInputs.program.maxIterations
     [ElDist, combMap] = updateElements(ElDist, globalInputs, Tdist, TPP, combMap);
 
     %construct coefficient matrix theta
-    % [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs);
-    [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix_transient(ElDist,Tdist,globalInputs);
+    [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs);
+    % [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix_transient(ElDist,Tdist,globalInputs);
 
     Q = constructHeatFlowInput(ElVec,Tdist,globalInputs,positionMap);
 
     %%Solve Equations
     %solve equation M.1 (main resistor matrix)
 
-    T_new =  (A)\(Q-b)';
-    % T_new = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs,Tdist);
+     % T_new =  (A)\(Q-b)';
+    T_new = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs,Tdist);
 
     %solve equation M.2 (flange temperatures 1 and 2)
     T_flange(1:2,1) = A2\b2;
@@ -69,7 +69,6 @@ while t < globalInputs.program.maxIterations
 
 
     %update Tdist
-    % Tdist = Tdist + Tdist_new*globalInputs.program.timeStep;
     Tdist = Tdist_new;
 
 

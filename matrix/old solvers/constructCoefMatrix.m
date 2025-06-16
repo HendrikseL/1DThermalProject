@@ -1,115 +1,24 @@
 function [theta,Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs)
-%This function is a copy of constructCoefMatrix. It is meant to be
-%identical except instead of placing the coeficients for the matrix, it
-%places a string coressponding to their  type (A0, A1, etc) and their
-%position in the Eldist matrix.
+%creates a coefficient matrix with transient terms not included. Meant for use
+%with the explicit solver.
 
 %initialize sparse matrix
 len = (length(ElDist(1,:))-4)*(length(ElDist(:,1))-1) +2*(globalInputs.program.radialNodes+2); %array length incudes elements and boundary nodes
 theta = zeros(len,len);
 
-%fill the main diagonal 
-N = globalInputs.program.N;
-M = globalInputs.program.M;
-r = globalInputs.program.radialNodes;
-offset = globalInputs.program.offset;
-
-%%Temperature vector
-k = 1; %row counter
+%%Create position map. maps temperature and elements into a vector for use
+%%as the 'x' term in the linear equation
 
 %initialize Tvec and ElVec
 Tvec = zeros(1,len);
 ElVec = cell(1,len);
 
-%slurry inlet boundary nodes
-for i = globalInputs.program.radialNodes+offset:-1:1+offset
-    Tvec(k) = Tdist(i,2);
-    positionMap(k,:) = [i,2];
-    k = k+1;  
-end
+[positionMap,ElVec,Tvec] = createPositionMap(globalInputs,ElDist,Tdist,ElVec,Tvec);
 
-%inner pipe inlet boundary condition
-Tvec(k) = Tdist(4,2);
-positionMap(k,:) = [4,2];
-k = k+1;  
+%b vector for linearr equation
+b = zeros(1,len);
 
-%screw inlet boundary condition
-index = length(Tdist(:,1));
-Tvec(k) = Tdist(index,2);
-positionMap(k,:) = [index,2];
-k = k+1; 
-
-
-%slurry
-for i = globalInputs.program.radialNodes+offset:-1:1+offset
-    for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(i,j);
-        ElVec{k} = ElDist{i,j};
-        positionMap(k,:) = ElDist{i,j}.pos;
-
-        k = k+1;
-    end
-end
-
-%inner pipe
-for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(4,j);
-        ElVec{k} = ElDist{4,j};
-        positionMap(k,:) = ElDist{4,j}.pos;
-
-        k = k+1;
-end
-
-%coolant
-for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(3,j);
-        ElVec{k} = ElDist{3,j};
-        positionMap(k,:) = ElDist{3,j}.pos;
-
-        k = k+1;
-end
-
-%screw
-for j =  globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(globalInputs.program.radialNodes+offset+1,j);
-        ElVec{k} = ElDist{globalInputs.program.radialNodes+offset+1,j};
-        positionMap(k,:) = ElDist{globalInputs.program.radialNodes+offset+1,j}.pos;
-
-        k = k+1;
-end
-
-%outer pipe
-for j = globalInputs.program.inputPadding+1:1:(N*M)+globalInputs.program.inputPadding
-        Tvec(k) = Tdist(2,j);
-        ElVec{k} = ElDist{2,j};
-        positionMap(k,:) = ElDist{2,j}.pos;
-
-        k = k+1;
-end
-
-len = length(Tdist(1,:))-1;
-%slurry outlet boundary nodes
-for i = globalInputs.program.radialNodes+offset:-1:1+offset
-    Tvec(k) = Tdist(i,len);
-    positionMap(k,:) = [i,len];
-    k = k+1;  
-end
-
-%inner pipe outlet boundary condition
-Tvec(k) = Tdist(4,len);
-positionMap(k,:) = [4,len];
-k = k+1;  
-
-%screw outlet boundary condition
-index = length(Tdist(:,1));
-Tvec(k) = Tdist(index,len);
-positionMap(k,:) = [index,len];
-k = k+1; 
-
-
-b = zeros(1,k-1);
-
-%% Coeficient Array
+%% Coeficient Array (A)
 
 %reusing counter k as a inlet boundary node counter
 k = 1;
@@ -135,12 +44,12 @@ b(k) = (globalInputs.temperature.in.Tsc+273.15);
 k = k+1; 
 
 %construct coefficient matrix for each internal node
-for i = k:1:N*M*(r+4)+k-1
+i = k;
+while ~isempty(ElVec{i})
     j =i;
  
-    theta(i,j) = ElVec{i}.Ap 
+    theta(i,j) = ElVec{i}.Ap;
     b(i) = 0;
-
     nMax = 4;
     neighbours = findNeighboursPosition(ElVec{i}.neighbours, positionMap, nMax);
 
@@ -171,44 +80,25 @@ for i = k:1:N*M*(r+4)+k-1
         theta(i,neighbours(4)) = ElVec{i}.As;
     end
 
+    i = i + 1;
+
 end
 
 %these are repeat codes. They have intetnionally been left seperate to
 %allow for changing the boundary conditions of each type of node
 %individually
-k = i+1;
+k = i;
 %slurry outlet boundary nodes
-for i = 1:1:globalInputs.program.radialNodes
+while k < length(ElVec) + 1
     theta(k,k) = 1;
     b(k) = 0;
 
     nMax = 1;
-    neighbour = findNeighboursPosition([positionMap(k,1),len-1], positionMap, nMax);
+    neighbour = findNeighboursPosition([positionMap(k,1),length(Tdist(1,:))-globalInputs.program.outputPadding], positionMap, nMax);
 
     theta(k,neighbour) = -1;
     k = k+1; 
 end
-
-%inner pipe outlet boundary condition 
-theta(k,k) = 1;
-b(k) = 0;
-
-nMax = 1;
-neighbour = findNeighboursPosition([positionMap(k,1),len-1], positionMap, nMax);
-
-theta(k,neighbour) = -1;
-k = k+1;
-
-    
-%screw outlet boundary condition
-theta(k,k) = 1;
-b(k) = 0;
-
-nMax = 1;
-neighbour = findNeighboursPosition([positionMap(k,1),len-1], positionMap, nMax);
-
-theta(k,neighbour) = -1;
-
 
 end
 

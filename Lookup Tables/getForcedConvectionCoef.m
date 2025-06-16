@@ -5,21 +5,10 @@ function [h] = getForcedConvectionCoef(TPP, globalInputs, T, k_slurry,alpha)
 %   globalInputs: input properties of the slurry
 %   T: desired operating temperature
 
-%getting slurry viscosity
-
-mu_water = lerp([TPP.water(:,1),TPP.water(:,3)],T);
-phi = globalInputs.slurry.volumeFraction;
-mu_slurry_reactants = mu_water *(1 + 2.5*phi + 10.05*phi^2 + 0.00273*exp(16.6*phi) );
-
-mu_slurry_products = calculateGasViscosity(TPP, globalInputs, T);
-
-mu_slurry = alpha*mu_slurry_products + (1-alpha)*mu_slurry_reactants;
-
-
-%getting slurry heat capacity
+mu_slurry = calculateSlurryViscosity(TPP,globalInputs,T,alpha);
 cp_slurry = calculateSlurryHeatCap(TPP,globalInputs,T,alpha);
 
-%Reynolds number and Prandtl number
+%Prandtl number
 Pr = (cp_slurry * mu_slurry) / k_slurry;
 
 %calculating reynolds number

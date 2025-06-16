@@ -37,7 +37,7 @@ classdef coolantElement
     end
     
     methods
-        function obj = coolantElement(i,j, globalInputs)
+        function obj = coolantElement(i,j, globalInputs, TPP, Tdist)
             %Constructs a slurry type temperature node
 
             %track position of slurry node

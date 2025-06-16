@@ -18,21 +18,21 @@ for k = 1:globalInputs.program.N:globalInputs.program.M*globalInputs.program.N
     for i = globalInputs.program.inputPadding+k:1:globalInputs.program.N+globalInputs.program.inputPadding+k-1
 
         %create Top
-        ElDist(2,i) = {outerPipeElement(2,i,globalInputs)};
+        ElDist(2,i) = {outerPipeElement(2,i,globalInputs,TPP, Tdist)};
 
         %create Tc
-        ElDist(3,i) = {coolantElement(3,i,globalInputs)};
+        ElDist(3,i) = {coolantElement(3,i,globalInputs,TPP, Tdist)};
 
         %create Tip
-        ElDist(4,i) = {innerPipeElement(4,i,globalInputs)};
+        ElDist(4,i) = {innerPipeElement(4,i,globalInputs,TPP, Tdist)};
 
         %create slurry node, equal to radial position
         for j = 1+offset:1:globalInputs.program.radialNodes+offset
-            ElDist(j,i) = {slurryElement(j,i,globalInputs)};
+            ElDist(j,i) = {slurryElement(j,i,globalInputs,TPP, Tdist)};
         end
 
         %create Tsc screw node - assign position data
-        ElDist(j+1,i) = {screwElement(j+1,i,globalInputs)};
+        ElDist(j+1,i) = {screwElement(j+1,i,globalInputs,TPP, Tdist)};
 
     end
 
