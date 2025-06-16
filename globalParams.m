@@ -54,6 +54,7 @@ globalInputs.slurry.rho = 1 / (globalInputs.water.w/globalInputs.water.rho + glo
 globalInputs.slurry.volumeFraction = (globalInputs.aluminum.w/globalInputs.aluminum.rho) / (globalInputs.aluminum.w/globalInputs.aluminum.rho + globalInputs.water.w/globalInputs.water.rho);
 globalInputs.slurry.ms = 0.2553; %kg/s
 globalInputs.slurry.Q = 1560310.37668; %W
+globalInputs.slurry.Pout = 101325; %user specified outlet pressure
 
 %inner pipe input parameters
 globalInputs.innerPipe.ID = 1.86*0.0254; %inner pipe ID in m

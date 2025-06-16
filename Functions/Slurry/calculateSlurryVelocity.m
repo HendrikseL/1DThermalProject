@@ -1,35 +1,9 @@
-function [vel, ms] = calculateSlurryVelocity(globalInputs,pos, rho)
-%calculates slurry velocity from known density
+function ElVec = calculateSlurryVelocity(globalInputs,ElVec,i,du,d2u)
+%Calculates the axial velocity for the slurry object at position i. Returns the
+%whole vector of object to avoid copying objects unecessarily
 
-%find radial position
-radialPosition = globalInputs.program.radialNodes+5  - pos(1);
 
-%calculate massflow
-% [ms_ax, ms_r] = calculateSlurryMassFlow(globalInputs,radialPosition);
-ms_ax = globalInputs.slurry.ms * 1;
-ms_r = globalInputs.slurry.ms * 0;
+ElVec{i}.vel(1) = ElVec{i}.vel(1) + globalInputs.program.timeStep* ( (-1/ElVec{i}.rho)*ElVec{i}.Pgrad + (1/ElVec{i}.rho)*ElVec{i}.mu*d2u - ElVec{i}.vel(1)*du);
 
-%turn total mass flow into the portion for that cell
-%axial
-radius = globalInputs.screw.d/2 + radialPosition*globalInputs.screw.deltaR;
-A_ax = pi*(radius^2-(radius-globalInputs.screw.deltaR)^2);
-A_axTotal =(pi/4)*(globalInputs.innerPipe.ID^2-globalInputs.screw.d^2);
-
-ms_ax = ms_ax* (A_ax/A_axTotal);
-
-%radial
- x = globalInputs.screw.l /(globalInputs.program.N*globalInputs.program.M);
-A_r = x * 2*pi*radius;
-A_rTotal = x*pi*globalInputs.innerPipe.ID;
-
-ms_r = ms_r * (A_r/A_rTotal);
-
-%axial velocity
-vel(1) = ms_ax/ (A_ax * rho);
-
-%radial velocity
-vel(2) = ms_r /(A_r*rho);
-
-ms = [ms_ax, ms_r];
 end
 

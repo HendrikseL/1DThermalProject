@@ -23,10 +23,10 @@ classdef slurryElement
         As double = [];
 
         %geometry data
-        vol double = [];
-        A double = [];
-        x double = [];
-        A_r double = [];
+        vol double = []; %element volume
+        A double = []; %element axial area
+        x double = []; %element axial dimension
+        A_r double = []; %element radial surface area
 
         %this term is related to the time derivative in the fluid
         t double = [];
@@ -35,7 +35,8 @@ classdef slurryElement
         rho double =[];
         c double =[];
         vel double = [];
-        mu
+        mu double = [];
+        Pgrad double =0; %pressure gradient
         rho_old double =[] %previous time step's density
         KE double =[] %kinetic energy term for source due to time varying density
         ms double = []; %mass flow
@@ -61,7 +62,7 @@ classdef slurryElement
 
             %initialize density and velocity
             obj.rho_old = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
-            [obj.vel, obj.ms] = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho_old); %ax,radial
+            [obj.vel, obj.ms] = initializeSlurryVelocity(globalInputs,obj.pos,obj.rho_old); %ax,radial
             
 
 
@@ -118,9 +119,10 @@ classdef slurryElement
             %burned density doesnt include the al2o3
             obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
             % obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
-            [obj.vel, obj.ms] = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho); %ax,radial
             obj.mu = calculateSlurryViscosity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
             
+
+            % [obj.vel, obj.ms] = calculateSlurryVelocity(globalInputs,obj.pos,obj.rho); %ax,radial
             %log cell heat capacity
             obj.c = cps_out;
 
