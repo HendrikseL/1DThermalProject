@@ -23,7 +23,7 @@ b = zeros(1,len);
 %reusing counter k as a inlet boundary node counter
 k = 1;
 
-%slurry inlet boundary nodes
+%slurry inlet boundary nodes (separate to allow for changing boundary)
 for i = 1:1:globalInputs.program.radialNodes
     theta(k,k) = -1;
     b(k) = (globalInputs.temperature.in.Ts+273.15);
@@ -84,11 +84,9 @@ while ~isempty(ElVec{i})
 
 end
 
-%these are repeat codes. They have intetnionally been left seperate to
-%allow for changing the boundary conditions of each type of node
-%individually
-k = i;
+
 %slurry outlet boundary nodes
+k = i;
 while k < length(ElVec) + 1
     theta(k,k) = 1;
     b(k) = 0;

@@ -1,6 +1,8 @@
 function neighbours = findNeighboursPosition(neighboursIn,positionMap,nMax)
 %find the neighbouring elements in the position map
 
+%neighbours in order: west, north, south, east
+%n should be equal to the desired direction.
 for n = 1:1:nMax
     index = 0;
     k = 1;

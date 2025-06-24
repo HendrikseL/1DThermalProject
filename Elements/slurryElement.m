@@ -82,7 +82,7 @@ classdef slurryElement
             obj.neighbours(1,:) = [obj.pos(1), obj.pos(2)-1];
             %north
             obj.neighbours(2,:) = [obj.pos(1)-1, obj.pos(2)];
-            %eastt
+            %east
             obj.neighbours(3,:) = [obj.pos(1), obj.pos(2)+1];
             %south
             obj.neighbours(4,:) = [obj.pos(1)+1, obj.pos(2)];
@@ -117,8 +117,8 @@ classdef slurryElement
 
             %physical properties
             %burned density doesnt include the al2o3
-            obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
-            % obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
+            % obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0);
+            obj.rho = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
             obj.mu = calculateSlurryViscosity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),obj.alpha);
             
 
