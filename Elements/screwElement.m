@@ -69,7 +69,7 @@ classdef screwElement
             %This function handles the updating of the screw node. It
             %is called upon initialization and when the solver is
             %iterating.
-            cdsc = calculateScrewConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.type);
+            cds = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.type,obj.alpha);
             
             %temperatures, averaged between nodes 
             T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
