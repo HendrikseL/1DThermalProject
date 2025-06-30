@@ -1,4 +1,4 @@
-function [du, d2u] = calculateSlurryVelocityGradient(globalInputs,positionMap,ElVec,idx_s)
+function [du, d2u] = calculateSlurryVelocityGradient(TPP,globalInputs,positionMap,ElVec,Tvec,idx_s)
 
 %prealloc for speed
 du = zeros(length(idx_s),1);
@@ -14,8 +14,11 @@ while i <= length(idx_s)
     if isempty(ElVec{neighbours(1)})
         [vel_west,~] = initializeSlurryVelocity(globalInputs,ElVec{idx_s(i)}.pos,ElVec{idx_s(i)}.rho); 
         vel_west = vel_west(1);
+
+        rho_west = calculateSlurryDensity(TPP,globalInputs,Tvec(neighbours(1),ElVec{neighbours(1)}.alpha));
     else
         vel_west = ElVec{neighbours(1)}.vel(1);
+        rho_west = ElVec{neighbours(1)}.rho;
     end
     
     %check for eastern and western neighbours
@@ -27,7 +30,7 @@ while i <= length(idx_s)
     
     
     %first derivative
-    du(i) = (ElVec{idx_s(i)}.vel(1) - vel_west)/ElVec{idx_s(i)}.x; %western neighbour is used
+    du(i) = (ElVec{idx_s(i)}.rho*ElVec{idx_s(i)}.vel(1) - rho_west*vel_west)/ElVec{idx_s(i)}.x; %western neighbour is used
     
     %second derivative
     d2u(i) = (vel_east - 2*ElVec{idx_s(i)}.vel(1) + vel_west)/(ElVec{idx_s(i)}.x)^2;
