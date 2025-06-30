@@ -15,6 +15,9 @@ while p <= globalInputs.program.pIterations
     %calculate pressure gradient at n+1/2
     ElVec = calculateSlurryPressureGradient(globalInputs,positionMap,ElVec,idx_s,d2u);
 
+    %update density for new pressure field
+    ElVec = updateSlurryDensities(globalInputs,TPP,ElVec,Tvec,idx_s);
+
     p = p +1;
 end
 %correct the velocity field to respect continuity (after full

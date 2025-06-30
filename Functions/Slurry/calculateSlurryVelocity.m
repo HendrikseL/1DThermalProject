@@ -7,7 +7,7 @@ vel_new = zeros(length(idx_s),1);
 
 i= 1;
 while i <= length(idx_s)
-    vel_new(i) = ElVec{idx_s(i)}.vel(1) + globalInputs.program.timeStep* ( (-1/ElVec{idx_s(i)}.rho)*ElVec{idx_s(i)}.Pgrad + (1/ElVec{idx_s(i)}.rho)*ElVec{idx_s(i)}.mu*d2u(i) - ElVec{idx_s(i)}.vel(1)*du(i));
+    vel_new(i) = (ElVec{idx_s(i)}.rho_old/ElVec{idx_s(i)}.rho)/ElVec{idx_s(i)}.vel(1) + (globalInputs.program.timeStep/ElVec{idx_s(i)}.rho)* (ElVec{idx_s(i)}.Pgrad + ElVec{idx_s(i)}.mu*d2u(i) - ElVec{idx_s(i)}.vel(1)*du(i));
     i = i + 1;
 end
 

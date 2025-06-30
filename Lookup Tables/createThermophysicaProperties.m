@@ -48,6 +48,8 @@ TPP.waterCoolantConduction(:,1) = TPP.waterCoolantConduction(:,1) + 273.15;
 
 
 %H2 Properties
+%[Engineering Toolbox, Hydrogen - density and specific weight vs. temperature, T[C] rho[kg/m3]]
+%Pref = 1e5 Pa
 TPP.H2 = readmatrix("H2_properties.csv",NumHeaderLines=1);
 TPP.H2(:,1) = TPP.H2(:,1) + 273.15;
 TPP.H2(:,3) = TPP.H2(:,3)*1000;
@@ -56,6 +58,8 @@ TPP.H2Density = readmatrix("H2_density.csv",NumHeaderLines=1);
 TPP.H2Density(:,1) = TPP.H2Density(:,1) + 273.15;
 
 %Steam Properties
+%[Engineering Toolbox, Dry air and water vapor - Density and Specific Volume vs. temperature, T[C] rho[kg/m3]]
+%Pref = 1e5; Pa
 TPP.Steam.density = readmatrix("Steam_Density.csv",NumHeaderLines=1);
 TPP.Steam.density(:,1) = TPP.Steam.density(:,1) + 273.15;
 

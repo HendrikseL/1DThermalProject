@@ -4,12 +4,12 @@ globalInputs = struct;
 
 %program parameters
 globalInputs.program.radialNodes = 3;
-globalInputs.program.N = 15;
+globalInputs.program.N = 5;
 globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
-globalInputs.program.maxIterations = 2000;
+globalInputs.program.maxIterations = 500;
 globalInputs.program.timeStep = 1e-5;
 globalInputs.program.writeOutput = 1; %flag for if write should be done
 globalInputs.program.writeInterval = 10; %time steps between writes
@@ -55,7 +55,8 @@ globalInputs.slurry.rho = 1 / (globalInputs.water.w/globalInputs.water.rho + glo
 globalInputs.slurry.volumeFraction = (globalInputs.aluminum.w/globalInputs.aluminum.rho) / (globalInputs.aluminum.w/globalInputs.aluminum.rho + globalInputs.water.w/globalInputs.water.rho);
 globalInputs.slurry.ms = 0.2553; %kg/s
 globalInputs.slurry.Q = 1560310.37668; %W
-globalInputs.slurry.Pout = 101325; %user specified outlet pressure
+globalInputs.slurry.P = 101325; %user specified inlet pressure (initial uniform pressure)
+globalInputs.slurry.Pgrad = 0; %input pressure gradient
 
 %inner pipe input parameters
 globalInputs.innerPipe.ID = 1.86*0.0254; %inner pipe ID in m

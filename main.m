@@ -39,7 +39,7 @@ while t < globalInputs.program.maxIterations
     cde = calculateFlangeEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
     
-    if t <= 2
+    if t <= 5
         Tdist(6,4) = 110+273.15;
     end
 

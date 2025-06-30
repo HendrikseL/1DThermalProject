@@ -69,7 +69,7 @@ classdef screwElement
             %This function handles the updating of the screw node. It
             %is called upon initialization and when the solver is
             %iterating.
-            cds = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.type,obj.alpha);
+            cds = calculateSlurryConductionResistance(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),"radial",obj.pos,obj.alpha);
             
             %temperatures, averaged between nodes 
             T_west = (Tdist(obj.neighbours(1,1),obj.neighbours(1,2)) + Tdist(obj.pos(1),obj.pos(2)))/2;
@@ -87,10 +87,10 @@ classdef screwElement
 
             %coefficients
             obj.Aw = (-1/cdsc_west);
-            obj.Ap = (1/cdsc_west + 1/cdsc_east + 1/cdsc);
+            obj.Ap = (1/cdsc_west + 1/cdsc_east + 1/cds);
             obj.Ae = (-1/cdsc_east);
 
-            obj.An = (-1/cdsc);
+            obj.An = (-1/cds);
 
  
         end

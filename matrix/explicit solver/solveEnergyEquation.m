@@ -12,7 +12,7 @@ function T_new = solveEnergyEquation(A, Q, b, Tvec, ElVec, globalInputs)
     %solve nodes
     i = k;
     while ~isempty(ElVec{i})
-        dT = (globalInputs.program.timeStep/(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol))*-(A(i,:)*Tvec' + b(i) - Q(i));
+        dT = (globalInputs.program.timeStep/(ElVec{i}.rho*ElVec{i}.c*ElVec{i}.vol)) * -(A(i,:)*Tvec' + b(i) - Q(i) + ElVec{i}.KE);
         T_new(i) = Tvec(i) + dT;
 
         i = i +1;
