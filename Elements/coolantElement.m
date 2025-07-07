@@ -120,10 +120,10 @@ classdef coolantElement
             %coefficients
             obj.Aw= (-1/cdc_west);
              %west and south switched to current for now
-            obj.Ap = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down - obj.vel(1)*obj.A*obj.rho*obj.c - obj.vel(2)*obj.A_r*obj.rho*obj.c );
-            obj.Ae = (-1/cdc_east + obj.vel(1)*obj.A*obj.rho*obj.c);
+            obj.Ap = (1/cdc_west + 1/cdc_east + 1/cdc_up + 1/cdc_down + obj.vel(1)*obj.A*obj.rho*obj.c + obj.vel(2)*obj.A_r*obj.rho*obj.c );
+            obj.Ae = (-1/cdc_east - obj.vel(1)*obj.A*obj.rho*obj.c);
 
-            obj.As = (-1/cdc_down +obj.vel(2)*obj.A_r*obj.rho*obj.c);
+            obj.As = (-1/cdc_down - obj.vel(2)*obj.A_r*obj.rho*obj.c);
 
             obj.An = (-1/cdc_up);
         end

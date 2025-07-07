@@ -43,33 +43,28 @@ while t < globalInputs.program.maxIterations
         Tdist(6,4) = 110+273.15;
     end
 
+    %updates the coefficients for each node
     [ElDist, combMap] = updateElements(ElDist, globalInputs, Tdist, TPP, combMap);
 
-    %construct coefficient matrix theta
     [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix(ElDist,Tdist,globalInputs);
-    % [A,Tvec,b,ElVec,positionMap] = constructCoefMatrix_transient(ElDist,Tdist,globalInputs);
-
     Q = constructHeatFlowInput(ElVec,Tdist,globalInputs,positionMap);
 
     %%Solve Equations
-    %solve equation M.1 (main resistor matrix)
+    %Explicitly solve equation M.1 (main resistor matrix)
+    %responsible for main temperatures and slurry pressure/momentum
+    [T_new, ElVec] = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs,positionMap,TPP);
 
-     % T_new =  (A)\(Q-b)';
-    T_new = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs,positionMap,TPP);
-
-    %solve equation M.2 (flange temperatures 1 and 2)
+    %Implicitly solve equation M.2 (flange temperatures 1 and 2)
     T_flange(1:2,1) = A2\b2;
 
-    %solve equations M.3 (flange temperatures 3 and 4)
+    %Implicitly  solve equations M.3 (flange temperatures 3 and 4)
     T_flange(3:4,1) = A3\b3;
 
     %combines the temperature outputs from the M1, M2 and M3 into the
-    %format of Tdist in the documentation
-    Tdist_new = reconstructTdist(T_new,T_flange,positionMap,Tdist);
-
-
-    %update Tdist
-    Tdist = Tdist_new;
+    %format of Tdist in the documentation and updates the temperature
+    Tdist = reconstructTdist(T_new,T_flange,positionMap,Tdist);
+    ElDist = reconstructEldist(ElVec,ElDist,positionMap);
+    Pdist = reconstructPdist(globalInputs,ElVec,positionMap);
 
 
     %write output for timestep

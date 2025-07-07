@@ -10,11 +10,12 @@ globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
 globalInputs.program.maxIterations = 500;
-globalInputs.program.timeStep = 1e-5;
+globalInputs.program.timeStep = 1e-1;
 globalInputs.program.writeOutput = 1; %flag for if write should be done
 globalInputs.program.writeInterval = 10; %time steps between writes
 globalInputs.program.outFile = "out.txt";
-globalInputs.program.pIterations = 1; %number of pressure loop iterations
+globalInputs.program.pIterations = 10; %number of pressure loop iterations
+globalInputs.program.alphaP = 0.5; %pressure underrelaxation factor
 
 %Aluminum thermophysical properties @300K
 globalInputs.aluminum.rho = 2701; %kg/m^3
