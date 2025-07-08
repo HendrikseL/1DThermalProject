@@ -1,6 +1,6 @@
 function [Av,bv] = constructVelocityCoefficientMatrix(globalInputs,slurryPositionMap,ElVec,slurryVel,slurryPgrad,slurryRho)
 %constructs a coefficient matrix to be used to calculate the velocity
-%fields at the cell faces
+%fields at the cell centers
 
 %initialize sparse matrix
 Av = zeros(length(slurryVel),length(slurryVel));

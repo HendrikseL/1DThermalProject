@@ -30,7 +30,7 @@ globalInputs.water.rho = 996.57; %kg/m^3
 % globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
-globalInputs.temperature.in.Ts = 21.1111; %80;
+globalInputs.temperature.in.Ts = 80;
 globalInputs.temperature.in.Tsc = 21.1111;
 globalInputs.temperature.in.flange = 21.1111;
 globalInputs.temperature.in.Tip = 21.1111;

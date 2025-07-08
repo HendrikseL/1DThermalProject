@@ -38,7 +38,7 @@ end
 while ~isempty(ElVec{i})
     if ~isempty(ElVec{i}) && strcmp(ElVec{i}.type,"slurry")
         slurryPositionMap(counter,:) = [positionMap(i,1),positionMap(i,2),i];
-        slurryVel(counter,:) = [ElVec{i}.vel(1),ElVec{i}.vel_old];
+        slurryVel(counter,:) = [ElVec{i}.vel(1),ElVec{i}.vel(1)];
         slurryP(counter) = ElVec{i}.P;
         slurryTvec(counter) = Tvec(i);
         slurryPgrad(counter) = ElVec{i}.Pgrad;

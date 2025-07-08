@@ -1,4 +1,4 @@
-function [AP bP] = constructPressureCoefficientMatrix(globalInputs,slurryPositionMap,ElVec,slurryVel,slurryP,slurryRho)
+function [AP, bP] = constructPressureCoefficientMatrix(globalInputs,slurryPositionMap,ElVec,slurryVel,slurryP,slurryRho)
 %constructs a coefficient matrix to be used to calculate the pressure at
 %cell faces. Velocity input vector must be for cell center vleocities.
 
@@ -11,12 +11,16 @@ bP = zeros(1,length(slurryP));
 %counter k as an inlet boundary node counter
 k = 1;
 
-%slurry inlet boundary nodes (separate to allow for changing boundary)
+%zero gradient pressure boundary at inlet
 for i = 1:1:globalInputs.program.radialNodes
-    AP(k,k) = -1;
-    bP(k) = slurryP(k);
+    AP(k,k) = 1;
+    bP(k) = 0;
 
-    k = k+1;  
+    nMax = 1;
+    neighbour = findNeighboursPosition([slurryPositionMap(i,1),slurryPositionMap(i,2)+1], slurryPositionMap, nMax);
+
+    AP(i,neighbour) = -1; 
+    k = k +1;
 end
 
 %construct coefficient matrix for each internal node
@@ -61,13 +65,9 @@ end
 
 %slurry outlet boundary nodes
 while i <= length(AP(:,1))
-    AP(i,i) = 1;
-    bP(i) = 0;
-
-    nMax = 1;
-    neighbour = findNeighboursPosition([slurryPositionMap(i,1),slurryPositionMap(i,2)-1], slurryPositionMap, nMax);
-
-    AP(i,neighbour) = -1; 
+    AP(i,i) = -1;
+    bP(i) = slurryP(i);
+ 
     i = i +1;
 end
 

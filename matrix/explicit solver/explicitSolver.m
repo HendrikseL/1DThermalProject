@@ -7,18 +7,25 @@ function [T_new, ElVec] = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs,positionM
 %of the primative variables for the solvers.
 [slurryVel, slurryP, slurryPgrad, slurryPositionMap, slurryTvec, slurryRho] = findSlurryNodeProperties(ElVec,globalInputs,positionMap,Tvec);
 
+%rhie and chow for past time step vleocity (at this point vel^(n-1) and
+%vel^(n) are equal)
+[Av, ~] = constructVelocityCoefficientMatrix(globalInputs,slurryPositionMap,ElVec,slurryVel,slurryPgrad,slurryRho);
+slurryVel_face(:,2) = centerToFaceInterp(Av, ElVec, slurryPositionMap, slurryVel(:,2), slurryP, slurryPgrad);
+
 p = 1;
 while p <= globalInputs.program.pIterations
 
     %calculates velocity at n+1/2, at the faces
     slurryVel(:,1) = calculateSlurryVelocity(globalInputs,slurryPositionMap,ElVec,slurryVel(:,1),slurryPgrad,slurryRho);
 
-    %rhie and chow
+    %rhie and chow for current time step
+    slurryVel_face(:,1) = centerToFaceInterp(Av, ElVec, slurryPositionMap, slurryVel(:,1), slurryP, slurryPgrad);
+
     % %calculate pressure gradient at n+1/2
-    [AP , bP] = constructPressureCoefficientMatrix(globalInputs,slurryPositionMap,ElVec,slurryVel,slurryP,slurryRho);
-    % Pdist = reconstructPdist(globalInputs,ElVec,positionMap);
-    % %update density for new pressure field
-    % ElVec = updateSlurryDensities(globalInputs,TPP,ElVec,Tvec,idx_s);
+    [slurryP, slurryPgrad] = calculateSlurryPressure(globalInputs,slurryPositionMap,ElVec,slurryVel,slurryP,slurryRho);
+    
+    %update density for new pressure field
+    slurryRho = updateSlurryDensities(globalInputs,TPP,slurryRho,slurryP,ElVec,slurryTvec,slurryPositionMap);
 
     p = p +1;
 end
