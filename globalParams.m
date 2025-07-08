@@ -14,7 +14,7 @@ globalInputs.program.timeStep = 1e-1;
 globalInputs.program.writeOutput = 1; %flag for if write should be done
 globalInputs.program.writeInterval = 10; %time steps between writes
 globalInputs.program.outFile = "out.txt";
-globalInputs.program.pIterations = 10; %number of pressure loop iterations
+globalInputs.program.pIterations = 1; %number of pressure loop iterations
 globalInputs.program.alphaP = 0.5; %pressure underrelaxation factor
 
 %Aluminum thermophysical properties @300K
@@ -30,7 +30,7 @@ globalInputs.water.rho = 996.57; %kg/m^3
 % globalInputs.water.k = 0.61450; %W/m K
 
 %Initial temperature matrix (in celsius)
-globalInputs.temperature.in.Ts = 80;
+globalInputs.temperature.in.Ts = 21.1111; %80;
 globalInputs.temperature.in.Tsc = 21.1111;
 globalInputs.temperature.in.flange = 21.1111;
 globalInputs.temperature.in.Tip = 21.1111;
@@ -109,3 +109,12 @@ globalInputs.chemistry.mf_Steam = globalInputs.slurry.massRatio - 1; % Assumes f
 %mol ratio
 globalInputs.chemistry.X_H2 = (globalInputs.chemistry.mf_H2/globalInputs.chemistry.M_H2)/((globalInputs.chemistry.mf_H2/globalInputs.chemistry.M_H2) + (globalInputs.chemistry.mf_Steam/globalInputs.chemistry.M_Steam));
 globalInputs.chemistry.X_Steam = 1 - globalInputs.chemistry.X_H2;
+
+
+%initial velocity (derived)
+globalInputs.slurry.initialRho = calculateSlurryDensity(TPP,globalInputs,globalInputs.temperature.in.Ts+273.15,0,globalInputs.slurry.P);
+globalInputs.slurry.initialV = zeros(globalInputs.program.radialNodes,2);
+globalInputs.slurry.initialms = zeros(globalInputs.program.radialNodes,2);
+for i = 5:1:4+globalInputs.program.radialNodes
+   [globalInputs.slurry.initialV(i-4,:), globalInputs.slurry.initialms(i-4,:)]= initializeSlurryVelocity(globalInputs,i,globalInputs.slurry.initialRho);
+end

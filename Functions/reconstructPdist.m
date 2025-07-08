@@ -2,7 +2,7 @@ function Pdist = reconstructPdist(globalInputs, ElVec,positionMap)
 %similar to reconstruct Tdist, but this function is only used for
 %outputting a pressure field within the slurry.
 
-idx_s = findSlurryNodesIndex(ElVec,globalInputs);
+idx_s = findSlurryNodeProperties(ElVec,globalInputs);
 Pdist = zeros(globalInputs.program.N*globalInputs.program.M+4,globalInputs.program.radialNodes+5);
 
 

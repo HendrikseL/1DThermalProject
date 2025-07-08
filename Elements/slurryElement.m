@@ -35,6 +35,7 @@ classdef slurryElement
         rho double =[];
         c double =[];
         vel double = [];
+        vel_old double = []; %old axial velocity
         mu double = [];
         Pgrad double =0; %pressure gradient
         P double = 0; %
@@ -67,7 +68,9 @@ classdef slurryElement
 
             %initialize density and velocity
             obj.rho_old = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0,obj.P);
-            [obj.vel, obj.ms] = initializeSlurryVelocity(globalInputs,obj.pos,obj.rho_old); %ax,radial
+            obj.vel = globalInputs.slurry.initialV(obj.pos(1)-4,:);
+            obj.vel_old = obj.vel(1);
+            obj.ms = globalInputs.slurry.initialms(obj.pos(1)-4,:);
 
 
         end

@@ -10,8 +10,9 @@ clc
 tic
 
 %initialize global parameters (creates struct globalInputs)
-globalParams
 createThermophysicaProperties
+globalParams
+
 
 %Initialize Temperature matrix 
 Tdist = initializeTempDistribution(globalInputs);
@@ -39,9 +40,9 @@ while t < globalInputs.program.maxIterations
     cde = calculateFlangeEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
     
-    if t <= 5
-        Tdist(6,4) = 110+273.15;
-    end
+    % if t <= 5
+    %     Tdist(6,4) = 110+273.15;
+    % end
 
     %updates the coefficients for each node
     [ElDist, combMap] = updateElements(ElDist, globalInputs, Tdist, TPP, combMap);
@@ -63,8 +64,8 @@ while t < globalInputs.program.maxIterations
     %combines the temperature outputs from the M1, M2 and M3 into the
     %format of Tdist in the documentation and updates the temperature
     Tdist = reconstructTdist(T_new,T_flange,positionMap,Tdist);
-    ElDist = reconstructEldist(ElVec,ElDist,positionMap);
-    Pdist = reconstructPdist(globalInputs,ElVec,positionMap);
+    % ElDist = reconstructEldist(ElVec,ElDist,positionMap);
+    % Pdist = reconstructPdist(globalInputs,ElVec,positionMap);
 
 
     %write output for timestep
