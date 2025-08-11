@@ -38,7 +38,7 @@ classdef slurryElement
         mu double = [];
         Pgrad double =0; %pressure gradient
         P double = 0; %
-        rho_old double =[] %previous time step's density
+        rho_old double =[0, 0] %previous time step's density
         KE double =[] %kinetic energy term for source due to time varying density
         ms double = []; %mass flow
     end
@@ -66,7 +66,8 @@ classdef slurryElement
             obj.Pgrad = globalInputs.slurry.Pgrad;
 
             %initialize density and velocity
-            obj.rho_old = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0,obj.P);
+            obj.rho_old(1) = calculateSlurryDensity(TPP,globalInputs,Tdist(obj.pos(1),obj.pos(2)),0,obj.P);
+            obj.rho_old(2) = obj.rho_old(1);
             obj.vel = globalInputs.slurry.initialV(obj.pos(1)-4,:);
             obj.ms = globalInputs.slurry.initialms(obj.pos(1)-4,:);
 
@@ -132,8 +133,10 @@ classdef slurryElement
             obj.c = cps_out;
 
             %kinetic energy change
-            obj.KE = ((obj.rho-obj.rho_old)/globalInputs.program.timeStep)*(sqrt(obj.vel(1)^2+obj.vel(2)^2)^2/2)*obj.vol;
-            obj.rho_old = obj.rho;
+            obj.KE = ((obj.rho-obj.rho_old(1))/globalInputs.program.timeStep)*(sqrt(obj.vel(1)^2+obj.vel(2)^2)^2/2)*obj.vol;
+            %update old densities for past two time steps
+            obj.rho_old(2) = obj.rho_old(1);
+            obj.rho_old(1) = obj.rho;
 
 
             % cds_west = 1e6;

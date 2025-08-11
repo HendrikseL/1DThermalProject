@@ -4,17 +4,18 @@ globalInputs = struct;
 
 %program parameters
 globalInputs.program.radialNodes = 3;
-globalInputs.program.N = 5;
+globalInputs.program.N = 3;
 globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
 globalInputs.program.maxIterations = 500;
-globalInputs.program.timeStep = 1e-1;
+globalInputs.program.timeStep = 1e-4;
 globalInputs.program.writeOutput = 1; %flag for if write should be done
 globalInputs.program.writeInterval = 10; %time steps between writes
 globalInputs.program.outFile = "out.txt";
-globalInputs.program.pIterations = 1; %number of pressure loop iterations
+globalInputs.program.pOutFile = "pOut.txt";
+globalInputs.program.pIterations = 3; %number of pressure loop iterations
 globalInputs.program.alphaP = 0.5; %pressure underrelaxation factor
 
 %Aluminum thermophysical properties @300K

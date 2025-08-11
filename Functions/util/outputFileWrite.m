@@ -1,4 +1,4 @@
-function outputFileWrite(globalInputs, Tdist, writeType, timeStep)
+function outputFileWrite(globalInputs, Tdist, writeType, timeStep,outFile)
 %creates an output file and writes the temperature matrix to the file.
 %   writeType --> 1: initializes the file and writes the settings
 %                       2: writes to the existing file
@@ -6,7 +6,7 @@ function outputFileWrite(globalInputs, Tdist, writeType, timeStep)
 switch writeType
     %Initialize the file
     case 1
-        fullFilePath = strcat(pwd ,"/",globalInputs.program.outFile);
+        fullFilePath = strcat(pwd ,"/",outFile);
         fid = fopen(fullFilePath,"w");
 
         %header and date
@@ -31,7 +31,7 @@ switch writeType
         fclose(fid);
 
     case 2
-        fullFilePath = strcat(pwd ,"/",globalInputs.program.outFile);
+        fullFilePath = strcat(pwd ,"/",outFile);
         fid = fopen(fullFilePath,"a");
 
         %write initial time step to file

@@ -40,15 +40,17 @@ while ~isempty(ElVec{slurryPositionMap(i,3)})
     %pressure poisson equation
     dRhodt = ((slurryRho(i,1) - slurryRho(i,2))/globalInputs.program.timeStep);
     dRhodt_west = ((slurryRho(neighbours(1),1) - slurryRho(neighbours(1),2))/globalInputs.program.timeStep);
-    dRhodt_east = ((slurryRho(neighbours(3),1) - slurryRho(neighbours(3),2))/globalInputs.program.timeStep);
-    dVeldt = ((slurryVel(i,1) - slurryVel(i,2))/globalInputs.program.timeStep);
-    dVeldt_west = ((slurryVel(neighbours(1),1) - slurryVel(neighbours(1),2))/globalInputs.program.timeStep);
+    d2Rhodt = (3*slurryRho(i,1) - 4* slurryRho(i,2) + slurryRho(i,3))/(globalInputs.program.timeStep)^2;
 
-    bP(i) = (-(slurryRho(i)+1)*slurryVel(i)*(dRhodt-dRhodt_west)/ElVec{slurryPositionMap(i,3)}.x) + (slurryRho(i)*(slurryVel(neighbours(1),1)-2*slurryVel(i,1) + slurryVel(neighbours(3),1))/ElVec{slurryPositionMap(i,3)}.x^2) ...
-            + (slurryVel(i,1)*(slurryVel(i,1)-slurryVel(neighbours(1),1))/ElVec{slurryPositionMap(i,3)}.x) + (slurryVel(i,1)^2*(slurryRho(neighbours(1),1)-2*slurryRho(i,1)+slurryRho(neighbours(3),1))/ElVec{slurryPositionMap(i,3)}.x^2) ...
-            - (slurryRho(i)*(dVeldt - dVeldt_west)/ElVec{slurryPositionMap(i,3)}.x) + (ElVec{slurryPositionMap(i,3)}.mu*(dRhodt_east-2*dRhodt + dRhodt_west)/ElVec{slurryPositionMap(i,3)}.x^2);
+    % bP(i) = (slurryVel(i) *(dRhodt - dRhodt_west)/ElVec{slurryPositionMap(i,3)}.x ...
+    %     -( ((slurryVel(i)-slurryVel(neighbours(1)))/ElVec{slurryPositionMap(i,3)}.x)   * (( (slurryRho(i,1)*slurryVel(i)) -(slurryRho(neighbours(1),1)*slurryVel(neighbours(1))) )/ElVec{slurryPositionMap(i,3)}.x) ) ...
+    %     + d2Rhodt);
 
+    % bP(i) =  -(slurryRho(i,1)*((slurryVel(i)-slurryVel(neighbours(1)))/ElVec{slurryPositionMap(i,3)}.x)^2);
 
+    bP(i) = -( ((slurryVel(i)-slurryVel(neighbours(1)))/ElVec{slurryPositionMap(i,3)}.x)   * (( (slurryRho(i,1)*slurryVel(i)) -(slurryRho(neighbours(1),1)*slurryVel(neighbours(1))) )/ElVec{slurryPositionMap(i,3)}.x) );
+    %+ (slurryVel(i) *(dRhodt - dRhodt_west)/ElVec{slurryPositionMap(i,3)}.x)
+    
     %western neighbour
     if ~(neighbours(1) == 0)
         AP(i,neighbours(1)) = Aw;
@@ -65,8 +67,8 @@ end
 
 %slurry outlet boundary nodes
 while i <= length(AP(:,1))
-    AP(i,i) = -1;
-    bP(i) = slurryP(i);
+    AP(i,i) = 1;
+    bP(i) = globalInputs.slurry.P;
  
     i = i +1;
 end

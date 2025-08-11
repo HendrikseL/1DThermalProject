@@ -25,20 +25,20 @@ k = 1;
 
 %slurry inlet boundary nodes (separate to allow for changing boundary)
 for i = 1:1:globalInputs.program.radialNodes
-    theta(k,k) = -1;
+    theta(k,k) = 1;
     b(k) = (globalInputs.temperature.in.Ts+273.15);
 
     k = k+1;  
 end
 
 %inner pipe inlet boundary condition
-theta(k,k) = -1;
+theta(k,k) = 1;
 b(k) = (globalInputs.temperature.in.Tip+273.15);
 
 k = k+1; 
     
 %screw inlet boundary condition
-theta(k,k) = -1;
+theta(k,k) = 1;
 b(k) = (globalInputs.temperature.in.Tsc+273.15);
 
 k = k+1; 

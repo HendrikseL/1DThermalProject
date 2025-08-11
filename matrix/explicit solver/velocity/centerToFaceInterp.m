@@ -17,7 +17,7 @@ while isempty(ElVec{slurryPositionMap(i,3)})
     l = 0.5;
 
     Pgrad = (slurryP(i) - slurryP(neighbours(3)))/ElVec{slurryPositionMap(neighbours(3),3)}.x;
-    interpPgrad = l*slurryPgrad(i) + l*slurryPgrad(3);
+    interpPgrad = l*slurryPgrad(i) + l*slurryPgrad(neighbours(3));
     slurryVel_face(i) = l*slurryVel(i) + l*slurryVel(neighbours(3)) - (1/Av(i,i)) * (Pgrad-interpPgrad);
 
     i = i+1;
@@ -29,7 +29,7 @@ while ~isempty(ElVec{slurryPositionMap(i,3)})
     % l = ElVec{slurryPositionMap(i,3)}.x / (ElVec{slurryPositionMap(i,3)}.x + ElVec{slurryPositionMap(neighbours(3),3)}.x); 
     l = 0.5;
     Pgrad = (slurryP(i) - slurryP(neighbours(3)))/ElVec{slurryPositionMap(i,3)}.x;
-    interpPgrad = l*slurryPgrad(i) + l*slurryPgrad(3);
+    interpPgrad = l*slurryPgrad(i) + l*slurryPgrad(neighbours(3));
     slurryVel_face(i) = l*slurryVel(i) + l*slurryVel(neighbours(3)) - (1/Av(i,i)) * (Pgrad-interpPgrad);
 
     i = i+1;

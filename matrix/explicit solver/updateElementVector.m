@@ -8,7 +8,7 @@ while i < length(slurryPositionMap)
     %dont update boundary buffer nodes
     if ~isempty(ElVec{position})
         ElVec{position}.vel(1) = slurryVel(i);
-        ElVec{position}.rho = slurryRho(i,1); %probably not needed
+        ElVec{position}.rho = slurryRho(i,1);
         ElVec{position}.P = slurryP(i);
         ElVec{position}.Pgrad = slurryPgrad(i);
     end

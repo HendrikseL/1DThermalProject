@@ -4,7 +4,7 @@ function [slurryP, slurryPgrad] = calculateSlurryPressure(globalInputs,slurryPos
 %calculates a coefficient matrix for the slurry velocity
 [AP , bP] = constructPressureCoefficientMatrix(globalInputs,slurryPositionMap,ElVec,slurryVel,slurryP,slurryRho);
 
-slurryP = -(AP\bP');
+slurryP = (AP\bP');
 
 %calculate pressure gradient
 slurryPgrad = zeros(length(slurryP),1);
