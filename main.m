@@ -43,7 +43,7 @@ while t < globalInputs.program.maxIterations
 
     cde = calculateFlangeEffectiveCd(globalInputs, Tdist, TPP);
     [A2, b2, A3, b3] = constructFlangeMatrices(Tdist,TPP,globalInputs,cde);
-    % 
+
     if t <= 5
         Tdist(6,4) = 110+273.15;
     end
@@ -57,7 +57,7 @@ while t < globalInputs.program.maxIterations
     %%Solve Equations
     %Explicitly solve equation M.1 (main resistor matrix)
     %responsible for main temperatures and slurry pressure/momentum
-    [T_new, ElVec,slurryPositionMap, slurryP,slurryVel] = explicitSolver(A,Q,b,Tvec,ElVec,globalInputs,positionMap,TPP);
+    [T_new, ElVec,slurryPositionMap, slurryP,slurryVel] = explicitSolverNP(A,Q,b,Tvec,ElVec,globalInputs,positionMap,TPP);
 
     %Implicitly solve equation M.2 (flange temperatures 1 and 2)
     T_flange(1:2,1) = A2\b2;

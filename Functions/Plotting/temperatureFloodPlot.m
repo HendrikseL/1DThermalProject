@@ -19,13 +19,13 @@ switch figType
         plot(boxSC_x,boxSC_y,'k--',LineWidth=2);
         
         %inner pipe box
-        boxIP_x = [0.5 length(Tdist(1,:))-0.5 length(Tdist(1,:))-1.5 2.5 2.5 ];
+        boxIP_x = [0.5 length(Tdist(1,:))+0.5 length(Tdist(1,:))+0.5 0.5 0.5 ];
         boxIP_y = [length(Tdist(:,1))-settings(3)-0.5 length(Tdist(:,1))-settings(3)-0.5 length(Tdist(:,1))-settings(3)-1.5 length(Tdist(:,1))-settings(3)-1.5 length(Tdist(:,1))-settings(3)-0.5 ];
         plot(boxIP_x,boxIP_y,'k--',LineWidth=2);
         
         %flange 1-2 box
         boxF12_x = [0.5 2.5 2.5 0.5 0.5 ];
-        boxF12_y = [length(Tdist(:,1))-settings(3)-0.5 length(Tdist(:,1))-settings(3)-1.5 0.5 0.5 length(Tdist(:,1))-settings(3)-1.5 ];
+        boxF12_y = [length(Tdist(:,1))-settings(3)-1.5 length(Tdist(:,1))-settings(3)-1.5 0.5 0.5 length(Tdist(:,1))-settings(3)-1.5 ];
         plot(boxF12_x,boxF12_y,'r--',LineWidth=2);
         
         %flange 3-4 box

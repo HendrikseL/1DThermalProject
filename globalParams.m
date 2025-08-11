@@ -9,8 +9,8 @@ globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
 globalInputs.program.offset = 4; %offset between ambient and slurry
-globalInputs.program.maxIterations = 500;
-globalInputs.program.timeStep = 1e-4;
+globalInputs.program.maxIterations = 5000;
+globalInputs.program.timeStep = 1e-2;
 globalInputs.program.writeOutput = 1; %flag for if write should be done
 globalInputs.program.writeInterval = 10; %time steps between writes
 globalInputs.program.outFile = "out.txt";
@@ -87,7 +87,7 @@ globalInputs.flange.D = 18.5*0.0254; %m
 globalInputs.flange.t = 3.5*0.0254;%m
 
 %coolant input parameters
-globalInputs.coolant.m = 0; %38258*0.000125998; %kg/s
+globalInputs.coolant.m = 38258*0.000125998; %kg/s
 globalInputs.coolant.m_r = globalInputs.coolant.m * 0.9;
 globalInputs.coolant.m_ax = globalInputs.coolant.m * 0.1;
 
