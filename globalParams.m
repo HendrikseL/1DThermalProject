@@ -4,7 +4,7 @@ globalInputs = struct;
 
 %program parameters
 globalInputs.program.radialNodes = 3;
-globalInputs.program.N = 3;
+globalInputs.program.N = 4;
 globalInputs.program.M = 1;
 globalInputs.program.inputPadding = 2;
 globalInputs.program.outputPadding = 2;
